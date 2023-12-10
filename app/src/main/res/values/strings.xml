@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">AdGalaxy</string>
+    <string name="show_reward"> Increase the count </string>
+    <string name="show_interstitial"> Double the count </string>
+    <string name="show_reward_interstitial">Double and increase the count</string>
+
+    <string name="run_google">Run Google</string>
+    <string name="run_facebook">Run Facebook</string>
+    <string name="run_adcolony">Run AdColony</string>
+    <string name="run_vungle">Run Vungle</string>
+    <string name="run_applovin">Run Applovin</string>
+    <string name="run_unity">Run Unity</string>
+
+    <string name="title_show_applovin">Show Applovin</string>
+    <string name="desc_ad_loaded_count">Total ad loaded : %d</string>
+    <string name="desc_remaining_ad_count">Total remaining loaded count : %d</string>
+
+    <string name="desc_not_ready_ad">Total ad not yet ready : %d</string>
+    <string name="desc_load_failed">Total ad load failed : %d</string>
+
+    <string name="desc_load_interstitial_count">Total Interstitial ad load called : %d</string>
+
+    <string name="desc_load_reward_count">Total Rewarded ad load called : %d</string>
+
+    <string name="pause">Pause</string>
+
+    <string name="google_publish_key">ca-app-pub-1164908821267698~780616545</string>
+    <string name="applovin_sdk_key">oMiUKaigFiazdAM746B4tiJ8GLHw2rmqzCeyan_wHRoTr6HeulFr7d95c4NrdoquH7TSkGDDOEspRmBycHZIKQ</string>
+
+</resources>
