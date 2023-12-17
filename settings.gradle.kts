@@ -10,6 +10,7 @@ pluginManagement {
 }
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+
     repositories {
         google()
         mavenCentral()
@@ -25,5 +26,8 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "AdGalaxy"
+
 include(":app")
-include(":app:avengerad")
+include(":avengerad")
+include(":feature:applovinscreen")
+include(":feature:convertor")
