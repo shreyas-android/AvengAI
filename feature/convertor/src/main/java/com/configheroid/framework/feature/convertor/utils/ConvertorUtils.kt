@@ -4,7 +4,6 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.widget.Toast
 import com.cogniheroid.framework.feature.convertor.R
 import com.configheroid.framework.feature.convertor.ui.datetimeconvertor.data.model.TimeZoneInfo
 import java.util.Random
@@ -25,20 +24,17 @@ object ConvertorUtils {
         context.startActivity(chooser)
     }
 
-    private fun copyContentToClipboard(context: Context, data: String) {
+    private fun copyContentToClipboard(context: Context, content: String) {
         val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val data = ClipData.newPlainText(Random().nextLong().toString(), data)
+        val data = ClipData.newPlainText(Random().nextLong().toString(), content)
         clipboard.setPrimaryClip(data)
     }
 
-    fun copyAndShowToast(context: Context, result: String, toastMessage:String) {
+    fun copyAndShowToast(context: Context, result: String) {
         copyContentToClipboard(
             context = context,
-            data = result
+            content = result
         )
-        Toast
-            .makeText(context, toastMessage, Toast.LENGTH_SHORT)
-            .show()
     }
 
     fun getFormattedDate(milliSecond: Long): String {

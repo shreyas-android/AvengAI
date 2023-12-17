@@ -12,8 +12,6 @@ android {
         applicationId = "com.cogniheroid.android"
         minSdk = 24
         targetSdk = 34
-        versionCode = 41
-        versionName = "7.2.11"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -53,17 +51,20 @@ android {
 
         create("convertor"){
             applicationIdSuffix = ".convertor"
-            versionNameSuffix = "-convertor"
+            versionCode = 1
+            versionName = "1.0.0"
         }
 
         create("todo"){
             applicationIdSuffix = ".todo"
-            versionNameSuffix = "-todo"
+            versionCode = 1
+            versionName = "1.0.0"
         }
 
         create("spinner"){
             applicationIdSuffix = ".spinner"
-            versionNameSuffix = "-spinner"
+            versionCode = 1
+            versionName = "1.0.0"
         }
     }
 }

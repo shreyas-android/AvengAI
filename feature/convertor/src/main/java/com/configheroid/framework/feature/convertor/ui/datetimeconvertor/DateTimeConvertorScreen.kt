@@ -1,6 +1,5 @@
 package com.configheroid.framework.feature.convertor.ui.datetimeconvertor
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -13,10 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,7 +24,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -47,10 +43,8 @@ import androidx.constraintlayout.compose.Dimension
 import com.cogniheroid.framework.feature.convertor.R
 import com.configheroid.framework.feature.convertor.ui.component.ConvertorButton
 import com.configheroid.framework.feature.convertor.ui.datetimeconvertor.data.model.TimeZoneInfo
-import com.configheroid.framework.feature.convertor.utils.CalendarUtils
 import com.configheroid.framework.feature.convertor.utils.ConvertorUtils
 import java.util.Calendar
-import java.util.TimeZone
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -182,8 +176,7 @@ fun DateTimeConvertorScreen(navigateBack:()->Unit) {
                             .clickable {
                                 ConvertorUtils.copyAndShowToast(
                                     context = context,
-                                    result = result.value,
-                                    clipboardLabel
+                                    result = result.value
                                 )
                             },
                             painter = painterResource(id = R.drawable.ic_copy),
@@ -203,14 +196,12 @@ fun DateTimeConvertorScreen(navigateBack:()->Unit) {
                                 .combinedClickable(onClick = {
                                     ConvertorUtils.copyAndShowToast(
                                         context = context,
-                                        result = result.value,
-                                        clipboardLabel
+                                        result = result.value
                                     )
                                 }, onLongClick = {
                                     ConvertorUtils.copyAndShowToast(
                                         context = context,
-                                        result = result.value,
-                                        clipboardLabel
+                                        result = result.value
                                     )
                                 })
                                 .padding(16.dp)

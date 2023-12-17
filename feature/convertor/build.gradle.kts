@@ -57,6 +57,4 @@ dependencies {
     implementation(libs.compose.foundation)
 
     implementation(libs.compose.navigation)
-
-    implementation(project(":feature:applovinscreen"))
 }

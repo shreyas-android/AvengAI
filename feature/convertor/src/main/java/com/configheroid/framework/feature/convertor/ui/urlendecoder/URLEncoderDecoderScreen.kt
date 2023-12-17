@@ -146,8 +146,7 @@ fun URLEncoderDecoderScreen(navigateBack:()->Unit) {
                             .clickable {
                                 ConvertorUtils.copyAndShowToast(
                                     context = context,
-                                    result = result.value,
-                                    clipboardLabel
+                                    result = result.value
                                 )
                             },
                             painter = painterResource(id = R.drawable.ic_copy),
@@ -167,12 +166,12 @@ fun URLEncoderDecoderScreen(navigateBack:()->Unit) {
                                 .combinedClickable(onClick = {
                                     ConvertorUtils.copyAndShowToast(
                                         context = context,
-                                        result = result.value, clipboardLabel
+                                        result = result.value
                                     )
                                 }, onLongClick = {
                                     ConvertorUtils.copyAndShowToast(
                                         context = context,
-                                        result = result.value, clipboardLabel
+                                        result = result.value
                                     )
                                 })
                                 .padding(16.dp)
