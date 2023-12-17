@@ -8,6 +8,7 @@ composeMaterial = "1.4.0"
 composeMaterial3 = "1.0.1"
 composeConstraintLayout = "1.0.1"
 composeActivity = "1.8.0"
+composeNavigation = "2.5.3"
 
 kotlin = "1.8.10"
 kotlinCoroutines = "1.6.4"
@@ -33,6 +34,7 @@ compose-material3 = { group = "androidx.compose.material3", name = "material3", 
 compose-material = { group = "androidx.compose.material", name = "material", version.ref = "composeMaterial" }
 compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "composeFoundation" }
 compose-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version.ref = "composeConstraintLayout" }
+compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "composeNavigation" }
 
 kotlinCoroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${versions.kotlinCoroutines}"
 

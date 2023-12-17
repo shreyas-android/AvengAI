@@ -15,9 +15,10 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModelProvider
-import com.configheroid.framework.feature.convertor.urlendecoder.URLEncoderDecoderScreen
+import com.configheroid.framework.feature.convertor.ui.urlendecoder.URLEncoderDecoderScreen
 import com.configheroid.android.ad.ui.theme.AdGalaxyTheme
-import com.configheroid.framework.feature.convertor.datetimeconvertor.DateTimeConvertorScreen
+import com.configheroid.framework.feature.convertor.ui.ConvertorScreen
+import com.configheroid.framework.feature.convertor.ui.datetimeconvertor.DateTimeConvertorScreen
 
 
 class MainActivity : ComponentActivity() {
@@ -39,7 +40,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             AdGalaxyTheme {
-                DateTimeConvertorScreen()
+                ConvertorScreen()
             }
         }
 
