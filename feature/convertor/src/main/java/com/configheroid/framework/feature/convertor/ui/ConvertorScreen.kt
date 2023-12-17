@@ -42,7 +42,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.cogniheroid.framework.feature.convertor.R
-import com.configheroid.framework.feature.convertor.ui.component.ConvertorButton
+import com.cogniheroid.framework.ui.component.ConvertorButton
 import com.configheroid.framework.feature.convertor.ui.datetimeconvertor.DateTimeConvertorScreen
 import com.configheroid.framework.feature.convertor.ui.urlendecoder.URLEncoderDecoderScreen
 
@@ -104,7 +104,7 @@ fun ConvertorContainer(navController: NavController){
             verticalArrangement = Arrangement.Center
         ) {
             ConvertorButton(label = stringResource(id = R.string.title_url_encoder_decoder)) {
-               navController.navigate(ConvertorRoute.URL_ENCODER_DECODER.route)
+                navController.navigate(ConvertorRoute.URL_ENCODER_DECODER.route)
             }
 
             ConvertorButton(label = stringResource(id = R.string.title_date_time_converter)) {

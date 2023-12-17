@@ -41,7 +41,8 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.cogniheroid.framework.feature.convertor.R
-import com.configheroid.framework.feature.convertor.ui.component.ConvertorButton
+import com.cogniheroid.framework.ui.component.ConvertorButton
+import com.cogniheroid.framework.util.ContentUtils
 import com.configheroid.framework.feature.convertor.ui.datetimeconvertor.data.model.TimeZoneInfo
 import com.configheroid.framework.feature.convertor.utils.ConvertorUtils
 import java.util.Calendar
@@ -109,25 +110,33 @@ fun DateTimeConvertorScreen(navigateBack:()->Unit) {
 
             Row {
                 Column {
-                    ConvertorButton(label = stringResource(R.string.label_convert_to_date), onClick = {
-                        result.value = ConvertorUtils.getFormattedDate(milliSecond.value)
-                    })
+                    com.cogniheroid.framework.ui.component.ConvertorButton(
+                        label = stringResource(R.string.label_convert_to_date),
+                        onClick = {
+                            result.value = ConvertorUtils.getFormattedDate(milliSecond.value)
+                        })
 
-                    ConvertorButton(label = stringResource(R.string.label_convert_to_time), onClick = {
-                        result.value = ConvertorUtils.getFormattedTime(milliSecond.value)
-                    })
+                    com.cogniheroid.framework.ui.component.ConvertorButton(
+                        label = stringResource(R.string.label_convert_to_time),
+                        onClick = {
+                            result.value = ConvertorUtils.getFormattedTime(milliSecond.value)
+                        })
 
-                    ConvertorButton(label = stringResource(R.string.label_convert_to_date_time), onClick = {
-                        result.value = ConvertorUtils.getFormattedDateAndTime(milliSecond.value)
-                    })
+                    com.cogniheroid.framework.ui.component.ConvertorButton(
+                        label = stringResource(R.string.label_convert_to_date_time),
+                        onClick = {
+                            result.value = ConvertorUtils.getFormattedDateAndTime(milliSecond.value)
+                        })
                 }
 
-                ConvertorButton(label = stringResource(R.string.label_now), onClick = {
-                    val calendar = Calendar.getInstance()
-                    milliSecond.value = calendar.timeInMillis
-                    input.value = calendar.timeInMillis.toString()
-                    result.value = ConvertorUtils.getFormattedDateAndTime(milliSecond.value)
-                })
+                com.cogniheroid.framework.ui.component.ConvertorButton(
+                    label = stringResource(R.string.label_now),
+                    onClick = {
+                        val calendar = Calendar.getInstance()
+                        milliSecond.value = calendar.timeInMillis
+                        input.value = calendar.timeInMillis.toString()
+                        result.value = ConvertorUtils.getFormattedDateAndTime(milliSecond.value)
+                    })
             }
 
             if (result.value.isNotEmpty()) {
@@ -161,7 +170,7 @@ fun DateTimeConvertorScreen(navigateBack:()->Unit) {
 
                             }
                             .clickable {
-                                ConvertorUtils.shareContent(context = context, data = result.value)
+                                ContentUtils.shareContent(context = context, data = result.value)
                             },
                             painter = painterResource(id = R.drawable.ic_share),
                             contentDescription = "", tint = MaterialTheme.colorScheme.primary
@@ -174,7 +183,7 @@ fun DateTimeConvertorScreen(navigateBack:()->Unit) {
                                 end.linkTo(parent.end)
                             }
                             .clickable {
-                                ConvertorUtils.copyAndShowToast(
+                                ContentUtils.copyAndShowToast(
                                     context = context,
                                     result = result.value
                                 )
@@ -194,12 +203,12 @@ fun DateTimeConvertorScreen(navigateBack:()->Unit) {
                                     width = Dimension.fillToConstraints
                                 }
                                 .combinedClickable(onClick = {
-                                    ConvertorUtils.copyAndShowToast(
+                                    ContentUtils.copyAndShowToast(
                                         context = context,
                                         result = result.value
                                     )
                                 }, onLongClick = {
-                                    ConvertorUtils.copyAndShowToast(
+                                    ContentUtils.copyAndShowToast(
                                         context = context,
                                         result = result.value
                                     )
@@ -210,10 +219,10 @@ fun DateTimeConvertorScreen(navigateBack:()->Unit) {
                 }
             }
 
-            ConvertorButton(modifier = Modifier.padding(top = 24.dp),
+            com.cogniheroid.framework.ui.component.ConvertorButton(modifier = Modifier.padding(top = 24.dp),
                 label = stringResource(R.string.title_show_current_timezone), onClick = {
-                showTimeZone.value = true
-            })
+                    showTimeZone.value = true
+                })
 
             if (showTimeZone.value) {
                 TimeZoneDataItem(timeZoneInfo = ConvertorUtils.getCurrentTimeZoneInfo(),

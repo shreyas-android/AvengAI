@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.konan.properties.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -14,6 +16,13 @@ android {
         targetSdk = 34
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        //load the values from .properties file
+        val keystoreFile = project.rootProject.file("local.properties")
+        val properties = Properties()
+        properties.load(keystoreFile.inputStream())
+
+        buildConfigField("String", "COGNI_HEROID_AI_API_KEY", properties.getProperty("COGNI_HEROID_AI_API_KEY"))
     }
 
     buildTypes {
@@ -55,8 +64,8 @@ android {
             versionName = "1.0.0"
         }
 
-        create("todo"){
-            applicationIdSuffix = ".todo"
+        create("cogniheroidai"){
+            applicationIdSuffix = ".ai"
             versionCode = 1
             versionName = "1.0.0"
         }
@@ -92,5 +101,7 @@ dependencies {
     implementation(libs.lifeCycleProcess)
 
     implementation(project(":feature:convertor"))
+
+    implementation(project(":feature:gemini"))
 
 }

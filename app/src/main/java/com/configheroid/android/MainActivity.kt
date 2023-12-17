@@ -15,6 +15,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModelProvider
+import com.cogniheroid.framework.feature.gemini.CogniHeroidAIDemoScreen
 import com.configheroid.framework.feature.convertor.ui.urlendecoder.URLEncoderDecoderScreen
 import com.configheroid.android.ad.ui.theme.AdGalaxyTheme
 import com.configheroid.framework.feature.convertor.ui.ConvertorScreen
@@ -40,7 +41,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             AdGalaxyTheme {
-                ConvertorScreen()
+                CogniHeroidAIDemoScreen()
             }
         }
 

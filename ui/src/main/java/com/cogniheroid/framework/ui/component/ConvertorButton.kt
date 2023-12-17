@@ -1,4 +1,4 @@
-package com.configheroid.framework.feature.convertor.ui.component
+package com.cogniheroid.framework.ui.component
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape

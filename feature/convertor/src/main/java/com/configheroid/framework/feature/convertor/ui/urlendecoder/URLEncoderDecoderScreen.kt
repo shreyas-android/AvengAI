@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.cogniheroid.framework.feature.convertor.R
-import com.configheroid.framework.feature.convertor.ui.component.ConvertorButton
+import com.cogniheroid.framework.util.ContentUtils
 import com.configheroid.framework.feature.convertor.utils.ConvertorUtils
 import java.net.URLDecoder
 import java.net.URLEncoder
@@ -93,12 +93,16 @@ fun URLEncoderDecoderScreen(navigateBack:()->Unit) {
             })
 
             Row {
-                ConvertorButton(label = stringResource(R.string.button_encode), onClick = {
-                    result.value = URLEncoder.encode(input.value, "UTF-8")
-                })
-                ConvertorButton(label = stringResource(R.string.button_decode), onClick = {
-                    result.value = URLDecoder.decode(input.value, "UTF-8")
-                })
+                com.cogniheroid.framework.ui.component.ConvertorButton(
+                    label = stringResource(R.string.button_encode),
+                    onClick = {
+                        result.value = URLEncoder.encode(input.value, "UTF-8")
+                    })
+                com.cogniheroid.framework.ui.component.ConvertorButton(
+                    label = stringResource(R.string.button_decode),
+                    onClick = {
+                        result.value = URLDecoder.decode(input.value, "UTF-8")
+                    })
             }
 
             if (result.value.isNotEmpty()) {
@@ -131,7 +135,7 @@ fun URLEncoderDecoderScreen(navigateBack:()->Unit) {
 
                             }
                             .clickable {
-                                ConvertorUtils.shareContent(context = context, data = result.value)
+                                ContentUtils.shareContent(context = context, data = result.value)
                             },
                             painter = painterResource(id = R.drawable.ic_share),
                             contentDescription = "", tint = MaterialTheme.colorScheme.primary
@@ -144,7 +148,7 @@ fun URLEncoderDecoderScreen(navigateBack:()->Unit) {
                                 end.linkTo(parent.end)
                             }
                             .clickable {
-                                ConvertorUtils.copyAndShowToast(
+                                ContentUtils.copyAndShowToast(
                                     context = context,
                                     result = result.value
                                 )
@@ -164,12 +168,12 @@ fun URLEncoderDecoderScreen(navigateBack:()->Unit) {
                                     width = Dimension.fillToConstraints
                                 }
                                 .combinedClickable(onClick = {
-                                    ConvertorUtils.copyAndShowToast(
+                                    ContentUtils.copyAndShowToast(
                                         context = context,
                                         result = result.value
                                     )
                                 }, onLongClick = {
-                                    ConvertorUtils.copyAndShowToast(
+                                    ContentUtils.copyAndShowToast(
                                         context = context,
                                         result = result.value
                                     )
@@ -183,25 +187,6 @@ fun URLEncoderDecoderScreen(navigateBack:()->Unit) {
     }
 }
 
-@Composable
-fun URLEncoderDecoderButton(label: String, onClick: () -> Unit) {
-    val buttonColors = ButtonDefaults.textButtonColors(
-        containerColor = MaterialTheme.colorScheme.onPrimaryContainer
-    )
-    TextButton(
-        shape = RoundedCornerShape(8.dp),
-        colors = buttonColors, onClick = {
-            onClick()
-        },
-        modifier = Modifier.padding(vertical = 16.dp, horizontal = 32.dp)
-    ) {
-        androidx.compose.material.Text(
-            color = MaterialTheme.colorScheme.onSecondary,
-            text = label,
-            fontSize = 16.sp
-        )
-    }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

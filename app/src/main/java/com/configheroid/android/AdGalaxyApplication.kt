@@ -7,6 +7,8 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ProcessLifecycleOwner
+import com.cogniheroid.framework.feature.gemini.CogniHeroidAICore
+
 
 
 class AdGalaxyApplication : Application(), Application.ActivityLifecycleCallbacks,
@@ -33,11 +35,14 @@ class AdGalaxyApplication : Application(), Application.ActivityLifecycleCallback
         INSTANCE = this
 
 
+
         pref = getSharedPreferences(prefName, Context.MODE_PRIVATE)
         prefEditor = pref.edit()
 
         registerActivityLifecycleCallbacks(this)
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
+
+        CogniHeroidAICore.init("")
 
     }
 
