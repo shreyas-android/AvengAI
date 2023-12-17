@@ -22,4 +22,6 @@
     <string name="label_convert_to_date_time">Convert to date time</string>
 
     <string name="title_show_current_timezone">Show device time zone</string>
+
+    <string name="title_convertor">VersaConvertor</string>
 </resources>

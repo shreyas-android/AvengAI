@@ -1,4 +1,4 @@
-package com.configheroid.framework.feature.convertor.urlendecoder
+package com.configheroid.framework.feature.convertor.ui.urlendecoder
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
@@ -18,6 +18,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -38,13 +39,14 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.cogniheroid.framework.feature.convertor.R
+import com.configheroid.framework.feature.convertor.ui.component.ConvertorButton
 import com.configheroid.framework.feature.convertor.utils.ConvertorUtils
 import java.net.URLDecoder
 import java.net.URLEncoder
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun URLEncoderDecoderScreen() {
+fun URLEncoderDecoderScreen(navigateBack:()->Unit) {
     val context = LocalContext.current
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -58,12 +60,23 @@ fun URLEncoderDecoderScreen() {
                         text = stringResource(id = R.string.title_url_encoder_decoder),
                         fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface
                     )
+                }, navigationIcon = {
+                    IconButton(onClick = {
+                        navigateBack()
+                    }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_arrow_back),
+                            contentDescription = "", tint = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
                 })
             }
 
         }) {
         Column(
-            modifier = Modifier.imePadding().verticalScroll(rememberScrollState())
+            modifier = Modifier
+                .imePadding()
+                .verticalScroll(rememberScrollState())
                 .fillMaxSize()
                 .padding(it), horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
         ) {
@@ -80,10 +93,10 @@ fun URLEncoderDecoderScreen() {
             })
 
             Row {
-                URLEncoderDecoderButton(label = stringResource(R.string.button_encode), onClick = {
+                ConvertorButton(label = stringResource(R.string.button_encode), onClick = {
                     result.value = URLEncoder.encode(input.value, "UTF-8")
                 })
-                URLEncoderDecoderButton(label = stringResource(R.string.button_decode), onClick = {
+                ConvertorButton(label = stringResource(R.string.button_decode), onClick = {
                     result.value = URLDecoder.decode(input.value, "UTF-8")
                 })
             }
@@ -110,22 +123,32 @@ fun URLEncoderDecoderScreen() {
                         .fillMaxWidth()) {
                         val (text, share, copy) = createRefs()
 
-                        Icon(modifier = Modifier.padding(top = 16.dp, end = 16.dp).constrainAs(share) {
+                        Icon(modifier = Modifier
+                            .padding(top = 16.dp, end = 16.dp)
+                            .constrainAs(share) {
                                 top.linkTo(parent.top)
                                 end.linkTo(copy.start)
 
-                            }.clickable {
+                            }
+                            .clickable {
                                 ConvertorUtils.shareContent(context = context, data = result.value)
                             },
                             painter = painterResource(id = R.drawable.ic_share),
                             contentDescription = "", tint = MaterialTheme.colorScheme.primary
                         )
 
-                        Icon(modifier = Modifier.padding(top = 16.dp, end = 16.dp).constrainAs(copy) {
+                        Icon(modifier = Modifier
+                            .padding(top = 16.dp, end = 16.dp)
+                            .constrainAs(copy) {
                                 top.linkTo(parent.top)
                                 end.linkTo(parent.end)
-                            }.clickable {
-                            ConvertorUtils.copyAndShowToast(context = context, result = result.value, clipboardLabel)
+                            }
+                            .clickable {
+                                ConvertorUtils.copyAndShowToast(
+                                    context = context,
+                                    result = result.value,
+                                    clipboardLabel
+                                )
                             },
                             painter = painterResource(id = R.drawable.ic_copy),
                             contentDescription = "", tint = MaterialTheme.colorScheme.primary

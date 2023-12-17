@@ -1,4 +1,4 @@
-package com.configheroid.framework.feature.convertor.datetimeconvertor.data.model
+package com.configheroid.framework.feature.convertor.ui.datetimeconvertor.data.model
 
 data class TimeZoneInfo(
         var tzId: String? = null,

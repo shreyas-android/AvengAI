@@ -1,6 +1,6 @@
 package com.configheroid.framework.feature.convertor.utils
 
-import com.configheroid.framework.feature.convertor.datetimeconvertor.data.model.TimeZoneInfo
+import com.configheroid.framework.feature.convertor.ui.datetimeconvertor.data.model.TimeZoneInfo
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date

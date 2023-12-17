@@ -1,4 +1,4 @@
-package com.configheroid.framework.feature.convertor.datetimeconvertor
+package com.configheroid.framework.feature.convertor.ui.datetimeconvertor
 
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -21,6 +21,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -44,7 +45,8 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.cogniheroid.framework.feature.convertor.R
-import com.configheroid.framework.feature.convertor.datetimeconvertor.data.model.TimeZoneInfo
+import com.configheroid.framework.feature.convertor.ui.component.ConvertorButton
+import com.configheroid.framework.feature.convertor.ui.datetimeconvertor.data.model.TimeZoneInfo
 import com.configheroid.framework.feature.convertor.utils.CalendarUtils
 import com.configheroid.framework.feature.convertor.utils.ConvertorUtils
 import java.util.Calendar
@@ -52,7 +54,7 @@ import java.util.TimeZone
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun DateTimeConvertorScreen() {
+fun DateTimeConvertorScreen(navigateBack:()->Unit) {
 
     val context = LocalContext.current
     Scaffold(
@@ -67,6 +69,15 @@ fun DateTimeConvertorScreen() {
                         text = stringResource(id = R.string.title_date_time_converter),
                         fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface
                     )
+                },navigationIcon = {
+                    IconButton(onClick = {
+                        navigateBack()
+                    }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_arrow_back),
+                            contentDescription = "", tint = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
                 })
             }
 
@@ -104,20 +115,20 @@ fun DateTimeConvertorScreen() {
 
             Row {
                 Column {
-                    DateTimeConvButton(label = stringResource(R.string.label_convert_to_date), onClick = {
+                    ConvertorButton(label = stringResource(R.string.label_convert_to_date), onClick = {
                         result.value = ConvertorUtils.getFormattedDate(milliSecond.value)
                     })
 
-                    DateTimeConvButton(label = stringResource(R.string.label_convert_to_time), onClick = {
+                    ConvertorButton(label = stringResource(R.string.label_convert_to_time), onClick = {
                         result.value = ConvertorUtils.getFormattedTime(milliSecond.value)
                     })
 
-                    DateTimeConvButton(label = stringResource(R.string.label_convert_to_date_time), onClick = {
+                    ConvertorButton(label = stringResource(R.string.label_convert_to_date_time), onClick = {
                         result.value = ConvertorUtils.getFormattedDateAndTime(milliSecond.value)
                     })
                 }
 
-                DateTimeConvButton(label = stringResource(R.string.label_now), onClick = {
+                ConvertorButton(label = stringResource(R.string.label_now), onClick = {
                     val calendar = Calendar.getInstance()
                     milliSecond.value = calendar.timeInMillis
                     input.value = calendar.timeInMillis.toString()
@@ -208,7 +219,7 @@ fun DateTimeConvertorScreen() {
                 }
             }
 
-            DateTimeConvButton(modifier = Modifier.padding(top = 24.dp),
+            ConvertorButton(modifier = Modifier.padding(top = 24.dp),
                 label = stringResource(R.string.title_show_current_timezone), onClick = {
                 showTimeZone.value = true
             })
@@ -218,26 +229,6 @@ fun DateTimeConvertorScreen() {
                     onItemClick = {})
             }
         }
-    }
-}
-
-@Composable
-fun DateTimeConvButton(modifier: Modifier = Modifier, label: String, onClick: () -> Unit) {
-    val buttonColors = ButtonDefaults.textButtonColors(
-        containerColor = MaterialTheme.colorScheme.onPrimaryContainer
-    )
-    TextButton(
-        shape = RoundedCornerShape(8.dp),
-        colors = buttonColors, onClick = {
-            onClick()
-        },
-        modifier = modifier.padding(vertical = 8.dp, horizontal = 32.dp)
-    ) {
-        androidx.compose.material.Text(
-            color = MaterialTheme.colorScheme.onSecondary,
-            text = label,
-            fontSize = 16.sp
-        )
     }
 }
 

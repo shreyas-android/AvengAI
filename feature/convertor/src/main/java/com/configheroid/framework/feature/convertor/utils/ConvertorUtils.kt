@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.widget.Toast
 import com.cogniheroid.framework.feature.convertor.R
-import com.configheroid.framework.feature.convertor.datetimeconvertor.data.model.TimeZoneInfo
+import com.configheroid.framework.feature.convertor.ui.datetimeconvertor.data.model.TimeZoneInfo
 import java.util.Random
 import java.util.TimeZone
 
