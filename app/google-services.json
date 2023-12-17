@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:1015533699645:android:5cc281b896df5e9434e054",
         "android_client_info": {
-          "package_name": "com.androidai.galaxy.ad"
+          "package_name": "com.cogniheroid.android.convertor"
         }
       },
       "oauth_client": [
@@ -38,7 +38,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:1015533699645:android:5cc281b896df5e9434e054",
         "android_client_info": {
-          "package_name": "com.androidai.galaxy.ad.debug"
+          "package_name": "com.cogniheroid.android.convertor.debug"
         }
       },
       "oauth_client": [

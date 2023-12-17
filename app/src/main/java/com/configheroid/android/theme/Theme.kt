@@ -1,4 +1,4 @@
-package com.androidai.galaxy.ad.ui.theme
+package com.configheroid.android.ad.ui.theme
 
 import android.app.Activity
 import android.os.Build

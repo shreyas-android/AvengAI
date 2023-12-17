@@ -5,13 +5,13 @@ plugins {
 }
 
 android {
-    namespace = "com.androidai.galaxy.ad"
-    compileSdk = 33
+    namespace = "com.cogniheroid.android"
+    compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.androidai.galaxy.ad"
+        applicationId = "com.cogniheroid.android"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 41
         versionName = "7.2.11"
 
@@ -51,14 +51,17 @@ android {
 
     productFlavors{
 
+        create("convertor"){
+            applicationIdSuffix = ".convertor"
+            versionNameSuffix = "-convertor"
+        }
+
         create("todo"){
-            dimension = "version"
             applicationIdSuffix = ".todo"
             versionNameSuffix = "-todo"
         }
 
         create("spinner"){
-            dimension = "version"
             applicationIdSuffix = ".spinner"
             versionNameSuffix = "-spinner"
         }
@@ -67,26 +70,26 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.9.0")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    implementation(libs.core.ktx)
+    implementation(libs.appcompat)
+    implementation(libs.com.google.android.material.material)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.espresso.core)
 
-    implementation("androidx.activity:activity-compose:1.7.2")
-    implementation(platform("androidx.compose:compose-bom:2023.03.00"))
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
-    implementation("androidx.compose.foundation:foundation:1.4.0")
-    implementation("androidx.compose.material:material:1.4.0")
-    implementation("androidx.compose.material3:material3:1.0.1")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 
-    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    implementation("androidx.lifecycle:lifecycle-process:2.2.0")
+    implementation(libs.compose.activity)
+    implementation(libs.compose.material3)
+    implementation(libs.compose.foundation)
 
-    implementation(project(":app:avengerad"))
+    implementation(libs.kotlinCoroutines)
+
+    implementation(libs.lifecycle.extensions)
+   // implementation(libs.lifeCycleExtension)
+    implementation(libs.lifeCycleRuntime)
+    implementation(libs.lifeCycleProcess)
+
+    implementation(project(":feature:convertor"))
 
 }

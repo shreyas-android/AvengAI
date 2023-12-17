@@ -1,4 +1,4 @@
-package com.androidai.galaxy.ad
+package com.configheroid.android
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel

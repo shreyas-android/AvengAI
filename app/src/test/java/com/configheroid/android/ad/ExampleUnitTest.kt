@@ -1,4 +1,4 @@
-package com.androidai.galaxy.ad
+package com.configheroid.android.ad
 
 import org.junit.Test
 

@@ -1,4 +1,4 @@
-package com.androidai.galaxy.ad.ui.theme
+package com.configheroid.android.ad.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

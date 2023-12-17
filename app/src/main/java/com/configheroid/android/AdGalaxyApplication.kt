@@ -1,28 +1,20 @@
-package com.androidai.galaxy.ad
+package com.configheroid.android
 
 import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ProcessLifecycleOwner
-import com.androidai.demo.avengerad.AvengerAd
-import com.androidai.demo.avengerad.AvengerAdCore
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 
 
 class AdGalaxyApplication : Application(), Application.ActivityLifecycleCallbacks,
     LifecycleObserver {
 
-   lateinit var  pref: SharedPreferences
+   private lateinit var  pref: SharedPreferences
 
-   lateinit var prefEditor: SharedPreferences.Editor
-
-   private lateinit var avengerAd: AvengerAd
+   private lateinit var prefEditor: SharedPreferences.Editor
 
 
     companion object {
@@ -39,9 +31,7 @@ class AdGalaxyApplication : Application(), Application.ActivityLifecycleCallback
     override fun onCreate() {
         super.onCreate()
         INSTANCE = this
-        AvengerAdCore.init(BuildConfig.DEBUG)
-        avengerAd = AvengerAd(CoroutineScope(Dispatchers.Main))
-        avengerAd.init(this)
+
 
         pref = getSharedPreferences(prefName, Context.MODE_PRIVATE)
         prefEditor = pref.edit()
@@ -64,8 +54,7 @@ class AdGalaxyApplication : Application(), Application.ActivityLifecycleCallback
     }
 
     override fun onActivityResumed(activity: Activity) {
-        Log.d("AdGalaxyApplication", "onActivityCreated $activity")
-        avengerAd.onApplovinActivityHandling(activity)
+      //  avengerAd.onApplovinActivityHandling(activity)
     }
 
     override fun onActivityPaused(activity: Activity) {

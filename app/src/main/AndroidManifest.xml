@@ -14,7 +14,7 @@
 
 
     <application
-        android:name=".AdGalaxyApplication"
+        android:name="com.configheroid.android.AdGalaxyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -25,10 +25,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AdGalaxy"
         tools:targetApi="31">
+
+        <meta-data
+            android:name="applovin.sdk.key"
+            android:value="@string/applovin_sdk_key" />
+
         <activity
-            android:name=".MainActivity"
+            android:name="com.configheroid.android.MainActivity"
             android:exported="true"
             android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.AdGalaxy">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,33 +43,7 @@
             </intent-filter>
         </activity>
 
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/google_publish_key" />
 
-        <meta-data
-            android:name="applovin.sdk.key"
-            android:value="@string/applovin_sdk_key" />
-
-          <activity
-              android:name="com.ironsource.sdk.controller.ControllerActivity"
-              android:configChanges="orientation|screenSize"
-              android:hardwareAccelerated="true" />
-          <activity
-              android:name="com.ironsource.sdk.controller.InterstitialActivity"
-              android:configChanges="orientation|screenSize"
-              android:hardwareAccelerated="true"
-              android:theme="@android:style/Theme.Translucent" />
-          <activity
-              android:name="com.ironsource.sdk.controller.OpenUrlActivity"
-              android:configChanges="orientation|screenSize"
-              android:hardwareAccelerated="true"
-              android:theme="@android:style/Theme.Translucent" />
-
-          <provider
-              android:name="com.ironsource.lifecycle.IronsourceLifecycleProvider"
-              android:authorities="${applicationId}.IronsourceLifecycleProvider"
-              android:exported="false" />
     </application>
 
 </manifest>

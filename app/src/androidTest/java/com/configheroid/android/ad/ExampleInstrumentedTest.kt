@@ -1,4 +1,4 @@
-package com.androidai.galaxy.ad
+package com.configheroid.android.ad
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

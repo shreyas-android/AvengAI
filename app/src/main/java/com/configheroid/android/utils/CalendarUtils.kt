@@ -1,4 +1,4 @@
-package com.androidai.galaxy.ad.utils
+package com.configheroid.android.utils
 
 import java.util.Calendar
 
