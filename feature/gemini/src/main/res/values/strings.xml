@@ -9,7 +9,7 @@
 
     <string name="hint_generate_text">Please enter the text…</string>
 
-    <string name="title_cogni_heroid_demo">CogniHeroid AI Demo</string>
+    <string name="title_cogni_heroid_demo">Gemini AI</string>
 
     <string name="placeholder_generate_text">Generating text...</string>
     <string name="placeholder_advance_generate_text">Generating content...</string>

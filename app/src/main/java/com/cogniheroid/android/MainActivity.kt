@@ -8,7 +8,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
-import com.cogniheroid.android.ad.ui.theme.AdGalaxyTheme
 import com.cogniheroid.framework.feature.convertor.ui.ConvertorScreen
 
 
@@ -30,9 +29,8 @@ class MainActivity : ComponentActivity() {
 
 
         setContent {
-            AdGalaxyTheme {
                 ConvertorScreen()
-            }
+
         }
 
     }
