@@ -57,6 +57,10 @@ dependencies {
 
     implementation(libs.compose.navigation)
 
+    implementation(libs.activity)
+
+    implementation(libs.coil.compose)
+
     implementation(project(":ui"))
     implementation(project(":utils"))
 

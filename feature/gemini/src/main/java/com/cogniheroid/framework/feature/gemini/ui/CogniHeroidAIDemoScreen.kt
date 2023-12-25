@@ -1,5 +1,7 @@
-package com.cogniheroid.framework.feature.gemini
+package com.cogniheroid.framework.feature.gemini.ui
 
+import android.graphics.Bitmap
+import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,30 +27,41 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.cogniheroid.framework.feature.gemini.textgeneration.TextGenerationScreen
-import com.cogniheroid.framework.ui.component.ConvertorButton
+import com.cogniheroid.android.ad.ui.theme.ComposeUITheme
+import com.cogniheroid.framework.feature.gemini.R
+import com.cogniheroid.framework.feature.gemini.ui.advancetextgeneration.AdvanceTextGeneration
+import com.cogniheroid.framework.feature.gemini.ui.textgeneration.TextGenerationScreen
+import com.cogniheroid.framework.ui.component.CustomButton
 
 enum class GeminiAIRoute(val route: String) {
     GENERATE_TEXT("generateText"),
+    GENERATE_ADVANCE_TEXT("generateAdvanceText"),
     HOME("home")
 }
 
 @Composable
-fun CogniHeroidAIDemoScreen() {
+fun CogniHeroidAIDemoScreen(onAddImage:(onImageAdded:(List<Uri>)->Unit)->Unit) {
+    ComposeUITheme {
+        val navController = rememberNavController()
+        NavHost(navController = navController, startDestination = GeminiAIRoute.HOME.route) {
 
-    val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = GeminiAIRoute.HOME.route){
+            composable(GeminiAIRoute.HOME.route) {
+                CogniHeroidAIDemoContainer(navController = navController)
+            }
 
-        composable(GeminiAIRoute.HOME.route){
-            CogniHeroidAIDemoContainer(navController = navController)
+            composable(GeminiAIRoute.GENERATE_TEXT.route) {
+                TextGenerationScreen {
+                    navController.navigateUp()
+                }
+            }
+
+            composable(GeminiAIRoute.GENERATE_ADVANCE_TEXT.route) {
+                AdvanceTextGeneration(onAddImage){
+                    navController.navigateUp()
+                }
+            }
+
         }
-
-        composable(GeminiAIRoute.GENERATE_TEXT.route){
-           TextGenerationScreen {
-                navController.navigateUp()
-           }
-        }
-
     }
 }
 
@@ -78,8 +91,12 @@ private fun  CogniHeroidAIDemoContainer(navController: NavController){
                 .padding(it), horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            ConvertorButton(label = stringResource(id = R.string.title_text_generation)) {
+            CustomButton(modifier = Modifier.padding(top = 32.dp), label = stringResource(id = R.string.title_text_generation)) {
                 navController.navigate(GeminiAIRoute.GENERATE_TEXT.route)
+            }
+
+            CustomButton(label = stringResource(id = R.string.title_advance_text_generation)) {
+                navController.navigate(GeminiAIRoute.GENERATE_ADVANCE_TEXT.route)
             }
         }
     }

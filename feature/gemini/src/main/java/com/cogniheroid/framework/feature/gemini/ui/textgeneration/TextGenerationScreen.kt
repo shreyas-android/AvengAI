@@ -1,13 +1,17 @@
-package com.cogniheroid.framework.feature.gemini.textgeneration
+package com.cogniheroid.framework.feature.gemini.ui.textgeneration
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -24,11 +28,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -38,13 +38,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.core.text.HtmlCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.cogniheroid.framework.feature.gemini.CogniHeroidAICore
 import com.cogniheroid.framework.feature.gemini.R
-import com.cogniheroid.framework.ui.component.ConvertorButton
+import com.cogniheroid.framework.ui.component.CustomButton
 import com.cogniheroid.framework.util.ContentUtils
-import kotlinx.coroutines.launch
-import java.net.URLEncoder
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -52,9 +50,8 @@ fun TextGenerationScreen(navigateBack: () -> Unit) {
 
     val textGenerationViewModel = viewModel<TextGenerationViewModel>()
 
-    Scaffold(
-        containerColor = MaterialTheme.colorScheme.background,
-        topBar = {
+    Column(modifier = Modifier.fillMaxSize().background(color = MaterialTheme.colorScheme.background)) {
+
             val colors = TopAppBarDefaults.smallTopAppBarColors(
                 containerColor = MaterialTheme.colorScheme.surface,
             )
@@ -76,45 +73,48 @@ fun TextGenerationScreen(navigateBack: () -> Unit) {
                 })
             }
 
-        }) {
-        TextGenerationViewModel(modifier = Modifier.padding(it),
-            textGenerationUIState = textGenerationViewModel.textGenerationUIStateFlow.collectAsState().value,
-            performIntent = { textGenerationUIEvent ->
-            textGenerationViewModel.performIntent(textGenerationUIEvent)
-        })
+            TextGenerationView(modifier = Modifier,
+                textGenerationUIState = textGenerationViewModel.textGenerationUIStateFlow.collectAsState().value,
+                performIntent = { textGenerationUIEvent ->
+                    textGenerationViewModel.performIntent(textGenerationUIEvent)
+                })
+
     }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun TextGenerationViewModel(modifier: Modifier, textGenerationUIState: TextGenerationUIState, performIntent: (TextGenerationUIEvent) -> Unit){
+fun TextGenerationView(modifier: Modifier, textGenerationUIState: TextGenerationUIState, performIntent: (TextGenerationUIEvent) -> Unit){
     val context = LocalContext.current
     Column(
-        modifier = Modifier
+        modifier = modifier.navigationBarsPadding()
             .imePadding()
             .verticalScroll(rememberScrollState())
             .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        TextInputField(textGenerationUIState.inputText, onInputTextChange = { inputData ->
+        TextInputField(modifier = Modifier.padding(top = 32.dp), textGenerationUIState.inputText,
+            onInputTextChange = { inputData ->
             performIntent(TextGenerationUIEvent.InputText(inputData))
+        }, onClear = {
+            performIntent(TextGenerationUIEvent.ClearText)
         })
 
 
-        ConvertorButton(label = stringResource(R.string.label_generate_text), onClick = {
+        CustomButton(label = stringResource(R.string.label_generate_text), onClick = {
            performIntent(TextGenerationUIEvent.GenerateText(textGenerationUIState.inputText))
         })
 
 
+        if (textGenerationUIState.outputText.isNotEmpty() || textGenerationUIState.isGenerating) {
 
-        if (textGenerationUIState.outputText.isNotEmpty()) {
-
-            Text(
-                text = stringResource(id = R.string.label_generated_by_gemini),
-                fontSize = 16.sp, modifier = Modifier
-                    .padding(top = 32.dp, bottom = 16.dp)
-            )
-
+            if (!textGenerationUIState.isGenerating) {
+                Text(
+                    text = stringResource(id = R.string.label_generated_by_gemini),
+                    fontSize = 16.sp, modifier = Modifier
+                        .padding(top = 32.dp, bottom = 16.dp), color = MaterialTheme.colorScheme.onSurface
+                )
+            }
             val cardColors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surface
             )
@@ -130,41 +130,48 @@ fun TextGenerationViewModel(modifier: Modifier, textGenerationUIState: TextGener
                 ) {
                     val (text, share, copy) = createRefs()
 
-                    Icon(modifier = Modifier
-                        .padding(top = 16.dp, end = 16.dp)
-                        .constrainAs(share) {
-                            top.linkTo(parent.top)
-                            end.linkTo(copy.start)
+                    if (!textGenerationUIState.isGenerating) {
+                        Icon(modifier = Modifier.size(24.dp)
+                            .padding(top = 8.dp, end = 8.dp)
+                            .constrainAs(share) {
+                                top.linkTo(parent.top)
+                                end.linkTo(copy.start)
 
-                        }
-                        .clickable {
-                            ContentUtils.shareContent(
-                                context = context,
-                                data = textGenerationUIState.outputText
-                            )
-                        },
-                        painter = painterResource(id = R.drawable.ic_share),
-                        contentDescription = "", tint = MaterialTheme.colorScheme.primary
-                    )
+                            }
+                            .clickable {
+                                ContentUtils.shareContent(
+                                    context = context,
+                                    data = textGenerationUIState.outputText
+                                )
+                            },
+                            painter = painterResource(id = R.drawable.ic_share),
+                            contentDescription = "", tint = MaterialTheme.colorScheme.primary
+                        )
 
-                    Icon(modifier = Modifier
-                        .padding(top = 16.dp, end = 16.dp)
-                        .constrainAs(copy) {
-                            top.linkTo(parent.top)
-                            end.linkTo(parent.end)
-                        }
-                        .clickable {
-                            ContentUtils.copyAndShowToast(
-                                context = context,
-                                result = textGenerationUIState.outputText
-                            )
-                        },
-                        painter = painterResource(id = R.drawable.ic_copy),
-                        contentDescription = "", tint = MaterialTheme.colorScheme.primary
-                    )
+                        Icon(modifier = Modifier.size(24.dp)
+                            .padding(top = 8.dp, end = 8.dp)
+                            .constrainAs(copy) {
+                                top.linkTo(parent.top)
+                                end.linkTo(parent.end)
+                            }
+                            .clickable {
+                                ContentUtils.copyAndShowToast(
+                                    context = context,
+                                    result = textGenerationUIState.outputText
+                                )
+                            },
+                            painter = painterResource(id = R.drawable.ic_copy),
+                            contentDescription = "", tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
 
+                    val result = if (textGenerationUIState.isGenerating) {
+                        stringResource(id = R.string.placeholder_generate_text)
+                    } else {
+                        textGenerationUIState.outputText
+                    }
 
-                    Text(text = textGenerationUIState.outputText, fontSize = 16.sp,
+                    Text(text = HtmlCompat.fromHtml(result,0).toString(), fontSize = 16.sp,
                         modifier = Modifier
                             .constrainAs(text) {
                                 top.linkTo(parent.top)
@@ -194,7 +201,7 @@ fun TextGenerationViewModel(modifier: Modifier, textGenerationUIState: TextGener
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TextInputField(inputText: String, onInputTextChange: (String) -> Unit) {
+private fun TextInputField(modifier: Modifier = Modifier, inputText: String, onInputTextChange: (String) -> Unit, onClear:()->Unit) {
 
     OutlinedTextField(
         value = inputText,
@@ -204,6 +211,17 @@ private fun TextInputField(inputText: String, onInputTextChange: (String) -> Uni
         label = {
             Text(text = stringResource(R.string.hint_generate_text))
         },
-        modifier = Modifier.padding(16.dp)
+        modifier = modifier.padding(16.dp).fillMaxWidth(), trailingIcon = {
+            if (!inputText.isNullOrEmpty()) {
+                IconButton(onClick = {
+                    onClear()
+                }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_close),
+                        contentDescription = "", tint = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
+        }
     )
 }
