@@ -1,10 +1,12 @@
 package com.cogniheroid.framework.core.ai
 
+import android.graphics.Bitmap
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.GenerateContentResponse
+import com.google.ai.client.generativeai.type.content
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 
 
 class AvengerAITextModel(apiKey:String) {
@@ -14,15 +16,30 @@ class AvengerAITextModel(apiKey:String) {
         apiKey = apiKey
     )
 
-    suspend fun generateText(text:String, callback:(String)->Unit){
-        val generateResponse = textGenerativeModel.generateContent(text)
-        generateResponse.text?.let {
-            callback(it)
-        }
-    }
+    private val advanceTextGenerationModel = GenerativeModel(
+        modelName = GenerativeAIModelEnum.GEMINI_VISION.modelName,
+        apiKey = apiKey
+    )
 
-    suspend fun generateTextStream(text: String): Flow<GenerateContentResponse> {
-        return textGenerativeModel.generateContentStream(text)
+    suspend fun generateTextStreamContent(imageInputList:List<Bitmap> = listOf(), text: String): Flow<String?>{
+        val input = content {
+            imageInputList.forEach {
+                image(it)
+            }
+            text(text)
+        }
+
+        val generationModel = if (imageInputList.isNotEmpty()) advanceTextGenerationModel else textGenerativeModel
+
+        return runCatching { generationModel.generateContentStream(input)}.fold(onSuccess = {
+            it.map { generateContentResponse: GenerateContentResponse ->
+                generateContentResponse.text
+            }
+        }, onFailure = {
+            flow {
+                emit(it.message)
+            }
+        })
     }
 
 }

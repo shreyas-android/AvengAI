@@ -8,9 +8,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
-import com.cogniheroid.framework.feature.gemini.CogniHeroidAIDemoScreen
+import com.configheroid.android.ad.ui.theme.AdGalaxyTheme
 import com.configheroid.framework.feature.convertor.ui.ConvertorScreen
-
 
 class ConvertorActivity : ComponentActivity() {
 
@@ -23,8 +22,9 @@ class ConvertorActivity : ComponentActivity() {
                 or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
         window.statusBarColor = Color.TRANSPARENT
 
+
         setContent {
-                ConvertorScreen()
+            ConvertorScreen()
         }
 
     }

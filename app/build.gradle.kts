@@ -17,12 +17,14 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        //load the values from .properties file
         val keystoreFile = project.rootProject.file("local.properties")
-        val properties = Properties()
+        val properties = org.jetbrains.kotlin.konan.properties.Properties()
         properties.load(keystoreFile.inputStream())
 
-        buildConfigField("String", "COGNI_HEROID_AI_API_KEY", properties.getProperty("COGNI_HEROID_AI_API_KEY"))
+        // Set API keys in BuildConfig
+        buildConfigField("String", "cogni_heroid_ai_api_key", "${properties.getProperty("COGNI_HEROID_AI_API_KEY")}")
+
+      //  buildConfigField("String", "cogni_heroid_ai_api_key", properties.getProperty("COGNI_HEROID_AI_API_KEY"))
     }
 
     buildTypes {
@@ -101,7 +103,5 @@ dependencies {
     implementation(libs.lifeCycleProcess)
 
     implementation(project(":feature:convertor"))
-
     implementation(project(":feature:gemini"))
-
 }
