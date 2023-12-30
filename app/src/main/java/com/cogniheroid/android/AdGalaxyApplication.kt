@@ -23,8 +23,6 @@ class AdGalaxyApplication : Application(), Application.ActivityLifecycleCallback
 
         private val prefName = "adgalaxy_app_pref"
 
-        val prefAdUnitType = "ad_unit_type"
-        val prefTime = "time"
     }
 
 
@@ -32,8 +30,6 @@ class AdGalaxyApplication : Application(), Application.ActivityLifecycleCallback
     override fun onCreate() {
         super.onCreate()
         INSTANCE = this
-
-
 
         pref = getSharedPreferences(prefName, Context.MODE_PRIVATE)
         prefEditor = pref.edit()

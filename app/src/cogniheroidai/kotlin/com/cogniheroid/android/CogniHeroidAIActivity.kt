@@ -2,55 +2,38 @@ package com.cogniheroid.android
 
 import android.content.Intent
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
+import com.cogniheroid.framework.feature.gemini.CogniHeroidAICore
 import com.cogniheroid.framework.feature.gemini.ui.CogniHeroidAIDemoScreen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
-class CogniHeroidAIActivity : ComponentActivity() {
+class CogniHeroidAIActivity : AppCompatActivity() {
 
-    val launcher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult(),
-        ActivityResultCallback<ActivityResult?> {
-            if (it?.resultCode == RESULT_OK) {
-                val singleData = it.data?.data
-                val clipData = it.data?.clipData
-                if (singleData != null) {
-                    itemUri.value = itemUri.value + listOf(singleData)
-                } else if (clipData != null) {
-                    val list = mutableListOf<Uri>()
-                    for (i in 0 until clipData.itemCount) {
-                        list.add(clipData.getItemAt(i).uri)
-                    }
-                    itemUri.value = itemUri.value + list
-
-                }
-            }
-        })
-
-    val imageIntent = Intent().apply {
-        setType("image/*")
-        putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-        setAction(Intent.ACTION_GET_CONTENT)
+    private val launcher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        if (it?.resultCode == RESULT_OK) {
+            itemIntent.value = it.data
+        }
     }
 
-    val itemUri = MutableStateFlow<List<Uri>>(listOf())
+    private val chooser = getCameraGalleryCombinedIntent()
+
+    private val itemIntent = MutableStateFlow<Intent?>(null)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         enableEdgeToEdge()
         WindowCompat.setDecorFitsSystemWindows(window, false)
         window?.decorView?.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -59,19 +42,40 @@ class CogniHeroidAIActivity : ComponentActivity() {
         window.navigationBarColor = Color.TRANSPARENT
 
         setContent {
-            CogniHeroidAIDemoScreen { onImageAdded ->
-                launcher.launch(imageIntent)
+            CogniHeroidAIDemoScreen {
+                launcher.launch(chooser)
+            }
+        }
 
-                lifecycleScope.launch {
-                    itemUri.collectLatest {
-                        if (it.isNotEmpty()) {
-                            onImageAdded(it)
-                            itemUri.value = listOf()
-                        }
-                    }
+        lifecycleScope.launch {
+            itemIntent.collectLatest {
+                it?.let {
+                    CogniHeroidAICore.onImageAdded(it)
                 }
             }
         }
+    }
+
+    fun getCameraGalleryCombinedIntent(): Intent {
+        val imageIntent = Intent().apply {
+            type = "image/*"
+            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            action = Intent.ACTION_GET_CONTENT
+        }
+
+        val cameraIntent = Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE).apply {
+            action = android.provider.MediaStore.ACTION_IMAGE_CAPTURE
+        }
+
+        val intentArray = arrayOf(cameraIntent)
+
+        val chooser = Intent(Intent.ACTION_CHOOSER).apply {
+            putExtra(Intent.EXTRA_INTENT, imageIntent);
+            putExtra(Intent.EXTRA_TITLE, "Select from:");
+            putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
+        }
+
+        return chooser
     }
 
 
