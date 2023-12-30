@@ -1,9 +1,11 @@
 package com.cogniheroid.framework.feature.gemini.ui.textgeneration
 
-import androidx.compose.ui.Modifier
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cogniheroid.framework.feature.gemini.CogniHeroidAICore
+import com.cogniheroid.framework.core.ai.AvengerAITextModel
+import com.cogniheroid.framework.feature.gemini.ui.textgeneration.uistate.TextGenerationUIEvent
+import com.cogniheroid.framework.feature.gemini.ui.textgeneration.uistate.TextGenerationUIState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collectLatest
@@ -11,23 +13,11 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-data class TextGenerationUIState(
-    val inputText:String,
-    val outputText:String,
-    val isGenerating:Boolean
-)
 
-sealed class TextGenerationUIEvent(){
-    data class InputText(val text:String): TextGenerationUIEvent()
-    data class OutputText(val text:String): TextGenerationUIEvent()
-    data class GenerateText(val text:String): TextGenerationUIEvent()
 
-    object ClearText: TextGenerationUIEvent()
-}
 
-class TextGenerationViewModel:ViewModel() {
 
-    private val avengerAITextModel = CogniHeroidAICore.avengerAITextModel
+class TextGenerationViewModel(private val avengerAITextModel: AvengerAITextModel):ViewModel() {
 
     private val inputField = MutableStateFlow("")
 
@@ -59,16 +49,16 @@ class TextGenerationViewModel:ViewModel() {
         }
     }
 
-    fun generateTextAndUpdateResult(text:String) {
+    private fun generateTextAndUpdateResult(text:String) {
         viewModelScope.launch {
-            avengerAITextModel?.generateTextStreamContent(text = text)?.collectLatest {
+            avengerAITextModel.generateTextStreamContent(text = text).collectLatest {
                 result.value += it ?: ""
                 isModelStartedGeneratingText.value = false
             }
         }
     }
 
-    fun clearResult(){
+    private fun clearResult(){
         result.value = ""
     }
 

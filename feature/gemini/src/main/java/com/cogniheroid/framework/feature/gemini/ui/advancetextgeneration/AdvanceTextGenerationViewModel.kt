@@ -1,9 +1,14 @@
 package com.cogniheroid.framework.feature.gemini.ui.advancetextgeneration
 
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cogniheroid.framework.core.ai.AvengerAITextModel
 import com.cogniheroid.framework.feature.gemini.CogniHeroidAICore
+import com.cogniheroid.framework.feature.gemini.ui.advancetextgeneration.uistate.AdvanceTextGenerationUIEffect
+import com.cogniheroid.framework.feature.gemini.ui.advancetextgeneration.uistate.AdvanceTextGenerationUIEvent
+import com.cogniheroid.framework.feature.gemini.ui.advancetextgeneration.uistate.AdvanceTextGenerationUIState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -13,35 +18,14 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-data class AdvanceTextGenerationUIState(
-    val inputText:String,
-    val outputText:String,
-    val isGenerating:Boolean,
-    val bitmaps: List<Bitmap>,
-)
-
-sealed class AdvanceTextGenerationUIEvent {
-    data class InputText(val text: String) : AdvanceTextGenerationUIEvent()
-    data class OutputText(val text: String) : AdvanceTextGenerationUIEvent()
-    data class GenerateText(val text: String) : AdvanceTextGenerationUIEvent()
-
-    object ClearText : AdvanceTextGenerationUIEvent()
-
-    object OnOpenImagePicker : AdvanceTextGenerationUIEvent()
-
-    data class RemoveImage(val image: Bitmap) : AdvanceTextGenerationUIEvent()
-
-    data class AddImage(val image: Bitmap?) : AdvanceTextGenerationUIEvent()
-}
-
-sealed class AdvanceTextGenerationUIEffect {
-   object ShowImagePicker : AdvanceTextGenerationUIEffect()
-}
 
 
-class AdvanceTextGenerationViewModel:ViewModel() {
 
-    private val avengerAITextModel = CogniHeroidAICore.avengerAITextModel
+
+
+
+
+class AdvanceTextGenerationViewModel(private val avengerAITextModel:AvengerAITextModel):ViewModel() {
 
     private val inputField = MutableStateFlow("")
 
@@ -61,6 +45,9 @@ class AdvanceTextGenerationViewModel:ViewModel() {
     val advanceTextGenerationUIEffectFlow = _advanceTextGenerationUIEffectFlow.receiveAsFlow()
 
 
+    init {
+        Log.d("CHECKVIEWMODEL","CHEKCI THE VIEWMODEL init = $")
+    }
     fun performIntent(textGenerationUIEvent: AdvanceTextGenerationUIEvent){
         when(textGenerationUIEvent){
             is AdvanceTextGenerationUIEvent.GenerateText -> {
@@ -98,7 +85,7 @@ class AdvanceTextGenerationViewModel:ViewModel() {
         }
     }
 
-    fun generateTextAndUpdateResult(images: List<Bitmap>, text:String) {
+    private fun generateTextAndUpdateResult(images: List<Bitmap>, text:String) {
         viewModelScope.launch {
             avengerAITextModel?.generateTextStreamContent(imageInputList = images,
                 text = text)?.collectLatest {
@@ -108,11 +95,11 @@ class AdvanceTextGenerationViewModel:ViewModel() {
         }
     }
 
-    fun clearResult(){
+    private fun clearResult(){
         result.value = ""
     }
 
-    fun setSideEffect(advanceTextGenerationUIEffect: AdvanceTextGenerationUIEffect){
+    private fun setSideEffect(advanceTextGenerationUIEffect: AdvanceTextGenerationUIEffect){
         viewModelScope.launch {
             _advanceTextGenerationUIEffectFlow.send(advanceTextGenerationUIEffect)
         }

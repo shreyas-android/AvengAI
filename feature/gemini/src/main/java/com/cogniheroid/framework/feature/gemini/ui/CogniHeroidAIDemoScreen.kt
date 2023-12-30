@@ -1,7 +1,5 @@
 package com.cogniheroid.framework.feature.gemini.ui
 
-import android.graphics.Bitmap
-import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,7 +38,7 @@ enum class GeminiAIRoute(val route: String) {
 }
 
 @Composable
-fun CogniHeroidAIDemoScreen(onAddImage:(onImageAdded:(List<Uri>)->Unit)->Unit) {
+fun CogniHeroidAIDemoScreen(onAddImage: () -> Unit) {
     ComposeUITheme {
         val navController = rememberNavController()
         NavHost(navController = navController, startDestination = GeminiAIRoute.HOME.route) {

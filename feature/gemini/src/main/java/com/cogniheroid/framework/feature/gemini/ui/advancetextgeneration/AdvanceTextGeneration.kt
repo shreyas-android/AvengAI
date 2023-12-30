@@ -1,14 +1,9 @@
 package com.cogniheroid.framework.feature.gemini.ui.advancetextgeneration
 
-import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
-import android.os.ParcelFileDescriptor
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultCallback
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -17,14 +12,12 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -38,7 +31,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -49,10 +41,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -65,63 +56,119 @@ import coil.ImageLoader
 import coil.request.ImageRequest
 import coil.request.SuccessResult
 import coil.size.Precision
+import com.cogniheroid.framework.feature.gemini.CogniHeroidAICore
 import com.cogniheroid.framework.feature.gemini.R
+import com.cogniheroid.framework.feature.gemini.ui.advancetextgeneration.uistate.AdvanceTextGenerationUIEffect
+import com.cogniheroid.framework.feature.gemini.ui.advancetextgeneration.uistate.AdvanceTextGenerationUIEvent
+import com.cogniheroid.framework.feature.gemini.ui.advancetextgeneration.uistate.AdvanceTextGenerationUIState
 import com.cogniheroid.framework.ui.component.CustomButton
 import com.cogniheroid.framework.util.ContentUtils
-import com.cogniheroid.framework.util.ImageUtils
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.io.IOException
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AdvanceTextGeneration(
-    onAddImage: (onImageAdded: (List<Uri>) -> Unit) -> Unit,
-    navigateBack: () -> Unit
-) {
+    onAddImage: () -> Unit, navigateBack: () -> Unit) {
 
     val imageRequestBuilder = ImageRequest.Builder(LocalContext.current)
     val imageLoader = ImageLoader.Builder(LocalContext.current).build()
 
     val coroutineScope = rememberCoroutineScope()
-    val advanceTextGenerationViewModel = viewModel<AdvanceTextGenerationViewModel>()
+    val advanceTextGenerationViewModel = viewModel<AdvanceTextGenerationViewModel>(
+        factory = CogniHeroidAICore.advanceTextGenerationViewModelFactory
+    )
+
+    LaunchedEffect(key1 = CogniHeroidAICore.imageIntentFlow) {
+        CogniHeroidAICore.imageIntentFlow.collectLatest { intent ->
+            if (intent != null) {
+                val data = intent.extras?.get("data")
+                if (data is Bitmap) {
+                    val imageRequest = imageRequestBuilder
+                        .data(data)
+                        .size(size = 480)
+                        .precision(Precision.EXACT)
+                        .build()
+
+                    coroutineScope.launch {
+                        val bitmap = try {
+                            val result = imageLoader.execute(imageRequest)
+                            if (result is SuccessResult) {
+                                (result.drawable as BitmapDrawable).bitmap
+                            } else {
+                                null
+                            }
+                        } catch (e: Exception) {
+                            null
+                        }
+
+                        advanceTextGenerationViewModel.performIntent(
+                            AdvanceTextGenerationUIEvent
+                                .AddImage(bitmap)
+                        )
+                    }
+                } else {
+                    val singleData = intent.data
+                    val clipData = intent.clipData
+                    val tempList: List<Uri> = if (singleData != null) {
+                        listOf(singleData)
+                    } else if (clipData != null) {
+                        val list = mutableListOf<Uri>()
+                        for (i in 0 until clipData.itemCount) {
+                            list.add(clipData.getItemAt(i).uri)
+                        }
+                        list
+                    } else {
+                        listOf()
+                    }
+
+                    tempList.forEach { uri ->
+                        coroutineScope.launch {
+                            val imageRequest = imageRequestBuilder
+                                .data(uri)
+                                .size(size = 480)
+                                .precision(Precision.EXACT)
+                                .build()
+
+                            val bitmap = try {
+                                val result = imageLoader.execute(imageRequest)
+                                if (result is SuccessResult) {
+                                    (result.drawable as BitmapDrawable).bitmap
+                                } else {
+                                    null
+                                }
+                            } catch (e: Exception) {
+                                null
+                            }
+                            advanceTextGenerationViewModel.performIntent(
+                                AdvanceTextGenerationUIEvent
+                                    .AddImage(bitmap)
+                            )
+                        }
+                    }
+                }
+            }
+
+        }
+
+    }
 
     LaunchedEffect(key1 = Unit) {
         advanceTextGenerationViewModel.advanceTextGenerationUIEffectFlow.collectLatest {
             when (it) {
                 AdvanceTextGenerationUIEffect.ShowImagePicker -> {
-                    onAddImage() {
-                        it.forEach { uri ->
-                            coroutineScope.launch {
-                                val imageRequest = imageRequestBuilder
-                                    .data(uri)
-                                    .size(size = 480)
-                                    .precision(Precision.EXACT)
-                                    .build()
-
-                                val bitmap = try {
-                                    val result = imageLoader.execute(imageRequest)
-                                    if (result is SuccessResult) {
-                                        (result.drawable as BitmapDrawable).bitmap
-                                    } else {
-                                        null
-                                    }
-                                } catch (e: Exception) {
-                                    null
-                                }
-                                advanceTextGenerationViewModel.performIntent(
-                                    AdvanceTextGenerationUIEvent
-                                        .AddImage(bitmap)
-                                )
-                            }
-                        }
-                    }
+                    onAddImage()
                 }
             }
         }
     }
-    Column(modifier = Modifier.fillMaxSize().background(color = MaterialTheme.colorScheme.background)) {
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = MaterialTheme.colorScheme.background)
+    ) {
 
         val colors = TopAppBarDefaults.smallTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.surface,
@@ -158,10 +205,13 @@ private fun AdvanceTextGenerationView(
     textGenerationUIState: AdvanceTextGenerationUIState,
     performIntent: (AdvanceTextGenerationUIEvent) -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
     val context = LocalContext.current
     Column(
-        modifier = modifier.navigationBarsPadding()
-            .imePadding().verticalScroll(rememberScrollState())
+        modifier = modifier
+            .navigationBarsPadding()
+            .imePadding()
+            .verticalScroll(rememberScrollState())
             .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
@@ -188,6 +238,7 @@ private fun AdvanceTextGenerationView(
                 Icon(
                     modifier = Modifier
                         .clickable {
+                            focusManager.clearFocus()
                             performIntent(AdvanceTextGenerationUIEvent.OnOpenImagePicker)
                         },
                     painter = painterResource(id = R.drawable.ic_add_photo),
@@ -211,16 +262,7 @@ private fun AdvanceTextGenerationView(
 
         }
 
-        val cardColors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        )
-
         if (textGenerationUIState.bitmaps.isNotEmpty()) {
-            /*Card(
-                modifier = Modifier.padding(top = 32.dp).wrapContentSize().padding(16.dp),
-                colors = cardColors,
-                elevation = CardDefaults.outlinedCardElevation(defaultElevation = 3.dp)
-            ) {*/
             LazyRow(
                 modifier = Modifier
                     .padding(top = 32.dp)
@@ -277,13 +319,13 @@ private fun AdvanceTextGenerationView(
 
                 }
             }
-            //}
         }
 
         CustomButton(
             modifier = Modifier.padding(top = 16.dp),
             label = stringResource(R.string.label_generate_text),
             onClick = {
+                focusManager.clearFocus()
                 performIntent(AdvanceTextGenerationUIEvent.GenerateText(textGenerationUIState.inputText))
             })
 
@@ -293,8 +335,10 @@ private fun AdvanceTextGenerationView(
             if (!textGenerationUIState.isGenerating) {
                 Text(
                     text = stringResource(id = R.string.label_generated_by_gemini),
-                    fontSize = 16.sp, modifier = Modifier
-                        .padding(top = 32.dp, bottom = 16.dp), color = MaterialTheme.colorScheme.onSurface
+                    fontSize = 16.sp,
+                    modifier = Modifier
+                        .padding(top = 32.dp, bottom = 16.dp),
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
 
@@ -315,13 +359,15 @@ private fun AdvanceTextGenerationView(
 
                     if (!textGenerationUIState.isGenerating) {
                         Icon(modifier = Modifier
-                            .padding(top = 16.dp, end = 16.dp)
+                            .size(28.dp)
+                            .padding(top = 8.dp, end = 8.dp)
                             .constrainAs(share) {
                                 top.linkTo(parent.top)
                                 end.linkTo(copy.start)
 
                             }
                             .clickable {
+                                focusManager.clearFocus()
                                 ContentUtils.shareContent(
                                     context = context,
                                     data = textGenerationUIState.outputText
@@ -332,12 +378,14 @@ private fun AdvanceTextGenerationView(
                         )
 
                         Icon(modifier = Modifier
-                            .padding(top = 16.dp, end = 16.dp)
+                            .size(28.dp)
+                            .padding(top = 8.dp, end = 8.dp)
                             .constrainAs(copy) {
                                 top.linkTo(parent.top)
                                 end.linkTo(parent.end)
                             }
                             .clickable {
+                                focusManager.clearFocus()
                                 ContentUtils.copyAndShowToast(
                                     context = context,
                                     result = textGenerationUIState.outputText
@@ -354,7 +402,7 @@ private fun AdvanceTextGenerationView(
                         textGenerationUIState.outputText
                     }
 
-                    Text(text = HtmlCompat.fromHtml(result,0).toString(), fontSize = 16.sp,
+                    Text(text = HtmlCompat.fromHtml(result, 0).toString(), fontSize = 16.sp,
                         modifier = Modifier
                             .constrainAs(text) {
                                 top.linkTo(parent.top)
@@ -402,7 +450,7 @@ private fun TextInputField(
         modifier = modifier
             .padding(start = 8.dp, end = 16.dp)
             .fillMaxWidth(), trailingIcon = {
-            if (!inputText.isNullOrEmpty()) {
+            if (inputText.isNotEmpty()) {
                 IconButton(onClick = {
                     onClear()
                 }) {
@@ -457,8 +505,8 @@ fun PhotoReasoningScreen(
     uiState: PhotoReasoningUiState = PhotoReasoningUiState.Loading,
     onReasonClicked: (String, List<Uri>) -> Unit = { _, _ -> }
 ) {
-    var userQuestion by rememberSaveable { mutableStateOf("") }
-    val imageUris = rememberSaveable(saver = UriSaver()) { mutableStateListOf() }
+    var userQuestion by remember Save able { mutableStateOf("") }
+    val imageUris = rememberSave able(saver = UriSaver()) { mutableStateListOf() }
 
     val pickMedia = rememberLauncherForActivityResult(
         ActivityResultContracts.PickVisualMedia()
@@ -571,7 +619,7 @@ fun PhotoReasoningScreen(
                                 }
                         )
                         Text(
-                            text = uiState.outputText, // TODO(thatfiredev): Figure out Markdown support
+                            text = uiState.outputText, // TODO(that fire dev): Figure out Markdown support
                             color = MaterialTheme.colorScheme.onSecondary,
                             modifier = Modifier
                                 .padding(start = 16.dp)

@@ -1,13 +1,29 @@
 package com.cogniheroid.framework.feature.gemini
 
+import android.content.Intent
 import android.util.Log
 import com.cogniheroid.framework.core.ai.AvengerAITextModel
+import com.cogniheroid.framework.feature.gemini.ui.advancetextgeneration.AdvanceTextGenerationViewModelFactory
+import com.cogniheroid.framework.feature.gemini.ui.textgeneration.TextGenerationViewModelFactory
+import kotlinx.coroutines.flow.MutableStateFlow
 
 object CogniHeroidAICore {
 
-    var avengerAITextModel:AvengerAITextModel? = null
+    lateinit var advanceTextGenerationViewModelFactory: AdvanceTextGenerationViewModelFactory
+
+    lateinit var textGenerationViewModelFactory: TextGenerationViewModelFactory
+
+    internal val imageIntentFlow = MutableStateFlow<Intent?>(null)
+
     fun init(apiKey:String){
-        Log.d("CHECKAPIKEY","CHEKCING THE API KEY = $apiKey")
-        avengerAITextModel = AvengerAITextModel(apiKey)
+        val avengerAITextModel = AvengerAITextModel(apiKey)
+        advanceTextGenerationViewModelFactory =
+            AdvanceTextGenerationViewModelFactory(avengerAITextModel)
+        textGenerationViewModelFactory =
+            TextGenerationViewModelFactory(avengerAITextModel)
+    }
+
+    fun onImageAdded(intent: Intent){
+        imageIntentFlow.value = intent
     }
 }
