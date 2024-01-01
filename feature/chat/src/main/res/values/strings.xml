@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_chat">Chat with AI</string>
+    <string name="placeholder_yesterday">Yesterday</string>
+    <string name="placeholder_start_typing">Start typing…</string>
+</resources>
