@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
-class CogniHeroidAIActivity : AppCompatActivity() {
+class CogniHeroidAIActivity : BaseActivity() {
 
     private val launcher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -34,12 +34,6 @@ class CogniHeroidAIActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        window?.decorView?.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
-        window.statusBarColor = Color.TRANSPARENT
-        window.navigationBarColor = Color.TRANSPARENT
 
         setContent {
             CogniHeroidAIDemoScreen {
@@ -56,7 +50,7 @@ class CogniHeroidAIActivity : AppCompatActivity() {
         }
     }
 
-    fun getCameraGalleryCombinedIntent(): Intent {
+   private fun getCameraGalleryCombinedIntent(): Intent {
         val imageIntent = Intent().apply {
             type = "image/*"
             putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)

@@ -11,18 +11,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.configheroid.android.ad.ui.theme.AdGalaxyTheme
 import com.configheroid.framework.feature.convertor.ui.ConvertorScreen
 
-class ConvertorActivity : ComponentActivity() {
+class ConvertorActivity : BaseActitivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        enableEdgeToEdge()
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        window?.decorView?.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
-        window.statusBarColor = Color.TRANSPARENT
-
-
         setContent {
             ConvertorScreen()
         }

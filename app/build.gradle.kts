@@ -68,12 +68,12 @@ android {
 
         create("cogniheroidai"){
             applicationIdSuffix = ".ai"
-            versionCode = 1
-            versionName = "1.0.0"
+            versionCode = 2
+            versionName = "1.0.1"
         }
 
-        create("spinner"){
-            applicationIdSuffix = ".spinner"
+        create("chat"){
+            applicationIdSuffix = ".chat"
             versionCode = 1
             versionName = "1.0.0"
         }
@@ -104,4 +104,5 @@ dependencies {
 
     implementation(project(":feature:convertor"))
     implementation(project(":feature:gemini"))
+    implementation(project(":feature:chat"))
 }
