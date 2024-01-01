@@ -26,13 +26,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.core.graphics.drawable.toBitmap
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
@@ -80,7 +86,7 @@ internal fun ChatListScreen(navController: NavController, chatViewModel: ChatVie
         },
             chatListItem = listOf(
                 ChatListItem(
-                    1L, "2", "3",
+                    1L, "SHREYAS", "3",
                     4, 5
                 )
             )
@@ -139,18 +145,24 @@ private fun ChatListItemContainer(
             .build()
         val painter = rememberAsyncImagePainter(model = imageLoader)
 
-        Image(modifier = Modifier.constrainAs(image) {
+        val modifier = Modifier.padding(end = 16.dp).constrainAs(image) {
             top.linkTo(parent.top)
             start.linkTo(parent.start)
             bottom.linkTo(parent.bottom)
-        }, painter = painter, contentDescription = "")
+        }
 
+        val avatarImageSize = with(LocalDensity.current) { 40.dp.toPx() }.toInt()
+        if (chatListItem.imageUri == null) {
+            Image(modifier = modifier, bitmap = drawable.toBitmap(avatarImageSize, avatarImageSize).asImageBitmap(), contentDescription = "")
+        }else{
+            Image(modifier = modifier, painter = painter, contentDescription = "")
+        }
         Text(modifier = Modifier.constrainAs(title) {
             top.linkTo(parent.top)
             start.linkTo(image.end)
             end.linkTo(time.start)
             width = Dimension.fillToConstraints
-        }, text = chatListItem.title, fontSize = 16.sp)
+        }, text = chatListItem.title, fontSize = 16.sp, fontWeight = FontWeight.Medium)
 
         Text(modifier = Modifier
             .padding(top = 4.dp)

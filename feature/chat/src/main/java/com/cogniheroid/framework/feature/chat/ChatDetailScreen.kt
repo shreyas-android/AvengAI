@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -31,16 +32,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.core.graphics.drawable.toBitmap
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import coil.transform.CircleCropTransformation
 import com.cogniheroid.framework.feature.chat.data.model.ChatDetailItem
 import com.cogniheroid.framework.feature.chat.data.model.MessageItem
 import com.cogniheroid.framework.feature.chat.data.model.ChatListItem
+import com.cogniheroid.framework.util.ImageUtils
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,6 +64,8 @@ internal fun ChatDetailScreen(
     val message = remember() {
         mutableStateOf("")
     }
+
+    val context = LocalContext.current
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
@@ -69,10 +82,29 @@ internal fun ChatDetailScreen(
                     start.linkTo(parent.start)
                 }
                 .statusBarsPadding(), colors = colors, title = {
-                Text(
-                    text = chatListItem.title,
-                    fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface
-                )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+
+                        val drawable = ImageUtils.getComposeContactPlaceHolder(chatListItem.title)
+                        val imageLoader = ImageRequest.Builder(context).data(chatListItem.imageUri)
+                            .error(drawable).placeholder(drawable).transformations(
+                                CircleCropTransformation()
+                            ).build()
+                        val painter = rememberAsyncImagePainter(model = imageLoader)
+
+                        val modifier = Modifier.padding(end = 16.dp)
+                        val avatarImageSize = with(LocalDensity.current) { 32.dp.toPx() }.toInt()
+                        if (chatListItem.imageUri == null) {
+                            Image(modifier = modifier, bitmap = drawable.toBitmap(avatarImageSize, avatarImageSize).asImageBitmap(), contentDescription = "")
+                        }else{
+                            Image(modifier = modifier, painter = painter, contentDescription = "")
+                        }
+
+                        Text(
+                            text = chatListItem.title,
+                            fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
             }, navigationIcon = {
                 IconButton(onClick = {
                     navigateBack()
