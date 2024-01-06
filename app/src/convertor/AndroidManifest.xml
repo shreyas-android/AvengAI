@@ -21,7 +21,7 @@
 
 
         <activity
-            android:name="com.cogniheroid.android.ConvertorActivity"
+            android:name="com.configheroid.android.ConvertorActivity"
             android:exported="true"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
