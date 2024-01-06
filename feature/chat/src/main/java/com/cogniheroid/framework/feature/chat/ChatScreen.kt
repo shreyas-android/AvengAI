@@ -13,9 +13,6 @@ enum class ChatRoute(val route: String) {
     HOME("home")
 }
 
-const val CHAT_LIST_ITEM_ARG = "chat_list_item"
-
-
 @Composable
 fun ChatScreen() {
     val chatViewModel = viewModel<ChatViewModel>()

@@ -66,7 +66,7 @@ android {
             versionName = "1.0.0"
         }
 
-        create("cogniheroidai"){
+        create("avengai"){
             applicationIdSuffix = ".ai"
             versionCode = 2
             versionName = "1.0.1"
@@ -103,6 +103,6 @@ dependencies {
     implementation(libs.lifeCycleProcess)
 
     implementation(project(":feature:convertor"))
-    implementation(project(":feature:gemini"))
+    implementation(project(":feature:avengai"))
     implementation(project(":feature:chat"))
 }

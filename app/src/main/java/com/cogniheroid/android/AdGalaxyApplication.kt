@@ -7,7 +7,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ProcessLifecycleOwner
-import com.cogniheroid.framework.feature.gemini.CogniHeroidAICore
+import com.cogniheroid.framework.feature.avengai.AvengAICore
 
 
 class AdGalaxyApplication : Application(), Application.ActivityLifecycleCallbacks,
@@ -37,7 +37,7 @@ class AdGalaxyApplication : Application(), Application.ActivityLifecycleCallback
         registerActivityLifecycleCallbacks(this)
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
 
-        CogniHeroidAICore.init(BuildConfig.cogni_heroid_ai_api_key)
+        AvengAICore.init(BuildConfig.cogni_heroid_ai_api_key)
     }
 
 
