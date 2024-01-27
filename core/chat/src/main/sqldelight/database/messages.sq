@@ -1,0 +1,48 @@
+insertMessage:
+INSERT INTO Messages (messageId, chatId, senderId, message, messageStartDate, messageTime, fileUri, readStatus, messageType, messageContentType, replyMessageId)
+VALUES (?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?);
+
+getLocalMessageId:
+SELECT MAX(messageId) FROM Messages;
+
+getMessages:
+SELECT * FROM Messages WHERE chatId = :chatId;
+
+
+updateMessage:
+UPDATE Messages
+SET
+  chatId = :chatId,
+  senderId = :senderId,
+  message = :message,
+  messageStartDate = :messageStartDate,
+  messageTime = :messageTime,
+  fileUri = :fileUri,
+  readStatus = :readStatus,
+  messageType = :messageType,
+  messageContentType = :messageContentType,
+  replyMessageId = :replyMessageId
+WHERE
+  messageId = :messageId;
+
+
+deleteMessage:
+DELETE FROM Messages WHERE messageId = :messageId;
+
+deleteMessageByChatId:
+DELETE FROM Messages WHERE chatId=:chatId;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

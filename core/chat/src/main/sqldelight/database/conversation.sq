@@ -1,0 +1,15 @@
+insertChatList:
+INSERT INTO Conversation (id, title, imageUri, lastMessageId, unreadCount)
+VALUES (?, ?, ?, ?, ?);
+
+getLastLocalChatId:
+SELECT MAX(id) FROM Conversation;
+
+getChatList:
+SELECT * FROM Conversation ORDER BY id DESC;
+
+deleteChatList:
+DELETE FROM Conversation WHERE id = :chatListId;
+
+
+
