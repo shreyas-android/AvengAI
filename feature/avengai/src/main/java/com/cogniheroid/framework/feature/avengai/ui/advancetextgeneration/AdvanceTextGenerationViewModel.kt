@@ -4,7 +4,8 @@ import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cogniheroid.framework.core.ai.AvengerAITextModel
+import com.cogniheroid.framework.core.ai.AvengerAIManager
+import com.cogniheroid.framework.core.ai.data.model.ModelInput
 import com.cogniheroid.framework.feature.avengai.ui.advancetextgeneration.uistate.AdvanceTextGenerationUIEffect
 import com.cogniheroid.framework.feature.avengai.ui.advancetextgeneration.uistate.AdvanceTextGenerationUIEvent
 import com.cogniheroid.framework.feature.avengai.ui.advancetextgeneration.uistate.AdvanceTextGenerationUIState
@@ -17,14 +18,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-
-
-
-
-
-
-
-class AdvanceTextGenerationViewModel(private val avengerAITextModel:AvengerAITextModel):ViewModel() {
+class AdvanceTextGenerationViewModel(private val avengerAIManager:AvengerAIManager):ViewModel() {
 
     private val inputField = MutableStateFlow("")
 
@@ -86,12 +80,22 @@ class AdvanceTextGenerationViewModel(private val avengerAITextModel:AvengerAITex
 
     private fun generateTextAndUpdateResult(images: List<Bitmap>, text:String) {
         viewModelScope.launch {
-            avengerAITextModel?.generateTextStreamContent(imageInputList = images,
-                text = text)?.collectLatest {
-                result.value += it ?: ""
-                isModelStartedGeneratingText.value = false
-            }
+
+            avengerAIManager.generateTextStreamContent(getModelInputList(images, text))
+                .collectLatest {
+                    result.value += it ?: ""
+                    isModelStartedGeneratingText.value = false
+                }
         }
+    }
+
+    private fun getModelInputList(images: List<Bitmap>, text:String):List<ModelInput>{
+        val modelInputList = mutableListOf<ModelInput>()
+        images.forEach {
+            modelInputList.add(ModelInput.Image(it))
+        }
+        modelInputList.add(ModelInput.Text(text))
+        return modelInputList
     }
 
     private fun clearResult(){

@@ -55,7 +55,7 @@ import coil.ImageLoader
 import coil.request.ImageRequest
 import coil.request.SuccessResult
 import coil.size.Precision
-import com.cogniheroid.framework.feature.avengai.AvengAICore
+import com.cogniheroid.framework.feature.avengai.AvengerAICore
 import com.cogniheroid.framework.feature.avengai.R
 import com.cogniheroid.framework.feature.avengai.ui.advancetextgeneration.uistate.AdvanceTextGenerationUIEffect
 import com.cogniheroid.framework.feature.avengai.ui.advancetextgeneration.uistate.AdvanceTextGenerationUIEvent
@@ -76,11 +76,11 @@ fun AdvanceTextGeneration(
 
     val coroutineScope = rememberCoroutineScope()
     val advanceTextGenerationViewModel = viewModel<AdvanceTextGenerationViewModel>(
-        factory = AvengAICore.advanceTextGenerationViewModelFactory
+        factory = AvengerAICore.advanceTextGenerationViewModelFactory
     )
 
-    LaunchedEffect(key1 = AvengAICore.imageIntentFlow) {
-        AvengAICore.imageIntentFlow.collectLatest { intent ->
+    LaunchedEffect(key1 = AvengerAICore.imageIntentFlow) {
+        AvengerAICore.imageIntentFlow.collectLatest { intent ->
             if (intent != null) {
                 val data = intent.extras?.get("data")
                 if (data is Bitmap) {
@@ -533,7 +533,7 @@ fun PhotoReasoningScreen(
                         )
                     },
                     modifier = Modifier
-                        .padding(all = 4.dp)
+                        .padding(all = Dimensions.padding4)
                         .align(Alignment.CenterVertically)
                 ) {
                     Icon(
@@ -556,7 +556,7 @@ fun PhotoReasoningScreen(
                         }
                     },
                     modifier = Modifier
-                        .padding(all = 4.dp)
+                        .padding(all = Dimensions.padding4)
                         .align(Alignment.CenterVertically)
                 ) {
                     Text(stringResource(R.string.action_go))
@@ -570,7 +570,7 @@ fun PhotoReasoningScreen(
                         model = imageUri,
                         contentDescription = null,
                         modifier = Modifier
-                            .padding(4.dp)
+                            .padding(Dimensions.padding4)
                             .requiredSize(72.dp)
                     )
                 }

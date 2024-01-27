@@ -39,7 +39,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.core.text.HtmlCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.cogniheroid.framework.feature.avengai.AvengAICore
+import com.cogniheroid.framework.feature.avengai.AvengerAICore
 import com.cogniheroid.framework.feature.avengai.R
 import com.cogniheroid.framework.feature.avengai.ui.textgeneration.uistate.TextGenerationUIEvent
 import com.cogniheroid.framework.feature.avengai.ui.textgeneration.uistate.TextGenerationUIState
@@ -51,7 +51,7 @@ import com.cogniheroid.framework.util.ContentUtils
 fun TextGenerationScreen(navigateBack: () -> Unit) {
 
     val textGenerationViewModel = viewModel<TextGenerationViewModel>(
-        factory = AvengAICore.textGenerationViewModelFactory)
+        factory = AvengerAICore.textGenerationViewModelFactory)
 
     Column(
         modifier = Modifier

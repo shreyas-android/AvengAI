@@ -1,9 +1,9 @@
 package com.cogniheroid.framework.feature.avengai.ui.textgeneration
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cogniheroid.framework.core.ai.AvengerAITextModel
+import com.cogniheroid.framework.core.ai.AvengerAIManager
+import com.cogniheroid.framework.core.ai.data.model.ModelInput
 import com.cogniheroid.framework.feature.avengai.ui.textgeneration.uistate.TextGenerationUIEvent
 import com.cogniheroid.framework.feature.avengai.ui.textgeneration.uistate.TextGenerationUIState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,11 +13,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-
-
-
-
-class TextGenerationViewModel(private val avengerAITextModel: AvengerAITextModel):ViewModel() {
+class TextGenerationViewModel(private val avengerAIManager: AvengerAIManager):ViewModel() {
 
     private val inputField = MutableStateFlow("")
 
@@ -51,7 +47,8 @@ class TextGenerationViewModel(private val avengerAITextModel: AvengerAITextModel
 
     private fun generateTextAndUpdateResult(text:String) {
         viewModelScope.launch {
-            avengerAITextModel.generateTextStreamContent(text = text).collectLatest {
+            val modelInput = ModelInput.Text(text)
+            avengerAIManager.generateTextStreamContent(listOf( modelInput)).collectLatest {
                 result.value += it ?: ""
                 isModelStartedGeneratingText.value = false
             }
