@@ -11,5 +11,6 @@ interface AvengerAIManager {
 
     suspend fun generateConversation(modelInputHistory: List<ModelInput>, modelInput: ModelInput): Flow<String?>
 
-    suspend fun generateTextStreamContent(modelInputList:List<ModelInput>): Flow<String?>
+    suspend fun generateTextStreamContent(modelInputList:List<ModelInput>,
+                                          defaultErrorMessage:String): Flow<String?>
 }

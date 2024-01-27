@@ -1,5 +1,6 @@
 package com.cogniheroid.framework.core.ai
 
+import android.util.Log
 import com.cogniheroid.framework.core.ai.data.enums.AvengerAIModelType
 import com.cogniheroid.framework.core.ai.data.model.ModelInput
 import com.google.ai.client.generativeai.GenerativeModel
@@ -15,7 +16,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
 
-internal class AvengerAIManagerImpl(apiKey:String):AvengerAIManager {
+internal class AvengerAIManagerImpl(apiKey: String) : AvengerAIManager {
 
     private val textGenerativeModel = GenerativeModel(
         modelName = AvengerAIModelType.GEMINI_TEXT.modelName,
@@ -27,38 +28,43 @@ internal class AvengerAIManagerImpl(apiKey:String):AvengerAIManager {
         apiKey = apiKey
     )
 
-   override suspend fun generateConversation(modelInputHistory: List<ModelInput>, modelInput: ModelInput): Flow<String?>{
-       val model = if (modelInputHistory.any {
-           it is ModelInput.Image
-           }){
-           advanceTextGenerationModel
-       }else{
-           textGenerativeModel
-       }
+    override suspend fun generateConversation(
+        modelInputHistory: List<ModelInput>,
+        modelInput: ModelInput
+    ): Flow<String?> {
+        val model = if (modelInputHistory.any {
+                it is ModelInput.Image
+            }) {
+            advanceTextGenerationModel
+        } else {
+            textGenerativeModel
+        }
         val historyList = mutableListOf<Content>()
 
-            modelInputHistory.forEach {
-                when(it){
-                    is ModelInput.Image -> {
-                        historyList.add(content("user") {
-                            image(it.bitmap)
-                        })
+        modelInputHistory.forEach {
+            when (it) {
+                is ModelInput.Image -> {
+                    historyList.add(content("user") {
+                        image(it.bitmap)
+                    })
 
-                    }
-                    is ModelInput.Text -> {
-                        historyList.add(content("user") {
-                            text(it.text)
-                        })
-                    }
+                }
+
+                is ModelInput.Text -> {
+                    historyList.add(content("user") {
+                        text(it.text)
+                    })
                 }
             }
+        }
 
-        val prompt = when(modelInput){
+        val prompt = when (modelInput) {
             is ModelInput.Image -> {
                 content("user") {
                     image(modelInput.bitmap)
                 }
             }
+
             is ModelInput.Text -> {
                 content("user") {
                     text(modelInput.text)
@@ -80,17 +86,17 @@ internal class AvengerAIManagerImpl(apiKey:String):AvengerAIManager {
                 emit(it.message)
             }
         })
-/*
-       return chat.sendMessageStream(prompt).map {
-           it.text
-       }*/
+        /*
+               return chat.sendMessageStream(prompt).map {
+                   it.text
+               }*/
 
     }
 
-    override suspend fun generateTextStreamContent(modelInputList:List<ModelInput>): Flow<String?>{
+    override suspend fun generateTextStreamContent(modelInputList: List<ModelInput>, defaultErrorMessage:String): Flow<String?> {
         val input = content {
             modelInputList.forEach {
-                when(it){
+                when (it) {
                     is ModelInput.Image -> image(it.bitmap)
                     is ModelInput.Text -> text(it.text)
                 }
@@ -99,7 +105,8 @@ internal class AvengerAIManagerImpl(apiKey:String):AvengerAIManager {
 
         val isImageInputPresent = modelInputList.any { it is ModelInput.Image }
 
-        val generationModel = if (isImageInputPresent) advanceTextGenerationModel else textGenerativeModel
+        val generationModel =
+            if (isImageInputPresent) advanceTextGenerationModel else textGenerativeModel
 
         return runCatching {
             generationModel.generateContentStream(input)
@@ -108,8 +115,13 @@ internal class AvengerAIManagerImpl(apiKey:String):AvengerAIManager {
                 val generateContentResponse = GenerateContentResponse(listOf(), null)
                 emit(generateContentResponse)
             }.map { generateContentResponse: GenerateContentResponse ->
-                    generateContentResponse.text
+                val text = generateContentResponse.text
+                if (text.isNullOrEmpty()) {
+                    defaultErrorMessage
+                } else {
+                    text
                 }
+            }
         }, onFailure = {
             flow {
                 emit(it.message)
