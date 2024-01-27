@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
-import com.cogniheroid.framework.feature.avengai.AvengAICore
+import com.cogniheroid.framework.feature.avengai.AvengerAICore
 import com.cogniheroid.framework.feature.avengai.ui.AvengAIDemoScreen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -38,7 +38,7 @@ class AvengAIActivity : BaseActivity() {
         lifecycleScope.launch {
             itemIntent.collectLatest {
                 it?.let {
-                    AvengAICore.onImageAdded(it)
+                    AvengerAICore.onImageAdded(it)
                 }
             }
         }

@@ -7,7 +7,12 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ProcessLifecycleOwner
-import com.cogniheroid.framework.feature.avengai.AvengAICore
+import com.cogniheroid.framework.feature.avengai.AvengerAICore
+import com.cogniheroid.framework.feature.chat.ChatCore
+import com.cogniheroid.framework.feature.convertor.ConvertorCore
+import com.configheroid.framework.core.avengerad.data.model.AvengerAdData
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 
 
 class AdGalaxyApplication : Application(), Application.ActivityLifecycleCallbacks,
@@ -37,7 +42,12 @@ class AdGalaxyApplication : Application(), Application.ActivityLifecycleCallback
         registerActivityLifecycleCallbacks(this)
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
 
-        AvengAICore.init(BuildConfig.cogni_heroid_ai_api_key)
+        AvengerAICore.init(BuildConfig.cogni_heroid_ai_api_key)
+
+        ChatCore.init(BuildConfig.cogni_heroid_ai_api_key, this)
+
+        ConvertorCore.init(this, BuildConfig.DEBUG, AvengerAdData(listOf()),
+            CoroutineScope(Dispatchers.IO))
     }
 
 
