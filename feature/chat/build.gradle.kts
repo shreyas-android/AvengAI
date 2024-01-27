@@ -65,4 +65,6 @@ dependencies {
     implementation(project(":utils"))
 
     api(project(":aicore"))
+    implementation(project(":core:chat"))
+
 }

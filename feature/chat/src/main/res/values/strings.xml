@@ -3,4 +3,7 @@
     <string name="title_chat">Chat with AI</string>
     <string name="placeholder_yesterday">Yesterday</string>
     <string name="placeholder_start_typing">Start typing…</string>
+    <string name="placeholder_no_conversation">No conversations yet</string>
+    <string name="placeholder_no_conversation_description">Start a conversation with the AI to see it here.</string>
+    <string name="placeholder_loading_message">Loading your messages…</string>
 </resources>

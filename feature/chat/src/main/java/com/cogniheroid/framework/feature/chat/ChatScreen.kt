@@ -6,7 +6,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.cogniheroid.android.ad.ui.theme.ComposeUITheme
-import com.cogniheroid.framework.feature.chat.data.model.ChatListItem
+import com.cogniheroid.framework.feature.chat.callback.ChatExternalCallback
+import com.cogniheroid.framework.feature.chat.ui.conversationowner.ChatListScreen
+import com.cogniheroid.framework.feature.chat.ui.conversationowner.ChatViewModel
+import com.cogniheroid.framework.feature.chat.ui.conversations.ChatDetailScreen
 
 enum class ChatRoute(val route: String) {
     CHAT_DETAIL("chat_detail"),
@@ -14,8 +17,8 @@ enum class ChatRoute(val route: String) {
 }
 
 @Composable
-fun ChatScreen() {
-    val chatViewModel = viewModel<ChatViewModel>()
+fun ChatScreen(chatExternalCallback: ChatExternalCallback) {
+    val chatViewModel = viewModel<ChatViewModel>(factory = Instance.conversationViewModelFactory)
     ComposeUITheme {
         val navController = rememberNavController()
         NavHost(navController = navController, startDestination = ChatRoute.HOME.route) {
@@ -26,7 +29,7 @@ fun ChatScreen() {
 
             composable(ChatRoute.CHAT_DETAIL.route) {
                chatViewModel.getSelectedChatListItem()?.let {
-                    ChatDetailScreen(chatViewModel, chatListItem = it){
+                    ChatDetailScreen(chatListItem = it, chatExternalCallback = chatExternalCallback){
                         navController.navigateUp()
                     }
                 }
