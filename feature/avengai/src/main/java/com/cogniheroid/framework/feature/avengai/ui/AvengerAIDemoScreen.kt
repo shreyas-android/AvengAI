@@ -31,29 +31,29 @@ import com.cogniheroid.framework.feature.avengai.ui.advancetextgeneration.Advanc
 import com.cogniheroid.framework.feature.avengai.ui.textgeneration.TextGenerationScreen
 import com.cogniheroid.framework.ui.component.CustomButton
 
-enum class AvengAIRoute(val route: String) {
+enum class AvengerAIRoute(val route: String) {
     GENERATE_TEXT("generateText"),
     GENERATE_ADVANCE_TEXT("generateAdvanceText"),
     HOME("home")
 }
 
 @Composable
-fun AvengAIDemoScreen(onAddImage: () -> Unit) {
+fun AvengerAIDemoScreen(onAddImage: () -> Unit) {
     ComposeUITheme {
         val navController = rememberNavController()
-        NavHost(navController = navController, startDestination = AvengAIRoute.HOME.route) {
+        NavHost(navController = navController, startDestination = AvengerAIRoute.HOME.route) {
 
-            composable(AvengAIRoute.HOME.route) {
+            composable(AvengerAIRoute.HOME.route) {
                 AvengAIDemoContainer(navController = navController)
             }
 
-            composable(AvengAIRoute.GENERATE_TEXT.route) {
+            composable(AvengerAIRoute.GENERATE_TEXT.route) {
                 TextGenerationScreen {
                     navController.navigateUp()
                 }
             }
 
-            composable(AvengAIRoute.GENERATE_ADVANCE_TEXT.route) {
+            composable(AvengerAIRoute.GENERATE_ADVANCE_TEXT.route) {
                 AdvanceTextGeneration(onAddImage){
                     navController.navigateUp()
                 }
@@ -90,11 +90,11 @@ private fun  AvengAIDemoContainer(navController: NavController){
             verticalArrangement = Arrangement.Center
         ) {
             CustomButton(modifier = Modifier.padding(top = 32.dp), label = stringResource(id = R.string.title_text_generation)) {
-                navController.navigate(AvengAIRoute.GENERATE_TEXT.route)
+                navController.navigate(AvengerAIRoute.GENERATE_TEXT.route)
             }
 
             CustomButton(label = stringResource(id = R.string.title_advance_text_generation)) {
-                navController.navigate(AvengAIRoute.GENERATE_ADVANCE_TEXT.route)
+                navController.navigate(AvengerAIRoute.GENERATE_ADVANCE_TEXT.route)
             }
         }
     }

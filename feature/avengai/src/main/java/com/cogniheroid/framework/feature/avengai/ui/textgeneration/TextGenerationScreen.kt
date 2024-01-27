@@ -113,10 +113,12 @@ fun TextGenerationView(
                 performIntent(TextGenerationUIEvent.ClearText)
             })
 
+        val defaultMessage = stringResource(id = R.string.message_default_error_ai)
 
         CustomButton(label = stringResource(R.string.label_generate_text), onClick = {
             focusManager.clearFocus()
-            performIntent(TextGenerationUIEvent.GenerateText(textGenerationUIState.inputText))
+            performIntent(TextGenerationUIEvent.GenerateText(
+                textGenerationUIState.inputText, defaultMessage))
         })
 
 

@@ -320,12 +320,15 @@ private fun AdvanceTextGenerationView(
             }
         }
 
+        val defaultMessage = stringResource(id = R.string.message_default_error_ai)
+
         CustomButton(
             modifier = Modifier.padding(top = 16.dp),
             label = stringResource(R.string.label_generate_text),
             onClick = {
                 focusManager.clearFocus()
-                performIntent(AdvanceTextGenerationUIEvent.GenerateText(textGenerationUIState.inputText))
+                performIntent(AdvanceTextGenerationUIEvent.GenerateText(
+                    textGenerationUIState.inputText, defaultMessage))
             })
 
 

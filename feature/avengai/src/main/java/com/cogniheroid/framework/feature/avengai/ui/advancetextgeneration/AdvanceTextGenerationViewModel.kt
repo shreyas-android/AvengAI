@@ -37,21 +37,17 @@ class AdvanceTextGenerationViewModel(private val avengerAIManager:AvengerAIManag
     private val _advanceTextGenerationUIEffectFlow = Channel<AdvanceTextGenerationUIEffect>()
     val advanceTextGenerationUIEffectFlow = _advanceTextGenerationUIEffectFlow.receiveAsFlow()
 
-
-    init {
-        Log.d("CHECKVIEWMODEL","CHEKCI THE VIEWMODEL init = $")
-    }
     fun performIntent(textGenerationUIEvent: AdvanceTextGenerationUIEvent){
         when(textGenerationUIEvent){
             is AdvanceTextGenerationUIEvent.GenerateText -> {
                 isModelStartedGeneratingText.value = true
                 clearResult()
-                generateTextAndUpdateResult(imageListFlow.value, textGenerationUIEvent.text)
+                generateTextAndUpdateResult(imageListFlow.value, textGenerationUIEvent.text,
+                    textGenerationUIEvent.defaultErrorMessage)
             }
             is AdvanceTextGenerationUIEvent.InputText -> {
                 inputField.value = textGenerationUIEvent.text
             }
-            is AdvanceTextGenerationUIEvent.OutputText -> TODO()
             AdvanceTextGenerationUIEvent.ClearText -> {
                 inputField.value = ""
             }
@@ -78,10 +74,11 @@ class AdvanceTextGenerationViewModel(private val avengerAIManager:AvengerAIManag
         }
     }
 
-    private fun generateTextAndUpdateResult(images: List<Bitmap>, text:String) {
+    private fun generateTextAndUpdateResult(images: List<Bitmap>, text:String, defaultErrorMessage:String) {
         viewModelScope.launch {
 
-            avengerAIManager.generateTextStreamContent(getModelInputList(images, text))
+            avengerAIManager.generateTextStreamContent(getModelInputList(images, text),
+                defaultErrorMessage)
                 .collectLatest {
                     result.value += it ?: ""
                     isModelStartedGeneratingText.value = false

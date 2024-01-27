@@ -4,8 +4,7 @@ import android.graphics.Bitmap
 
 sealed class AdvanceTextGenerationUIEvent {
     data class InputText(val text: String) : AdvanceTextGenerationUIEvent()
-    data class OutputText(val text: String) : AdvanceTextGenerationUIEvent()
-    data class GenerateText(val text: String) : AdvanceTextGenerationUIEvent()
+    data class GenerateText(val text: String, val defaultErrorMessage:String) : AdvanceTextGenerationUIEvent()
 
     object ClearText : AdvanceTextGenerationUIEvent()
 

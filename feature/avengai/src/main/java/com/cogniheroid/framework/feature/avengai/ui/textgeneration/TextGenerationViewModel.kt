@@ -33,22 +33,22 @@ class TextGenerationViewModel(private val avengerAIManager: AvengerAIManager):Vi
             is TextGenerationUIEvent.GenerateText -> {
                 isModelStartedGeneratingText.value = true
                 clearResult()
-                generateTextAndUpdateResult(textGenerationUIEvent.text)
+                generateTextAndUpdateResult(textGenerationUIEvent.text,
+                    defaultErrorMessage = textGenerationUIEvent.defaultErrorMessage)
             }
             is TextGenerationUIEvent.InputText -> {
                 inputField.value = textGenerationUIEvent.text
             }
-            is TextGenerationUIEvent.OutputText -> TODO()
             TextGenerationUIEvent.ClearText -> {
                 inputField.value = ""
             }
         }
     }
 
-    private fun generateTextAndUpdateResult(text:String) {
+    private fun generateTextAndUpdateResult(text:String, defaultErrorMessage:String) {
         viewModelScope.launch {
             val modelInput = ModelInput.Text(text)
-            avengerAIManager.generateTextStreamContent(listOf( modelInput)).collectLatest {
+            avengerAIManager.generateTextStreamContent(listOf( modelInput), defaultErrorMessage).collectLatest {
                 result.value += it ?: ""
                 isModelStartedGeneratingText.value = false
             }
