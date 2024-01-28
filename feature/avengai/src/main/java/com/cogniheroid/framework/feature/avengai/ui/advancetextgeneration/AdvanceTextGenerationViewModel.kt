@@ -89,9 +89,9 @@ class AdvanceTextGenerationViewModel(private val avengerAIManager:AvengerAIManag
     private fun getModelInputList(images: List<Bitmap>, text:String):List<ModelInput>{
         val modelInputList = mutableListOf<ModelInput>()
         images.forEach {
-            modelInputList.add(ModelInput.Image(it))
+            modelInputList.add(ModelInput.Image(true, it))
         }
-        modelInputList.add(ModelInput.Text(text))
+        modelInputList.add(ModelInput.Text(true, text))
         return modelInputList
     }
 

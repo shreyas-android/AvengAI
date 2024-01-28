@@ -47,7 +47,7 @@ class TextGenerationViewModel(private val avengerAIManager: AvengerAIManager):Vi
 
     private fun generateTextAndUpdateResult(text:String, defaultErrorMessage:String) {
         viewModelScope.launch {
-            val modelInput = ModelInput.Text(text)
+            val modelInput = ModelInput.Text(true, text)
             avengerAIManager.generateTextStreamContent(listOf( modelInput), defaultErrorMessage).collectLatest {
                 result.value += it ?: ""
                 isModelStartedGeneratingText.value = false
