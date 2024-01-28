@@ -6,6 +6,7 @@ import app.cash.sqldelight.db.QueryResult
 import app.cash.sqldelight.db.SqlCursor
 import app.cash.sqldelight.db.SqlDriver
 import kotlin.Any
+import kotlin.Boolean
 import kotlin.Int
 import kotlin.Long
 import kotlin.String
@@ -75,6 +76,64 @@ public class MessagesQueries(
     )
   }
 
+  public fun <T : Any> getJoinedMessages(chatId: Long, mapper: (
+    messageId: Long,
+    chatId: Long,
+    senderId: Long,
+    message: String?,
+    messageStartDate: String,
+    messageTime: Long,
+    fileUri: String?,
+    readStatus: Int?,
+    messageType: Int?,
+    messageContentType: Int?,
+    replyMessageId: Long?,
+    sId: Long?,
+    senderName: String?,
+    senderImageUri: String?,
+    isUser: Boolean?,
+  ) -> T): Query<T> = GetJoinedMessagesQuery(chatId) { cursor ->
+    mapper(
+      cursor.getLong(0)!!,
+      cursor.getLong(1)!!,
+      cursor.getLong(2)!!,
+      cursor.getString(3),
+      cursor.getString(4)!!,
+      cursor.getLong(5)!!,
+      cursor.getString(6),
+      cursor.getLong(7)?.let { MessagesAdapter.readStatusAdapter.decode(it) },
+      cursor.getLong(8)?.let { MessagesAdapter.messageTypeAdapter.decode(it) },
+      cursor.getLong(9)?.let { MessagesAdapter.messageContentTypeAdapter.decode(it) },
+      cursor.getLong(10),
+      cursor.getLong(11),
+      cursor.getString(12),
+      cursor.getString(13),
+      cursor.getBoolean(14)
+    )
+  }
+
+  public fun getJoinedMessages(chatId: Long): Query<GetJoinedMessages> = getJoinedMessages(chatId) {
+      messageId, chatId_, senderId, message, messageStartDate, messageTime, fileUri, readStatus,
+      messageType, messageContentType, replyMessageId, sId, senderName, senderImageUri, isUser ->
+    GetJoinedMessages(
+      messageId,
+      chatId_,
+      senderId,
+      message,
+      messageStartDate,
+      messageTime,
+      fileUri,
+      readStatus,
+      messageType,
+      messageContentType,
+      replyMessageId,
+      sId,
+      senderName,
+      senderImageUri,
+      isUser
+    )
+  }
+
   public fun insertMessage(
     messageId: Long?,
     chatId: Long,
@@ -89,7 +148,7 @@ public class MessagesQueries(
     replyMessageId: Long?,
   ) {
     driver.execute(-173_663_723, """
-        |INSERT INTO Messages (messageId, chatId, senderId, message, messageStartDate, messageTime, fileUri, readStatus, messageType, messageContentType, replyMessageId)
+        |INSERT OR REPLACE INTO Messages (messageId, chatId, senderId, message, messageStartDate, messageTime, fileUri, readStatus, messageType, messageContentType, replyMessageId)
         |VALUES (?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?)
         """.trimMargin(), 11) {
           bindLong(0, messageId)
@@ -194,5 +253,27 @@ public class MessagesQueries(
     }
 
     override fun toString(): String = "messages.sq:getMessages"
+  }
+
+  private inner class GetJoinedMessagesQuery<out T : Any>(
+    public val chatId: Long,
+    mapper: (SqlCursor) -> T,
+  ) : Query<T>(mapper) {
+    override fun addListener(listener: Query.Listener) {
+      driver.addListener("Messages", "Sender", listener = listener)
+    }
+
+    override fun removeListener(listener: Query.Listener) {
+      driver.removeListener("Messages", "Sender", listener = listener)
+    }
+
+    override fun <R> execute(mapper: (SqlCursor) -> QueryResult<R>): QueryResult<R> =
+        driver.executeQuery(-115_712_974,
+        """SELECT Messages.*, Sender.senderId AS sId, senderName, senderImageUri, isUser FROM Messages LEFT JOIN Sender ON Messages.senderId = Sender.senderId WHERE chatId = ?""",
+        mapper, 1) {
+      bindLong(0, chatId)
+    }
+
+    override fun toString(): String = "messages.sq:getJoinedMessages"
   }
 }

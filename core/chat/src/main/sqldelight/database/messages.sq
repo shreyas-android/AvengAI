@@ -1,5 +1,5 @@
 insertMessage:
-INSERT INTO Messages (messageId, chatId, senderId, message, messageStartDate, messageTime, fileUri, readStatus, messageType, messageContentType, replyMessageId)
+INSERT OR REPLACE INTO Messages (messageId, chatId, senderId, message, messageStartDate, messageTime, fileUri, readStatus, messageType, messageContentType, replyMessageId)
 VALUES (?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?);
 
 getLocalMessageId:
@@ -7,6 +7,9 @@ SELECT MAX(messageId) FROM Messages;
 
 getMessages:
 SELECT * FROM Messages WHERE chatId = :chatId;
+
+getJoinedMessages:
+SELECT Messages.*, Sender.senderId AS sId, senderName, senderImageUri, isUser FROM Messages LEFT JOIN Sender ON Messages.senderId = Sender.senderId WHERE chatId = :chatId;
 
 
 updateMessage:

@@ -5,6 +5,7 @@ import com.cogniheroid.framework.shared.core.chat.data.enum.MessageContentType
 import com.cogniheroid.framework.shared.core.chat.data.enum.MessageType
 import com.cogniheroid.framework.shared.core.chat.data.enum.ReadStatusType
 import com.cogniheroid.framework.shared.core.chat.data.model.MessageWithSender
+import database.GetJoinedMessages
 import migrations.Messages
 
 
@@ -17,13 +18,24 @@ fun Messages.toMessageEntity(): MessagesEntity {
         replyMessageId=  replyMessageId, fileUri = fileUri)
 }
 
-fun MessagesEntity.toMessageWithSender(senderName:String, senderImageURI:String?=null): MessageWithSender {
+fun GetJoinedMessages.toMessageWithSender(): MessageWithSender {
+    return MessageWithSender( messageId=messageId, chatId= chatId,
+        senderId= senderId, message= message, senderName = senderName ?: "",
+        senderImageUri = senderImageUri, isUser = isUser ?: false,
+        messageStartDate= messageStartDate,
+        messageTime= messageTime,readStatus=  (readStatus ?: ReadStatusType.PENDING.value)
+            .toReadStatusType(), messageType= (messageType?:MessageType.NORMAL.value)
+            .toMessageType(), messageContentType= (messageContentType ?: MessageContentType.TEXT
+                .value).toMessageContentType(), replyMessageId=  replyMessageId, fileUri = fileUri)
+}
+
+fun MessagesEntity.toMessageWithSender(isUser:Boolean, senderName:String, senderImageURI:String?=null): MessageWithSender {
     return MessageWithSender(messageId = messageId, chatId = chatId, senderId = senderId,
         message = message,
         messageContentType = messageContentType.toMessageContentType(), senderName = senderName,
         messageStartDate = messageStartDate, messageTime = messageTime, replyMessageId = replyMessageId,
         fileUri = fileUri, readStatus = readStatus.toReadStatusType(), messageType = messageType
-            .toMessageType(), senderImageUri = senderImageURI)
+            .toMessageType(), senderImageUri = senderImageURI, isUser = isUser)
 }
 
 fun Int.toMessageContentType(): MessageContentType {

@@ -19,6 +19,9 @@ interface SenderManager {
 
     suspend fun getSender(senderId: Long): CommonFlow<SenderEntity>
 
+    suspend fun insertNewSender(senderName:String, senderImageUri:String?,
+                                isUser:Boolean)
+
     suspend fun insertSender(senderItem: SenderEntity)
 
     suspend fun updateSender(senderItem: SenderEntity)

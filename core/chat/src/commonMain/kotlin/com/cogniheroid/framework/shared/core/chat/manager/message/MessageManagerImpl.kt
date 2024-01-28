@@ -28,11 +28,7 @@ class MessageManagerImpl(private val messageRepository: MessageRepository): Mess
     }
 
     override fun getMessages(chatId: Long): CommonFlow<List<MessageWithSender>> {
-        return messageRepository.getMessagesEntities(chatId).map {
-            it.map {
-                it.toMessageWithSender("")
-            }
-        }.toCommonFlow()
+        return messageRepository.getJoinedMessageEntities(chatId).toCommonFlow()
     }
 
     override suspend fun insertAndGetNewMessage(
@@ -49,6 +45,7 @@ class MessageManagerImpl(private val messageRepository: MessageRepository): Mess
         val newMessageId = getLatestLocalMessageId()
 
         val messageStartDate = DateTimeUtils.getStartDay(messageTime)
+        println("MESSAGE = $messageStartDate")
         val messageEntity = MessagesEntity(messageId = newMessageId, chatId = chatId, senderId = senderId,
             message = message, messageTime = messageTime, readStatus = readStatus.value,
             messageType = messageType.value, replyMessageId = replyMessageId,

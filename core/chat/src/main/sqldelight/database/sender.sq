@@ -1,5 +1,5 @@
 insertSenderInfo:
-INSERT INTO Sender (senderId, senderName, senderImageUri, isUser)
+INSERT OR REPLACE INTO Sender (senderId, senderName, senderImageUri, isUser)
 VALUES (?,?,?,?);
 
 getLocalSenderId:

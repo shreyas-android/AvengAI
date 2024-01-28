@@ -1,7 +1,9 @@
 package com.cogniheroid.framework.shared.core.chat.manager.sender
 
 import com.cogniheroid.framework.shared.core.chat.UniqueIdGenerator
+import com.cogniheroid.framework.shared.core.chat.data.entities.ConversationEntity
 import com.cogniheroid.framework.shared.core.chat.data.entities.SenderEntity
+import com.cogniheroid.framework.shared.core.chat.data.mapper.toConversationItem
 import com.cogniheroid.framework.shared.core.chat.flow.CommonFlow
 import com.cogniheroid.framework.shared.core.chat.repository.sender.SenderRepository
 
@@ -21,6 +23,17 @@ class SenderManagerImpl(private val senderRepository: SenderRepository):SenderMa
 
     override suspend fun getSender(senderId: Long): CommonFlow<SenderEntity> {
         return senderRepository.getSenderEntity(senderId)
+    }
+
+    override suspend fun insertNewSender(
+        senderName: String,
+        senderImageUri: String?,
+        isUser: Boolean
+    ) {
+
+        val newSenderId = getLatestLocalSenderId()
+        val senderEntity = SenderEntity(newSenderId, senderName, senderImageUri, isUser)
+        senderRepository.insertSenderInfo(senderEntity)
     }
 
     override suspend fun insertSender(senderItem: SenderEntity) {

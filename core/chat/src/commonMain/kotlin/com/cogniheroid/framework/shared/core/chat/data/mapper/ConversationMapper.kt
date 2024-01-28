@@ -12,6 +12,7 @@ fun ConversationEntity.toConversationItem(
         id = id,
         title = title,
         imageUri = imageUri,
+        lastMessageId = lastMessageId,
         lastMessage = lastMessage,
         lastMessageTime = lastMessageTime,
         unreadCount = unreadCount

@@ -21,5 +21,9 @@ interface ChatListRepository {
 
     suspend fun updateChatListItem(conversationEntity: ConversationEntity)
 
+    suspend fun updateChatListItemTitle(title:String, chatId:Long)
+
+    suspend fun updateChatListItemLastMessageId(lastMessageId:Long, chatId:Long)
+
     suspend fun deleteChatListItem(chatId: Long)
 }

@@ -4,6 +4,8 @@ import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import com.cogniheroid.framework.shared.core.chat.data.mapper.toMessageEntity
 import com.cogniheroid.framework.shared.core.chat.data.entities.MessagesEntity
+import com.cogniheroid.framework.shared.core.chat.data.mapper.toMessageWithSender
+import com.cogniheroid.framework.shared.core.chat.data.model.MessageWithSender
 import database.MessagesQueries
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -19,6 +21,14 @@ class MessageDataSourceImpl(private val dispatcher:CoroutineContext, private val
                 it.map {messageItem ->
                     messageItem.toMessageEntity()
                 }
+        }
+    }
+
+    override fun getJoinedMessageEntities(chatId: Long): Flow<List<MessageWithSender>> {
+        return messageQueries.getJoinedMessages(chatId).asFlow().mapToList(dispatcher).map {
+            it.map { getJoinedMessages ->
+                getJoinedMessages.toMessageWithSender()
+            }
         }
     }
 

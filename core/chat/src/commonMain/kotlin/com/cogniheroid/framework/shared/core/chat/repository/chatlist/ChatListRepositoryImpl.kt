@@ -22,6 +22,14 @@ class ChatListRepositoryImpl(private val chatListDataSource: ChatListDataSource)
         chatListDataSource.updateChatListItem(conversationEntity)
     }
 
+    override suspend fun updateChatListItemTitle(title: String, chatId: Long) {
+        chatListDataSource.updateChatListItemTitle(title, chatId)
+    }
+
+    override suspend fun updateChatListItemLastMessageId(lastMessageId: Long, chatId: Long) {
+        chatListDataSource.updateChatListItemLastMessageId(lastMessageId, chatId)
+    }
+
     override suspend fun deleteChatListItem(chatId: Long) {
         chatListDataSource.deleteChatListItem(chatId)
     }

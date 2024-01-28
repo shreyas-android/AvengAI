@@ -5,7 +5,7 @@ import com.cogniheroid.framework.shared.core.chat.data.enum.MessageType
 import com.cogniheroid.framework.shared.core.chat.data.enum.ReadStatusType
 
 data class MessageWithSender(val messageId:Long, val chatId:Long,
-                             val senderId:Long, val senderName:String, val message:String?,
+                             val senderId:Long, val senderName:String, val isUser:Boolean, val message:String?,
                              val senderImageUri:String?,
                              val fileUri:String?,
                              val messageStartDate:String,

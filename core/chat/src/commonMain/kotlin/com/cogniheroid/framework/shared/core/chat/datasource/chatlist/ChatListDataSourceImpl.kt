@@ -28,8 +28,17 @@ class ChatListDataSourceImpl(private val dispatcher:CoroutineContext,
             conversationEntity.imageUri, conversationEntity.lastMessageId, conversationEntity.unreadCount)
     }
 
-    override suspend fun updateChatListItem(conversationEntity: ConversationEntity) {
+    override suspend fun updateChatListItemTitle(title: String, chatId: Long) {
+        conversationQueries.updateChatListItemTitle(title, chatId)
+    }
 
+    override suspend fun updateChatListItemLastMessageId(lastMessageId: Long, chatId: Long) {
+        conversationQueries.updateLastMessageId(lastMessageId, chatId)
+    }
+
+    override suspend fun updateChatListItem(conversationEntity: ConversationEntity) {
+        conversationQueries.updateChatListItem(conversationEntity.title, conversationEntity.imageUri,
+            conversationEntity.lastMessageId, conversationEntity.unreadCount, conversationEntity.id)
     }
 
     override suspend fun deleteChatListItem(chatId: Long) {

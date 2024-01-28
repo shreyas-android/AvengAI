@@ -2,6 +2,7 @@ package com.cogniheroid.framework.shared.core.chat.repository.message
 
 import com.cogniheroid.framework.shared.core.chat.ChatDomainCore
 import com.cogniheroid.framework.shared.core.chat.data.entities.MessagesEntity
+import com.cogniheroid.framework.shared.core.chat.data.model.MessageWithSender
 import com.cogniheroid.framework.shared.core.chat.flow.CommonFlow
 
 interface MessageRepository{
@@ -16,6 +17,8 @@ interface MessageRepository{
    suspend fun getLastLocalMessageId(): Long
 
    fun getMessagesEntities(chatId: Long): CommonFlow<List<MessagesEntity>>
+
+   fun getJoinedMessageEntities(chatId: Long):CommonFlow<List<MessageWithSender>>
 
     suspend fun insertMessage(messagesEntity: MessagesEntity)
 

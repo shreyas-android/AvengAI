@@ -1,6 +1,7 @@
 package com.cogniheroid.framework.shared.core.chat.repository.message
 
 import com.cogniheroid.framework.shared.core.chat.data.entities.MessagesEntity
+import com.cogniheroid.framework.shared.core.chat.data.model.MessageWithSender
 import com.cogniheroid.framework.shared.core.chat.datasource.message.MessageDataSource
 import com.cogniheroid.framework.shared.core.chat.flow.CommonFlow
 import com.cogniheroid.framework.shared.core.chat.flow.toCommonFlow
@@ -14,6 +15,10 @@ class MessageRepositoryImpl(private val messageDataSource: MessageDataSource):Me
 
     override fun getMessagesEntities(chatId: Long): CommonFlow<List<MessagesEntity>> {
         return messageDataSource.getMessages(chatId).toCommonFlow()
+    }
+
+    override fun getJoinedMessageEntities(chatId: Long): CommonFlow<List<MessageWithSender>> {
+        return messageDataSource.getJoinedMessageEntities(chatId).toCommonFlow()
     }
 
     override suspend fun insertMessage(messagesEntity: MessagesEntity) {
