@@ -2,6 +2,8 @@ package com.configheroid.framework.core.avengerad
 
 import android.app.Activity
 import android.content.Context
+import android.view.View
+import com.applovin.mediation.ads.MaxAdView
 import com.configheroid.framework.core.avengerad.adnetwork.admob.AdMobLoadShow
 import com.configheroid.framework.core.avengerad.adnetwork.applovin.ApplovinInitialization
 import com.configheroid.framework.core.avengerad.adnetwork.chartboost.ChartBoostLoadShow
@@ -55,7 +57,7 @@ class AvengerAd(private val coroutineScope: CoroutineScope) {
 
     private val unityLoadShow by lazy { UnityLoadShow() }
 
-    val shouldEnableLoadButton = MutableStateFlow(true)
+    private val shouldEnableLoadButton = MutableStateFlow(true)
 
     fun initAvengerAd(context: Context) {
         com.configheroid.framework.core.avengerad.analytics.AdGalaxyAnalytics.logEvent(com.configheroid.framework.core.avengerad.analytics.AdGalaxyAnalytics.AD_GALAXY_AD_INIT)
@@ -82,5 +84,13 @@ class AvengerAd(private val coroutineScope: CoroutineScope) {
 
     fun onApplovinActivityHandling(activity: Activity) {
         applovinInitialization.onApplovinActivityHandling(activity)
+    }
+
+    fun getApplovinBannerView(activity: Activity, bannerId:String): View {
+        return applovinInitialization.getApplovinBannerView(activity, bannerId)
+    }
+
+    fun getApplovinMRECView(activity: Activity, mRECId:String): View {
+        return applovinInitialization.getApplovinMRECView(activity, mRECId)
     }
 }

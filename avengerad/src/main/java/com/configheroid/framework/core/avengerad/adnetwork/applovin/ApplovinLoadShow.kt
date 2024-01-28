@@ -43,24 +43,24 @@ internal class ApplovinLoadShow {
         AdGalaxyAnalytics.logEvent(AdGalaxyAnalytics.APPLOVIN_INTERSTITIAL_AD_LOAD)
         val interstitialAd = MaxInterstitialAd(adUnitId, activity)
         interstitialAd.setListener(object : MaxAdListener {
-            override fun onAdLoaded(p0: MaxAd?) {
+            override fun onAdLoaded(p0: MaxAd) {
                 AdGalaxyAnalytics.logEvent(AdGalaxyAnalytics.APPLOVIN_INTERSTITIAL_AD_LOADED)
                 callback(SuccessState.Success(interstitialAd))
             }
 
-            override fun onAdDisplayed(p0: MaxAd?) {
+            override fun onAdDisplayed(p0: MaxAd) {
 
             }
 
-            override fun onAdHidden(p0: MaxAd?) {
+            override fun onAdHidden(p0: MaxAd) {
 
             }
 
-            override fun onAdClicked(p0: MaxAd?) {
+            override fun onAdClicked(p0: MaxAd) {
 
             }
 
-            override fun onAdLoadFailed(p0: String?, p1: MaxError) {
+            override fun onAdLoadFailed(p0: String, p1: MaxError) {
                 AdGalaxyAnalytics.logEvent(
                     AdGalaxyAnalytics.APPLOVIN_INTERSTITIAL_AD_LOAD_FAILED,
                     p1.message.toBundle(AdGalaxyAnalytics.ERROR_MESSAGE)
@@ -69,7 +69,7 @@ internal class ApplovinLoadShow {
 
             }
 
-            override fun onAdDisplayFailed(p0: MaxAd?, p1: MaxError) {
+            override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
             }
         })
 
@@ -78,11 +78,11 @@ internal class ApplovinLoadShow {
 
     fun onShowInterstitialAd(interstitialAd: MaxInterstitialAd, callback: (AdLifecycleState) -> Unit) {
         interstitialAd.setListener(object : MaxAdListener {
-            override fun onAdLoaded(p0: MaxAd?) {
+            override fun onAdLoaded(p0: MaxAd) {
 
             }
 
-            override fun onAdDisplayed(p0: MaxAd?) {
+            override fun onAdDisplayed(p0: MaxAd) {
                 Log.d(
                     "CHECKAPPLOVIN",
                     "CHEKCING THE APPLOVIN REWARDED AD onShowInterstitialAd:: = onAdDisplayed:: "
@@ -91,25 +91,25 @@ internal class ApplovinLoadShow {
                 callback(AdLifecycleState.FINISHED)
             }
 
-            override fun onAdHidden(p0: MaxAd?) {
+            override fun onAdHidden(p0: MaxAd) {
                 Log.d(
                     "CHECKAPPLOVIN",
                     "CHEKCING THE APPLOVIN REWARDED AD onShowInterstitialAd:: = onAdHidden:: "
                 )
             }
 
-            override fun onAdClicked(p0: MaxAd?) {
+            override fun onAdClicked(p0: MaxAd) {
                 Log.d(
                     "CHECKAPPLOVIN",
                     "CHEKCING THE APPLOVIN REWARDED AD onShowInterstitialAd:: = onAdClicked:: "
                 )
             }
 
-            override fun onAdLoadFailed(p0: String?, p1: MaxError) {
+            override fun onAdLoadFailed(p0: String, p1: MaxError) {
 
             }
 
-            override fun onAdDisplayFailed(p0: MaxAd?, p1: MaxError) {
+            override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
                 Log.d(
                     "CHECKAPPLOVIN",
                     "CHEKCING THE APPLOVIN REWARDED AD onShowInterstitialAd:: = onAdDisplayFailed:: $p0 and error = ${p1.message}"
@@ -137,7 +137,7 @@ internal class ApplovinLoadShow {
         val interstitialAd = MaxInterstitialAd(adUnitId, activity)
 
         interstitialAd.setListener(object : MaxAdListener {
-            override fun onAdLoaded(p0: MaxAd?) {
+            override fun onAdLoaded(p0: MaxAd) {
                 Log.d(
                     "CHECKAPPLOVIN",
                     "CHEKCING THE APPLOVIN REWARDED AD loadInterstitialAd:: = onAdLoaded:: "
@@ -146,7 +146,7 @@ internal class ApplovinLoadShow {
                 AdGalaxyAnalytics.logEvent(AdGalaxyAnalytics.APPLOVIN_INTERSTITIAL_AD_LOADED)
             }
 
-            override fun onAdDisplayed(p0: MaxAd?) {
+            override fun onAdDisplayed(p0: MaxAd) {
                 Log.d(
                     "CHECKAPPLOVIN",
                     "CHEKCING THE APPLOVIN REWARDED AD loadInterstitialAd:: = onAdDisplayed:: "
@@ -155,21 +155,21 @@ internal class ApplovinLoadShow {
                 callback(AdLifecycleState.FINISHED)
             }
 
-            override fun onAdHidden(p0: MaxAd?) {
+            override fun onAdHidden(p0: MaxAd) {
                 Log.d(
                     "CHECKAPPLOVIN",
                     "CHEKCING THE APPLOVIN REWARDED AD loadInterstitialAd:: = onAdHidden:: "
                 )
             }
 
-            override fun onAdClicked(p0: MaxAd?) {
+            override fun onAdClicked(p0: MaxAd) {
                 Log.d(
                     "CHECKAPPLOVIN",
                     "CHEKCING THE APPLOVIN REWARDED AD loadInterstitialAd:: = onAdClicked:: "
                 )
             }
 
-            override fun onAdLoadFailed(p0: String?, p1: MaxError) {
+            override fun onAdLoadFailed(p0: String, p1: MaxError) {
                 Log.d(
                     "CHECKAPPLOVIN",
                     "CHEKCING THE APPLOVIN REWARDED AD loadInterstitialAd:: = onAdLoadFailed:: $p0 and error = ${p1.message} "
@@ -181,7 +181,7 @@ internal class ApplovinLoadShow {
                 callback(AdLifecycleState.FAILED)
             }
 
-            override fun onAdDisplayFailed(p0: MaxAd?, p1: MaxError) {
+            override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
                 Log.d(
                     "CHECKAPPLOVIN",
                     "CHEKCING THE APPLOVIN REWARDED AD loadInterstitialAd:: = onAdDisplayFailed:: $p0 and error = ${p1.message}"
@@ -204,20 +204,20 @@ internal class ApplovinLoadShow {
         AdGalaxyAnalytics.logEvent(com.configheroid.framework.core.avengerad.analytics.AdGalaxyAnalytics.APPLOVIN_REWARD_AD_LOAD)
         val rewardedAd = MaxRewardedAd.getInstance(adUnitId, activity)
         rewardedAd.setListener(object : MaxRewardedAdListener {
-            override fun onAdLoaded(p0: MaxAd?) {
-                AdGalaxyAnalytics.logEvent(com.configheroid.framework.core.avengerad.analytics.AdGalaxyAnalytics.APPLOVIN_REWARD_AD_LOADED)
+            override fun onAdLoaded(p0: MaxAd) {
+                AdGalaxyAnalytics.logEvent(AdGalaxyAnalytics.APPLOVIN_REWARD_AD_LOADED)
                 callback(SuccessState.Success(rewardedAd))
             }
 
-            override fun onAdDisplayed(p0: MaxAd?) {
+            override fun onAdDisplayed(p0: MaxAd) {
 
             }
 
-            override fun onAdHidden(p0: MaxAd?) {
+            override fun onAdHidden(p0: MaxAd) {
 
             }
 
-            override fun onAdClicked(p0: MaxAd?) {
+            override fun onAdClicked(p0: MaxAd) {
 
             }
 
@@ -237,15 +237,15 @@ internal class ApplovinLoadShow {
 
             }
 
-            override fun onUserRewarded(p0: MaxAd?, p1: MaxReward?) {
+            override fun onUserRewarded(p0: MaxAd, p1: MaxReward) {
 
             }
 
-            override fun onRewardedVideoStarted(p0: MaxAd?) {
+            override fun onRewardedVideoStarted(p0: MaxAd) {
 
             }
 
-            override fun onRewardedVideoCompleted(p0: MaxAd?) {
+            override fun onRewardedVideoCompleted(p0: MaxAd) {
 
             }
         })
@@ -256,26 +256,26 @@ internal class ApplovinLoadShow {
     fun onShowRewardAd(rewardedAd: MaxRewardedAd, callback: (AdLifecycleState) -> Unit) {
         Log.d("CHECKAPPLOVINSHOW","CHEKCIG  THE APPLOVIN SHOW onShowRewardAd:: = $rewardedAd")
         rewardedAd.setListener(object : MaxRewardedAdListener {
-            override fun onAdLoaded(p0: MaxAd?) {
+            override fun onAdLoaded(p0: MaxAd) {
 
             }
 
-            override fun onAdDisplayed(p0: MaxAd?) {
+            override fun onAdDisplayed(p0: MaxAd) {
                 Log.d(
                     "CHECKAPPLOVINSHOW",
                     "CHEKCING THE APPLOVIN REWARDED AD loadRewardedAd:: = onAdDisplayed::"
                 )
-                AdGalaxyAnalytics.logEvent(com.configheroid.framework.core.avengerad.analytics.AdGalaxyAnalytics.APPLOVIN_REWARD_AD_DISPLAYED)
+                AdGalaxyAnalytics.logEvent(AdGalaxyAnalytics.APPLOVIN_REWARD_AD_DISPLAYED)
             }
 
-            override fun onAdHidden(p0: MaxAd?) {
+            override fun onAdHidden(p0: MaxAd) {
                 Log.d(
                     "CHECKAPPLOVINSHOW",
                     "CHEKCING THE APPLOVIN REWARDED AD loadRewardedAd:: = onAdHidden::"
                 )
             }
 
-            override fun onAdClicked(p0: MaxAd?) {
+            override fun onAdClicked(p0: MaxAd) {
                 Log.d(
                     "CHECKAPPLOVINSHOW",
                     "CHEKCING THE APPLOVIN REWARDED AD loadRewardedAd:: = onAdClicked::"
@@ -298,7 +298,7 @@ internal class ApplovinLoadShow {
                 callback(AdLifecycleState.FAILED)
             }
 
-            override fun onUserRewarded(p0: MaxAd?, p1: MaxReward?) {
+            override fun onUserRewarded(p0: MaxAd, p1: MaxReward) {
                 Log.d(
                     "CHECKAPPLOVINSHOW",
                     "CHEKCING THE APPLOVIN REWARDED AD loadRewardedAd:: = onUserRewarded:: $p0 and error = ${p1}"
@@ -306,7 +306,7 @@ internal class ApplovinLoadShow {
               //  callback(AdLifecycleState.CLOSED)
             }
 
-            override fun onRewardedVideoStarted(p0: MaxAd?) {
+            override fun onRewardedVideoStarted(p0: MaxAd) {
                 Log.d(
                     "CHECKAPPLOVINSHOW",
                     "CHEKCING THE APPLOVIN REWARDED AD loadRewardedAd:: = onRewardedVideoStarted:: $p0 and error ="
@@ -314,7 +314,7 @@ internal class ApplovinLoadShow {
                 callback(AdLifecycleState.FINISHED)
             }
 
-            override fun onRewardedVideoCompleted(p0: MaxAd?) {
+            override fun onRewardedVideoCompleted(p0: MaxAd) {
                 Log.d(
                     "CHECKAPPLOVINSHOW",
                     "CHEKCING THE APPLOVIN REWARDED AD loadRewardedAd:: = onRewardedVideoCompleted:: $p0 and error ="
@@ -337,31 +337,31 @@ internal class ApplovinLoadShow {
         AdGalaxyAnalytics.logEvent(com.configheroid.framework.core.avengerad.analytics.AdGalaxyAnalytics.APPLOVIN_REWARD_AD_LOAD)
         val rewardedAd = MaxRewardedAd.getInstance(adUnitId, activity)
         rewardedAd.setListener(object : MaxRewardedAdListener {
-            override fun onAdLoaded(p0: MaxAd?) {
+            override fun onAdLoaded(p0: MaxAd) {
                 Log.d(
                     "CHECKAPPLOVIN",
                     "CHEKCING THE APPLOVIN REWARDED AD loadRewardedAd:: = onAdLoaded::"
                 )
-                AdGalaxyAnalytics.logEvent(com.configheroid.framework.core.avengerad.analytics.AdGalaxyAnalytics.APPLOVIN_REWARD_AD_LOADED)
+                AdGalaxyAnalytics.logEvent(AdGalaxyAnalytics.APPLOVIN_REWARD_AD_LOADED)
                 rewardedAd.showAd()
             }
 
-            override fun onAdDisplayed(p0: MaxAd?) {
+            override fun onAdDisplayed(p0: MaxAd) {
                 Log.d(
                     "CHECKAPPLOVIN",
                     "CHEKCING THE APPLOVIN REWARDED AD loadRewardedAd:: = onAdDisplayed::"
                 )
-                AdGalaxyAnalytics.logEvent(com.configheroid.framework.core.avengerad.analytics.AdGalaxyAnalytics.APPLOVIN_REWARD_AD_DISPLAYED)
+                AdGalaxyAnalytics.logEvent(AdGalaxyAnalytics.APPLOVIN_REWARD_AD_DISPLAYED)
             }
 
-            override fun onAdHidden(p0: MaxAd?) {
+            override fun onAdHidden(p0: MaxAd) {
                 Log.d(
                     "CHECKAPPLOVIN",
                     "CHEKCING THE APPLOVIN REWARDED AD loadRewardedAd:: = onAdHidden::"
                 )
             }
 
-            override fun onAdClicked(p0: MaxAd?) {
+            override fun onAdClicked(p0: MaxAd) {
                 Log.d(
                     "CHECKAPPLOVIN",
                     "CHEKCING THE APPLOVIN REWARDED AD loadRewardedAd:: = onAdClicked::"
@@ -394,7 +394,7 @@ internal class ApplovinLoadShow {
                 callback(AdLifecycleState.FAILED)
             }
 
-            override fun onUserRewarded(p0: MaxAd?, p1: MaxReward?) {
+            override fun onUserRewarded(p0: MaxAd, p1: MaxReward) {
                 Log.d(
                     "CHECKAPPLOVIN",
                     "CHEKCING THE APPLOVIN REWARDED AD loadRewardedAd:: = onUserRewarded:: $p0 and error = ${p1}"
@@ -402,7 +402,7 @@ internal class ApplovinLoadShow {
                 callback(AdLifecycleState.CLOSED)
             }
 
-            override fun onRewardedVideoStarted(p0: MaxAd?) {
+            override fun onRewardedVideoStarted(p0: MaxAd) {
                 Log.d(
                     "CHECKAPPLOVIN",
                     "CHEKCING THE APPLOVIN REWARDED AD loadRewardedAd:: = onRewardedVideoStarted:: $p0 and error ="
@@ -410,7 +410,7 @@ internal class ApplovinLoadShow {
                 callback(AdLifecycleState.FINISHED)
             }
 
-            override fun onRewardedVideoCompleted(p0: MaxAd?) {
+            override fun onRewardedVideoCompleted(p0: MaxAd) {
                 Log.d(
                     "CHECKAPPLOVIN",
                     "CHEKCING THE APPLOVIN REWARDED AD loadRewardedAd:: = onRewardedVideoCompleted:: $p0 and error ="
@@ -424,29 +424,29 @@ internal class ApplovinLoadShow {
     }
 
     fun getBannerView(activity: Activity, adUnitId: String): MaxAdView {
-        AdGalaxyAnalytics.logEvent(com.configheroid.framework.core.avengerad.analytics.AdGalaxyAnalytics.APPLOVIN_BANNER_LOAD)
+        AdGalaxyAnalytics.logEvent(AdGalaxyAnalytics.APPLOVIN_BANNER_LOAD)
         val adView = MaxAdView(adUnitId, activity)
         adView.setListener(object : MaxAdViewAdListener {
-            override fun onAdLoaded(p0: MaxAd?) {
-                AdGalaxyAnalytics.logEvent(com.configheroid.framework.core.avengerad.analytics.AdGalaxyAnalytics.APPLOVIN_BANNER_LOADED)
+            override fun onAdLoaded(p0: MaxAd) {
+                AdGalaxyAnalytics.logEvent(AdGalaxyAnalytics.APPLOVIN_BANNER_LOADED)
             }
 
-            override fun onAdDisplayed(p0: MaxAd?) {
-                AdGalaxyAnalytics.logEvent(com.configheroid.framework.core.avengerad.analytics.AdGalaxyAnalytics.APPLOVIN_BANNER_DISPLAYED)
-
-            }
-
-            override fun onAdHidden(p0: MaxAd?) {
+            override fun onAdDisplayed(p0: MaxAd) {
+                AdGalaxyAnalytics.logEvent(AdGalaxyAnalytics.APPLOVIN_BANNER_DISPLAYED)
 
             }
 
-            override fun onAdClicked(p0: MaxAd?) {
+            override fun onAdHidden(p0: MaxAd) {
+
+            }
+
+            override fun onAdClicked(p0: MaxAd) {
 
             }
 
             override fun onAdLoadFailed(p0: String, p1: MaxError) {
                 AdGalaxyAnalytics.logEvent(
-                    com.configheroid.framework.core.avengerad.analytics.AdGalaxyAnalytics.APPLOVIN_BANNER_LOAD_FAILED,
+                    AdGalaxyAnalytics.APPLOVIN_BANNER_LOAD_FAILED,
                     p1.message.toBundle(AdGalaxyAnalytics.ERROR_MESSAGE)
                 )
 
@@ -454,16 +454,16 @@ internal class ApplovinLoadShow {
 
             override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
                 AdGalaxyAnalytics.logEvent(
-                    com.configheroid.framework.core.avengerad.analytics.AdGalaxyAnalytics.APPLOVIN_BANNER_DISPLAY_FAILED,
+                    AdGalaxyAnalytics.APPLOVIN_BANNER_DISPLAY_FAILED,
                     p1.message.toBundle(AdGalaxyAnalytics.ERROR_MESSAGE)
                 )
             }
 
-            override fun onAdExpanded(p0: MaxAd?) {
+            override fun onAdExpanded(p0: MaxAd) {
 
             }
 
-            override fun onAdCollapsed(p0: MaxAd?) {
+            override fun onAdCollapsed(p0: MaxAd) {
 
             }
 
@@ -477,20 +477,20 @@ internal class ApplovinLoadShow {
         AdGalaxyAnalytics.logEvent(AdGalaxyAnalytics.APPLOVIN_MREC_LOAD)
         val adView = MaxAdView(adUnitId, MaxAdFormat.MREC, activity)
         adView.setListener(object : MaxAdViewAdListener {
-            override fun onAdLoaded(p0: MaxAd?) {
+            override fun onAdLoaded(p0: MaxAd) {
                 AdGalaxyAnalytics.logEvent(AdGalaxyAnalytics.APPLOVIN_MREC_LOADED)
             }
 
-            override fun onAdDisplayed(p0: MaxAd?) {
+            override fun onAdDisplayed(p0: MaxAd) {
                 AdGalaxyAnalytics.logEvent(AdGalaxyAnalytics.APPLOVIN_MREC_DISPLAYED)
 
             }
 
-            override fun onAdHidden(p0: MaxAd?) {
+            override fun onAdHidden(p0: MaxAd) {
 
             }
 
-            override fun onAdClicked(p0: MaxAd?) {
+            override fun onAdClicked(p0: MaxAd) {
 
             }
 
@@ -508,11 +508,11 @@ internal class ApplovinLoadShow {
                 )
             }
 
-            override fun onAdExpanded(p0: MaxAd?) {
+            override fun onAdExpanded(p0: MaxAd) {
 
             }
 
-            override fun onAdCollapsed(p0: MaxAd?) {
+            override fun onAdCollapsed(p0: MaxAd) {
 
             }
 

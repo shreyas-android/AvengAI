@@ -9,6 +9,7 @@ import com.configheroid.framework.core.avengerad.data.SuccessState
 import com.configheroid.framework.core.avengerad.delay.TimeDelay
 import com.applovin.adview.AppLovinFullscreenActivity
 import com.applovin.adview.AppLovinFullscreenThemedActivity
+import com.applovin.mediation.ads.MaxAdView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -212,6 +213,14 @@ internal class ApplovinInitialization(private val coroutineScope: CoroutineScope
                 }
             }
         }
+    }
+
+    fun getApplovinBannerView(activity: Activity, bannerId:String): MaxAdView {
+        return applovinLoadShow.getBannerView(activity, bannerId)
+    }
+
+    fun getApplovinMRECView(activity: Activity, mRECId: String): MaxAdView {
+        return applovinLoadShow.getMRECView(activity, mRECId)
     }
 
 }

@@ -14,26 +14,25 @@ object AvengerAdCore {
 
     private var avengerAdData: AvengerAdData? = null
 
-    private var avengerAd: com.configheroid.framework.core.avengerad.AvengerAd? = null
+    private var avengerAd: AvengerAd? = null
 
-    fun initCore(isDebug:Boolean, avengerAdData: AvengerAdData, scope: CoroutineScope) {
-        com.configheroid.framework.core.avengerad.AvengerAdCore.firebaseAnalytics = Firebase.analytics
-        com.configheroid.framework.core.avengerad.AvengerAdCore.isAdDebug = isDebug
-        com.configheroid.framework.core.avengerad.AvengerAdCore.avengerAdData = avengerAdData
-        com.configheroid.framework.core.avengerad.AvengerAdCore.avengerAd =
-            com.configheroid.framework.core.avengerad.AvengerAd(scope)
+    fun initAvengerAdCore(isDebug:Boolean, avengerAdData: AvengerAdData, scope: CoroutineScope) {
+        firebaseAnalytics = Firebase.analytics
+        isAdDebug = isDebug
+        AvengerAdCore.avengerAdData = avengerAdData
+        avengerAd = AvengerAd(scope)
 
     }
 
     fun getAvengerAdData(): AvengerAdData? {
-        return com.configheroid.framework.core.avengerad.AvengerAdCore.avengerAdData
+        return avengerAdData
     }
 
-    fun getAvengerAd(scope: CoroutineScope): com.configheroid.framework.core.avengerad.AvengerAd {
-        return if (com.configheroid.framework.core.avengerad.AvengerAdCore.avengerAd == null){
-            com.configheroid.framework.core.avengerad.AvengerAd(scope)
+    fun getAvengerAd(scope: CoroutineScope): AvengerAd {
+        return if (avengerAd == null){
+            AvengerAd(scope)
         }else{
-            com.configheroid.framework.core.avengerad.AvengerAdCore.avengerAd!!
+            avengerAd!!
         }
     }
 }

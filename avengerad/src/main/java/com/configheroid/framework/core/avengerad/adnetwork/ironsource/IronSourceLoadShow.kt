@@ -8,7 +8,7 @@ import com.configheroid.framework.core.avengerad.adnetwork.ironsource.IronSource
 import com.configheroid.framework.core.avengerad.analytics.AdGalaxyAnalytics
 import com.configheroid.framework.core.avengerad.analytics.toBundle
 import com.configheroid.framework.core.avengerad.data.AdLifecycleState
-import com.ironsource.mediationsdk.ISBannerSize
+/*import com.ironsource.mediationsdk.ISBannerSize
 import com.ironsource.mediationsdk.IronSource
 import com.ironsource.mediationsdk.IronSourceBannerLayout
 import com.ironsource.mediationsdk.adunit.adapter.utility.AdInfo
@@ -16,14 +16,14 @@ import com.ironsource.mediationsdk.logger.IronSourceError
 import com.ironsource.mediationsdk.model.Placement
 import com.ironsource.mediationsdk.sdk.LevelPlayBannerListener
 import com.ironsource.mediationsdk.sdk.LevelPlayInterstitialListener
-import com.ironsource.mediationsdk.sdk.LevelPlayRewardedVideoListener
+import com.ironsource.mediationsdk.sdk.LevelPlayRewardedVideoListener*/
 
 
 internal class IronSourceLoadShow {
 
     fun init(context: Context) {
         AdGalaxyAnalytics.logEvent(com.configheroid.framework.core.avengerad.analytics.AdGalaxyAnalytics.IRON_SOURCE_INIT)
-        IronSource.init(
+        /*IronSource.init(
             context,
             APP_KEY,
             {
@@ -33,16 +33,12 @@ internal class IronSourceLoadShow {
             IronSource.AD_UNIT.INTERSTITIAL,
             IronSource.AD_UNIT.REWARDED_VIDEO,
             IronSource.AD_UNIT.BANNER
-        )
+        )*/
     }
 
     fun loadRewardedAd(activity: Activity, placementName: String, callback: (AdLifecycleState) -> Unit) {
         AdGalaxyAnalytics.logEvent(AdGalaxyAnalytics.IRON_SOURCE_REWARD_AD_LOAD)
-        Log.d(
-            "CHECKIRONSOURCE",
-            "CHEKCING THE APP LOCIB = loadRewardedAd::${IronSource.isRewardedVideoAvailable()}"
-        )
-        IronSource.setLevelPlayRewardedVideoListener(object : LevelPlayRewardedVideoListener {
+       /* IronSource.setLevelPlayRewardedVideoListener(object : LevelPlayRewardedVideoListener {
             // Indicates that there's an available ad.
             // The adInfo object includes information about the ad that was loaded successfully
             // Use this callback instead of onRewardedVideoAvailabilityChanged(true)
@@ -125,13 +121,13 @@ internal class IronSourceLoadShow {
             Toast.makeText(activity, "IronSourceReward failed ad", Toast.LENGTH_SHORT)
                 .show()
             callback(AdLifecycleState.FAILED)
-        }
+        }*/
     }
 
     fun loadInterstitialAd(activity: Activity, placementName: String, callback: (AdLifecycleState) -> Unit) {
         AdGalaxyAnalytics.logEvent(com.configheroid.framework.core.avengerad.analytics.AdGalaxyAnalytics.IRON_SOURCE_INTERSTITIAL_AD_LOAD)
         Log.d("CHECKIRONSOURCE", "CHEKCING THE APP LOCIB = loadInterstitialAd::$")
-        IronSource.setLevelPlayInterstitialListener(object : LevelPlayInterstitialListener {
+        /*IronSource.setLevelPlayInterstitialListener(object : LevelPlayInterstitialListener {
             // Invoked when the interstitial ad was loaded successfully.
             // AdInfo parameter includes information about the loaded ad
             override fun onAdReady(adInfo: AdInfo) {
@@ -233,10 +229,10 @@ internal class IronSourceLoadShow {
             )
                 .show()
             callback(AdLifecycleState.FAILED)
-        }
+        }*/
     }
 
-    fun getBannerAd(activity: Activity, placement: String): IronSourceBannerLayout {
+   /* fun getBannerAd(activity: Activity, placement: String): IronSourceBannerLayout {
         AdGalaxyAnalytics.logEvent(com.configheroid.framework.core.avengerad.analytics.AdGalaxyAnalytics.IRON_SOURCE_BANNER_LOAD)
         Log.d("CHECKIRONSOURCE", "CHEKCING THE APP LOCIB = getBannerAd::$")
         val banner = IronSource.createBanner(activity, ISBannerSize.BANNER)
@@ -332,5 +328,5 @@ internal class IronSourceLoadShow {
         IronSource.loadBanner(mrec, placement)
 
         return mrec
-    }
+    }*/
 }
