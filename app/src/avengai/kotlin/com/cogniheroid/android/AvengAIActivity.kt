@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import com.cogniheroid.framework.feature.avengai.AvengerAICore
-import com.cogniheroid.framework.feature.avengai.ui.AvengAIDemoScreen
+import com.cogniheroid.framework.feature.avengai.ui.AvengerAIDemoScreen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -30,7 +30,7 @@ class AvengAIActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            AvengAIDemoScreen {
+            AvengerAIDemoScreen {
                 launcher.launch(chooser)
             }
         }
