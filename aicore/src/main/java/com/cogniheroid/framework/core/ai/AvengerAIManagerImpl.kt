@@ -29,9 +29,8 @@ internal class AvengerAIManagerImpl(apiKey: String) : AvengerAIManager {
     )
 
     override suspend fun generateConversation(
-        modelInputHistory: List<ModelInput>,
-        modelInput: ModelInput
-    ): Flow<String?> {
+        modelInputHistory: List<ModelInput>, modelInput: ModelInput,
+        defaultErrorMessage:String): Flow<String?> {
         val model = if (modelInputHistory.any {
                 it is ModelInput.Image
             }) {
@@ -44,14 +43,24 @@ internal class AvengerAIManagerImpl(apiKey: String) : AvengerAIManager {
         modelInputHistory.forEach {
             when (it) {
                 is ModelInput.Image -> {
-                    historyList.add(content("user") {
+                    val role = if (it.isUser){
+                        "user"
+                    }else{
+                        "model"
+                    }
+                    historyList.add(content(role) {
                         image(it.bitmap)
                     })
 
                 }
 
                 is ModelInput.Text -> {
-                    historyList.add(content("user") {
+                    val role = if (it.isUser){
+                        "user"
+                    }else{
+                        "model"
+                    }
+                    historyList.add(content(role) {
                         text(it.text)
                     })
                 }
@@ -60,27 +69,43 @@ internal class AvengerAIManagerImpl(apiKey: String) : AvengerAIManager {
 
         val prompt = when (modelInput) {
             is ModelInput.Image -> {
-                content("user") {
+                val role = if (modelInput.isUser){
+                    "user"
+                }else{
+                    "model"
+                }
+                content(role) {
                     image(modelInput.bitmap)
                 }
             }
 
             is ModelInput.Text -> {
-                content("user") {
+                val role = if (modelInput.isUser){
+                    "user"
+                }else{
+                    "model"
+                }
+                content(role) {
                     text(modelInput.text)
                 }
             }
         }
         val chat = model.startChat(historyList)
         return runCatching {
-            chat.sendMessageStream(prompt)
+            chat.sendMessage(prompt)
         }.fold(onSuccess = {
-            it.catch {
+            flow {
+                emit(it)
+            }.catch {
                 val generateContentResponse = GenerateContentResponse(listOf(), null)
                 emit(generateContentResponse)
             }.map { generateContentResponse: GenerateContentResponse ->
-                generateContentResponse.text
-            }
+                val text = generateContentResponse.text
+                if (text.isNullOrEmpty()) {
+                    defaultErrorMessage
+                } else {
+                    text
+                }            }
         }, onFailure = {
             flow {
                 emit(it.message)
@@ -93,7 +118,8 @@ internal class AvengerAIManagerImpl(apiKey: String) : AvengerAIManager {
 
     }
 
-    override suspend fun generateTextStreamContent(modelInputList: List<ModelInput>, defaultErrorMessage:String): Flow<String?> {
+    override suspend fun generateTextStreamContent(modelInputList: List<ModelInput>,
+                                                   defaultErrorMessage:String): Flow<String?> {
         val input = content {
             modelInputList.forEach {
                 when (it) {

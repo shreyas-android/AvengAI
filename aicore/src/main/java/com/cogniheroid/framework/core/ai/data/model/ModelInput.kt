@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 
 sealed class ModelInput {
 
-    data class Image(val bitmap: Bitmap): ModelInput()
+    data class Image(val isUser:Boolean, val bitmap: Bitmap): ModelInput()
 
-    data class Text(val text: String): ModelInput()
+    data class Text(val isUser:Boolean, val text: String): ModelInput()
 }
