@@ -1,12 +1,11 @@
 package com.cogniheroid.framework.feature.chat.ui.conversations
 
 import android.graphics.Bitmap
-import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
@@ -24,8 +22,14 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -42,17 +46,23 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -60,11 +70,10 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
-import coil.size.Precision
 import coil.transform.CircleCropTransformation
+import com.cogniheroid.framework.extension.nonRippleClickable
 import com.cogniheroid.framework.feature.chat.Instance
 import com.cogniheroid.framework.feature.chat.R
 import com.cogniheroid.framework.feature.chat.callback.ChatExternalCallback
@@ -79,6 +88,7 @@ import com.cogniheroid.framework.shared.core.chat.data.model.ConversationItem
 import com.cogniheroid.framework.shared.core.chat.data.model.MessageWithSender
 import com.cogniheroid.framework.shared.core.chat.utils.DateTimeUtils
 import com.cogniheroid.framework.ui.theme.Dimensions
+import com.cogniheroid.framework.util.ContentUtils
 import com.cogniheroid.framework.util.ImageUtils
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -121,6 +131,7 @@ internal fun ChatDetailScreen(
         val colors = TopAppBarDefaults.smallTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.surface,
         )
+
         Surface(tonalElevation = 3.dp, modifier = Modifier
             .constrainAs(topAppBar) {
                 top.linkTo(parent.top)
@@ -128,7 +139,8 @@ internal fun ChatDetailScreen(
             }
             .statusBarsPadding()) {
             TopAppBar(colors = colors, title = {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically) {
 
                     val drawable = ImageUtils.getComposeContactPlaceHolder(chatListItem.title)
                     val imageLoader = ImageRequest.Builder(context).data(chatListItem.imageUri)
@@ -150,11 +162,11 @@ internal fun ChatDetailScreen(
                         Image(modifier = modifier, painter = painter, contentDescription = "")
                     }
 
-                    Text(
-                        text = chatListItem.title,
-                        fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface,
-                        fontWeight = FontWeight.Medium
-                    )
+                    TopAppBarTitle(chatListItem.title){
+                        messageViewModel.performEvent(MessageEvent.OnTitleChanged(it))
+                    }
+
+
                 }
             }, navigationIcon = {
                 IconButton(onClick = {
@@ -184,6 +196,9 @@ internal fun ChatDetailScreen(
             )
         }
 
+        val defaultErrorMessage = stringResource(id = R.string.message_default_error_ai)
+
+        val geminiInitialMessage = stringResource(id = R.string.placeholder_gemini_content_initial)
         SendMessageField(modifier = Modifier
             .constrainAs(messageField) {
                 bottom.linkTo(parent.bottom)
@@ -193,8 +208,8 @@ internal fun ChatDetailScreen(
         }, onSendClick = {
             messageViewModel.performEvent(
                 MessageEvent.OnSendMessageEvent(
-                    context,
-                    System.currentTimeMillis(), message.value
+                    context, System.currentTimeMillis(), message.value,
+                    defaultErrorMessage, geminiInitialMessage
                 )
             )
             message.value = ""
@@ -207,6 +222,94 @@ internal fun ChatDetailScreen(
 
     }
 
+}
+
+@Composable
+fun TopAppBarTitle(title: String, onSaveTitle: (String) -> Unit) {
+
+    val enableTextField = rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    val fieldValue = rememberSaveable(key = title) {
+        mutableStateOf(title)
+    }
+
+    val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
+
+    BasicTextField(
+        modifier = Modifier.fillMaxWidth().focusRequester(focusRequester),
+        value = fieldValue.value, onValueChange = {
+            fieldValue.value = it
+        },
+        textStyle = TextStyle(
+            fontSize = 16.sp,
+            color = MaterialTheme.colorScheme.onSurface,
+            fontWeight = FontWeight.Medium
+        ),
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+        keyboardActions = KeyboardActions(onDone = {
+            onSaveTitle(fieldValue.value)
+            enableTextField.value = false
+            focusManager.clearFocus()
+        }), cursorBrush = SolidColor(MaterialTheme.colorScheme.primary)
+    ) { innerTextField ->
+        if (enableTextField.value) {
+            ConstraintLayout {
+                val (field, divider, icon) = createRefs()
+                Box(modifier = Modifier.constrainAs(field) {
+                    start.linkTo(parent.start)
+                    end.linkTo(icon.start)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(divider.top)
+                    width = Dimension.fillToConstraints
+                }) {
+                    if (fieldValue.value.isEmpty()) {
+                        Text(
+                            text = fieldValue.value,
+                            fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            fontWeight = FontWeight.Medium)
+                    } else {
+                        innerTextField()
+                    }
+                }
+
+                Divider(modifier = Modifier
+                    .constrainAs(divider) {
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start)
+                    }
+                    .padding(top = Dimensions.padding4))
+
+                IconButton(modifier = Modifier.constrainAs(icon) {
+                    end.linkTo(parent.end)
+                    top.linkTo(parent.top)
+                }, onClick = {
+                    onSaveTitle(fieldValue.value)
+                    enableTextField.value = false
+                    focusManager.clearFocus()
+                }) {
+                    Icon(
+                        imageVector = Icons.Filled.Check,
+                        contentDescription = "", tint = MaterialTheme.colorScheme.onSurface
+                    )
+
+                }
+            }
+
+        } else {
+            Text(
+                text = fieldValue.value,
+                fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface,
+                fontWeight = FontWeight.Medium, modifier = Modifier.clickable {
+                    enableTextField.value = true
+
+
+                }
+            )
+        }
+    }
 }
 
 
@@ -229,59 +332,60 @@ fun SendMessageField(
             .fillMaxWidth()
     ) {
         val (textField, sendButton) = createRefs()
-        BasicTextField(modifier = Modifier
-            .background(
-                color = MaterialTheme.colorScheme.surfaceVariant,
-                shape = RoundedCornerShape(Dimensions.size20)
-            )
-            .constrainAs(textField) {
-                start.linkTo(parent.start)
-                top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-                end.linkTo(sendButton.start)
-                width = Dimension.fillToConstraints
-            }
-            .padding(
-                horizontal = Dimensions.defaultPadding, vertical = Dimensions
-                    .defaultPaddingHalf
-            ), value = value, onValueChange = {
-            onValueChange(it)
-        }, decorationBox = { innerTextField ->
-            ConstraintLayout {
-                val (field, icon) = createRefs()
-                Box(modifier = Modifier.constrainAs(field) {
+        BasicTextField(cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
+            modifier = Modifier
+                .background(
+                    color = MaterialTheme.colorScheme.surfaceVariant,
+                    shape = RoundedCornerShape(Dimensions.size20)
+                )
+                .constrainAs(textField) {
                     start.linkTo(parent.start)
-                    end.linkTo(icon.start)
-                    width = Dimension.fillToConstraints
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
-                }) {
-                    innerTextField()
-                    if (value.isEmpty()) {
-                        Text(
-                            text = stringResource(id = R.string.placeholder_start_typing),
-                            fontSize = Dimensions.secondaryFontSize,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
+                    end.linkTo(sendButton.start)
+                    width = Dimension.fillToConstraints
                 }
-                Icon(modifier = Modifier
-                    .constrainAs(icon) {
-                        end.linkTo(parent.end)
+                .padding(
+                    horizontal = Dimensions.defaultPadding, vertical = Dimensions
+                        .defaultPaddingHalf
+                ), value = value, onValueChange = {
+                onValueChange(it)
+            }, decorationBox = { innerTextField ->
+                ConstraintLayout {
+                    val (field, icon) = createRefs()
+                    Box(modifier = Modifier.constrainAs(field) {
+                        start.linkTo(parent.start)
+                        end.linkTo(icon.start)
+                        width = Dimension.fillToConstraints
                         top.linkTo(parent.top)
                         bottom.linkTo(parent.bottom)
+                    }) {
+                        innerTextField()
+                        if (value.isEmpty()) {
+                            Text(
+                                text = stringResource(id = R.string.placeholder_start_typing),
+                                fontSize = Dimensions.secondaryFontSize,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
                     }
-                    .clickable {
-                        onAttachmentClick()
-                    }
-                    .padding(start = Dimensions.padding4),
-                    painter = painterResource(id = R.drawable.ic_add_photo),
-                    contentDescription = "",
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer
-                )
+                    Icon(modifier = Modifier
+                        .constrainAs(icon) {
+                            end.linkTo(parent.end)
+                            top.linkTo(parent.top)
+                            bottom.linkTo(parent.bottom)
+                        }
+                        .clickable {
+                            onAttachmentClick()
+                        }
+                        .padding(start = Dimensions.padding4),
+                        painter = painterResource(id = R.drawable.ic_add_photo),
+                        contentDescription = "",
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
 
-            }
-        }, textStyle = TextStyle(color = MaterialTheme.colorScheme.onSurface)
+                }
+            }, textStyle = TextStyle(color = MaterialTheme.colorScheme.onSurface)
         )
 
         val sendIcon = R.drawable.ic_send /*if (value.isEmpty()) {
@@ -352,11 +456,44 @@ fun ConversationList(
             stickyHeader {
                 DateHeaderItem(dateHeader = key)
             }
-            items(value) {
+            items(value, key = {
+                it.id
+            }) {
                 ChatItemContainer(chatDetailItem = it)
             }
         }
 
+    }
+}
+
+fun getAnnotatedString(text: String): AnnotatedString {
+    val boldRegex = Regex("(?<!\\*)\\*\\*(?!\\*).*?(?<!\\*)\\*\\*(?!\\*)")
+
+    val boldKeywords: Sequence<MatchResult> = boldRegex.findAll(text)
+
+    val boldIndexes = mutableListOf<Pair<Int, Int>>()
+    boldKeywords.map {
+        boldIndexes.add(Pair(it.range.first, it.range.last - 2))
+    }
+
+    val newText = text.replace("**", "")
+
+    return buildAnnotatedString {
+        append(newText)
+
+        // Add bold style to keywords that has to be bold
+        boldIndexes.forEach {
+            addStyle(
+                style = SpanStyle(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = Dimensions.primaryFontSize
+
+                ),
+                start = it.first,
+                end = it.second
+            )
+
+        }
     }
 }
 
@@ -431,9 +568,9 @@ private fun NormalMessageItem(normalMessage: ChatDetailItem.NormalMessage) {
     MessageItem(messageItem = normalMessage.messageItem)
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun MessageItem(messageItem: MessageWithSender) {
-    Log.d("CHECKMESSAGES", "CHEKCIG THE MESSAGE = ${messageItem.fileUri}")
     if (messageItem.message.isNullOrEmpty() && messageItem.fileUri.isNullOrEmpty()) {
         return
     }
@@ -451,39 +588,80 @@ private fun MessageItem(messageItem: MessageWithSender) {
         val avatarImageSize =
             with(LocalDensity.current) { Dimensions.avatarImageSize.toPx() }.toInt()
 
+        val senderUri = if (messageItem.isUser){
+            messageItem.senderImageUri
+        }else{
+            DisplayUtils.getImageUri(context, R.drawable.google_gemini)
+        }
         val drawable = ImageUtils.getComposeContactPlaceHolder(messageItem.senderName)
-        val imageLoader = ImageRequest.Builder(context).data(messageItem.senderImageUri)
-            .error(drawable).placeholder(drawable).transformations(CircleCropTransformation())
-            .build()
 
-        val painter = rememberAsyncImagePainter(model = imageLoader)
-
-        if (messageItem.senderImageUri == null) {
+        if (senderUri == null) {
             Image(
                 bitmap = drawable.toBitmap(avatarImageSize, avatarImageSize).asImageBitmap(),
                 contentDescription = ""
             )
         } else {
-            Image(painter = painter, contentDescription = "")
+            val bitmap: MutableState<Bitmap?> = rememberSaveable() {
+                mutableStateOf(null)
+            }
+
+            val scope = rememberCoroutineScope()
+            LaunchedEffect(key1 = Unit) {
+                scope.launch {
+                    bitmap.value = DisplayUtils.getCircularBitmap(context,
+                        avatarImageSize, uri = senderUri.toString())
+                }
+            }
+
+            val actualBitmap = bitmap.value?.asImageBitmap() ?: drawable.toBitmap(avatarImageSize,
+                avatarImageSize).asImageBitmap()
+            Image(
+                bitmap = actualBitmap,
+                contentDescription = ""
+            )
         }
 
+        val cardColors = CardDefaults.cardColors(
+            containerColor = if (messageItem.isUser) {
+                MaterialTheme.colorScheme.primary
+            } else {
+                MaterialTheme.colorScheme.surfaceVariant
+            }
+        )
         Card(
+            colors = cardColors,
             modifier = Modifier
                 .padding(start = Dimensions.defaultPaddingHalf)
                 .wrapContentWidth(), shape = RoundedCornerShape(Dimensions.size8)
         ) {
-            ConstraintLayout(modifier = Modifier.padding(Dimensions.defaultPaddingHalf)) {
+            ConstraintLayout(modifier = Modifier.combinedClickable(onClick = {}, onLongClick = {
+                ContentUtils.copyAndShowToast(
+                    context = context,
+                    result = messageItem.message ?: ""
+                )
+            }).padding(Dimensions.defaultPaddingHalf)) {
                 val (username, message, messageTimeContainer) = createRefs()
+                val senderName = if (messageItem.senderName.isEmpty()) {
+                    "Shreyas"
+                } else {
+                    messageItem.senderName
+                }
+
+                val textColor = if (messageItem.isUser) {
+                    MaterialTheme.colorScheme.onPrimary
+                } else {
+                    MaterialTheme.colorScheme.onSurface
+                }
                 Text(
-                    text = "SHREYAS",
-                    fontSize = Dimensions.fontSize10,
+                    text = senderName,
+                    fontSize = Dimensions.fontSize12,
                     fontWeight = FontWeight.Medium,
                     modifier = Modifier
                         .constrainAs(username) {
                             start.linkTo(parent.start)
                             top.linkTo(parent.top)
                         },
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = textColor
                 )
 
                 val messageModifier = Modifier
@@ -491,30 +669,28 @@ private fun MessageItem(messageItem: MessageWithSender) {
                     .constrainAs(message) {
                         start.linkTo(parent.start)
                         top.linkTo(username.bottom)
-                        width = Dimension.fillToConstraints
                     }
                 if (messageItem.messageContentType == MessageContentType.TEXT) {
                     messageItem.message?.let {
+                        val annotatedString = getAnnotatedString(it)
                         Text(
-                            text = it,
+                            text = annotatedString,
                             fontSize = Dimensions.secondaryFontSize,
-                            modifier = messageModifier,
-                            color = MaterialTheme.colorScheme.onSurface,
+                            modifier = messageModifier
+                                .nonRippleClickable { }
+                                .combinedClickable(onClick = {}, onLongClick = {
+                                    ContentUtils.copyAndShowToast(
+                                        context = context,
+                                        result = annotatedString.toString()
+                                    )
+                                }),
+                            color = textColor,
                             lineHeight = Dimensions.lineHeight
                         )
                     }
                 } else {
-                    val messageImageLoader = ImageRequest.Builder(context).data(messageItem.fileUri)
-                        .size(400).precision(Precision.EXACT).transformations(
-                            CircleCropTransformation())
-                        .build()
 
-                    Log.d(
-                        "CHECKIMAGELOADER",
-                        "CHEKCIN G THE IMAGE LOADER = ${messageImageLoader.allowConversionToBitmap}"
-                    )
-
-                    val bitmap:MutableState<Bitmap?> = rememberSaveable() {
+                    val bitmap: MutableState<Bitmap?> = rememberSaveable() {
                         mutableStateOf(null)
                     }
 
@@ -533,10 +709,6 @@ private fun MessageItem(messageItem: MessageWithSender) {
                         )
                     }
 
-                    Log.d("CHECKIMAGE", "CHEKCIG N THE IMAGE = ${Uri.parse(messageItem.fileUri)}")
-                    /*AsyncImage(modifier = messageModifier.size(300.dp), model = Uri.parse(messageItem.fileUri),
-                        contentDescription = "Picture")*/
-
                 }
                 Row(modifier = Modifier.constrainAs(messageTimeContainer) {
                     top.linkTo(message.bottom)
@@ -551,7 +723,7 @@ private fun MessageItem(messageItem: MessageWithSender) {
                         fontSize = Dimensions.fontSize8,
                         modifier = Modifier
                             .padding(end = Dimensions.padding4, top = Dimensions.padding4),
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = textColor,
                         lineHeight = Dimensions.lineHeight,
                         letterSpacing = Dimensions.letterSpacing
                     )

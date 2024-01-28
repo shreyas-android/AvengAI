@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -13,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -89,8 +91,7 @@ internal fun ChatListScreen(navController: NavController, chatViewModel: ChatVie
             width = Dimension.fillToConstraints
             height = Dimension.fillToConstraints
         },
-            chatListItem = chatViewModel.getChatListItems()
-                .collectAsState(initial = emptyList()).value,
+            chatListItem = chatViewModel.getChatListItems().collectAsState(initial =null).value,
             onNewChatClicked = {
                 coroutineScope.launch {
                     chatViewModel.updateSelectedChatListItem(
@@ -127,15 +128,48 @@ internal fun ChatListScreen(navController: NavController, chatViewModel: ChatVie
     }
 }
 
+@Composable
+private fun LoadingView() {
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+    ) {
+        val (progressBar, description) = createRefs()
+        CircularProgressIndicator(modifier = Modifier
+            .constrainAs(progressBar) {
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                bottom.linkTo(description.top)
+            })
+
+        Text(text = stringResource(id = R.string.placeholder_loading_conversation_list),
+            fontSize = 14.sp,
+            modifier = Modifier
+                .constrainAs(description) {
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                }
+                .padding(16.dp),
+            fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onSurface,
+            textAlign = TextAlign.Center)
+    }
+}
+
 
 @Composable
 private fun ChatListContainer(
     modifier: Modifier = Modifier,
-    chatListItem: List<ConversationItem>,
+    chatListItem: List<ConversationItem>?,
     onChatClicked: (ConversationItem) -> Unit,
     onNewChatClicked: () -> Unit
 ) {
-    if (chatListItem.isEmpty()) {
+    if (chatListItem == null){
+        LoadingView()
+    }
+    else if (chatListItem.isEmpty()) {
         ConstraintLayout(modifier = modifier.fillMaxSize()) {
             val (placeholder, button) = createRefs()
             Text(

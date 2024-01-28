@@ -1,14 +1,10 @@
 package com.cogniheroid.framework.feature.chat.ui.conversations
 
 import android.content.Context
-import android.graphics.ImageDecoder
 import android.net.Uri
 import android.util.Log
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import coil.ImageLoader
-import coil.request.ImageRequest
 import com.cogniheroid.framework.core.ai.AvengerAIManager
 import com.cogniheroid.framework.core.ai.data.model.ModelInput
 import com.cogniheroid.framework.feature.chat.callback.ExternalTextCallback
@@ -17,12 +13,14 @@ import com.cogniheroid.framework.feature.chat.data.model.ConversationMessage
 import com.cogniheroid.framework.feature.chat.ui.conversations.uistate.MessageEvent
 import com.cogniheroid.framework.feature.chat.ui.conversations.uistate.MessageSideEffect
 import com.cogniheroid.framework.feature.chat.utils.DisplayUtils
+import com.cogniheroid.framework.shared.core.chat.data.entities.MessagesEntity
 import com.cogniheroid.framework.shared.core.chat.data.enum.MessageContentType
 import com.cogniheroid.framework.shared.core.chat.data.enum.MessageType
 import com.cogniheroid.framework.shared.core.chat.data.enum.ReadStatusType
 import com.cogniheroid.framework.shared.core.chat.data.model.ConversationItem
 import com.cogniheroid.framework.shared.core.chat.data.model.MessageWithSender
 import com.cogniheroid.framework.shared.core.chat.flow.CommonFlow
+import com.cogniheroid.framework.shared.core.chat.manager.chatlist.ChatListManager
 import com.cogniheroid.framework.shared.core.chat.manager.message.MessageManager
 import com.cogniheroid.framework.shared.core.chat.manager.sender.SenderManager
 import kotlinx.coroutines.channels.Channel
@@ -32,6 +30,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class MessageViewModel(
+    private val chatListManager: ChatListManager,
     private val messageManager: MessageManager,
     private val avengerAIManager: AvengerAIManager,
     private val senderManager: SenderManager
@@ -47,6 +46,8 @@ class MessageViewModel(
     private lateinit var chatListItem: ConversationItem
 
     private val _allMessages = MutableStateFlow<List<MessageWithSender>>(listOf())
+
+    private val _generativeAIChatFlow = MutableStateFlow<String>("")
 
     init {
         viewModelScope.launch {
@@ -64,8 +65,11 @@ class MessageViewModel(
                         )
                     }
                 }
+
                 conversationMessages.value =
-                    ConversationMessage.Messages(mappedChatDetailItems.groupBy { it.messageStartDate })
+                    ConversationMessage.Messages(mappedChatDetailItems.groupBy {
+                        Log.d("CHECKMESSAGE","CHEKCIGN THE MESSAGE = ${it.messageStartDate}")
+                        it.messageStartDate })
             }
         }
     }
@@ -79,7 +83,7 @@ class MessageViewModel(
 
     fun updateChatDetailMap(chatListItem: ConversationItem) {
         viewModelScope.launch {
-            getConversationMessages(chatListItem).collectLatest { it ->
+            getConversationMessages(chatListItem).collectLatest {
                 _allMessages.value = it
             }
         }
@@ -89,27 +93,29 @@ class MessageViewModel(
 
         val modelInputList = mutableListOf<ModelInput>()
 
-        _allMessages.value.forEach {
-            when (it.messageContentType) {
+        _allMessages.value.forEach { messageWithSender ->
+            when (messageWithSender.messageContentType) {
                 MessageContentType.TEXT -> {
-                    it.message?.let { message ->
-                        modelInputList.add(ModelInput.Text(message))
+                    messageWithSender.message?.let { message ->
+                        modelInputList.add(ModelInput.Text(isUser = messageWithSender.isUser, message))
                     }
                 }
 
                 MessageContentType.IMAGE -> {
-                    it.fileUri?.let { uri ->
+                    messageWithSender.fileUri?.let { uri ->
                         val bitmap = DisplayUtils.getBitmap(context, uri)
                         bitmap?.let {
-                            modelInputList.add(ModelInput.Image(it))
+                            modelInputList.add(ModelInput.Image(isUser = messageWithSender.isUser,
+                                it))
                         }
 
                     }
                 }
 
                 else -> {
-                    it.message?.let { message ->
-                        modelInputList.add(ModelInput.Text(message))
+                    messageWithSender.message?.let { message ->
+                        modelInputList.add(ModelInput.Text(isUser = messageWithSender.isUser,
+                            message))
                     }
                 }
             }
@@ -122,14 +128,8 @@ class MessageViewModel(
         when (messageEvent) {
             is MessageEvent.OnSendMessageEvent -> {
                 viewModelScope.launch {
-                    insertNewMessage(messageEvent.message)
-
-                    avengerAIManager.generateConversation(
-                        modelInputHistory = convertAllMessagesToModelInput(messageEvent.context),
-                        modelInput = ModelInput.Text(messageEvent.message)
-                    ).collectLatest {
-                        insertNewMessage(it ?: "")
-                    }
+                    onUserSentMessage(messageEvent.context, messageEvent.message, messageEvent
+                        .defaultErrorMessage, messageEvent.geminiInitialMessage)
                 }
             }
 
@@ -143,7 +143,11 @@ class MessageViewModel(
                 setSideEffect(MessageSideEffect.OnAddAttachment(externalTextCallback))
             }
 
-
+            is MessageEvent.OnTitleChanged -> {
+                viewModelScope.launch {
+                    chatListManager.updateChatListItemTitle(messageEvent.title, chatListItem.id)
+                }
+            }
         }
     }
 
@@ -153,44 +157,54 @@ class MessageViewModel(
         }
     }
 
+   private suspend fun onUserSentMessage(context: Context, message: String, defaultErrorMessage:String, geminiInitialMessage:String){
+        insertNewMessage(message, 1L)
 
-    private fun insertNewMessage(message: String) {
-        viewModelScope.launch {
-            messageManager.insertAndGetNewMessage(
-                chatId = chatListItem.id,
-                senderId = 1,
-                message = message,
-                fileUri = null,
-                messageTime = System.currentTimeMillis(),
-                readStatus = ReadStatusType.READ,
-                messageType = MessageType.NORMAL,
-                replyMessageId = null,
-                messageContentType = MessageContentType.TEXT
-            )
+        val geminiMessage =  insertNewMessage(geminiInitialMessage, 2L)
+        avengerAIManager.generateConversation(
+            modelInputHistory = convertAllMessagesToModelInput(context),
+            modelInput = ModelInput.Text(isUser = true, message), defaultErrorMessage).collectLatest {
+            updateMessage(geminiMessage.copy(message = it?:""))
         }
+    }
+
+    private suspend fun updateMessage(messagesEntity: MessagesEntity){
+        messageManager.updateMessage(messagesEntity)
+    }
+
+    private suspend fun insertNewMessage(message: String, senderId:Long):MessagesEntity {
+           return insertNewMessageEntity(message, null, MessageContentType.TEXT,  senderId)
+
+    }
+
+    private suspend fun insertNewMessageEntity(message: String?, uri:String?, contentType: MessageContentType, senderId:Long): MessagesEntity {
+       val messageEntity =  messageManager.insertAndGetNewMessage(
+            chatId = chatListItem.id,
+            senderId = senderId,
+            message = message,
+            fileUri = uri,
+            messageTime = System.currentTimeMillis(),
+            readStatus = ReadStatusType.READ,
+            messageType = MessageType.NORMAL,
+            replyMessageId = null,
+            messageContentType = contentType
+        )
+
+        chatListManager.updateChatListItemLastMessageId(messageEntity.messageId, chatListItem.id)
+
+        return messageEntity
     }
 
     fun insertListOfNewAttachment(uriList: List<Uri>) {
         uriList.forEach {
-            insertNewAttachment(it.toString())
+            insertNewAttachment(it.toString(), 1L)
         }
 
     }
 
-    private fun insertNewAttachment(uri: String) {
-        Log.d("CHECKTHEATTACH","CHEKCIG THE ATTACH = $uri")
+    private fun insertNewAttachment(uri: String, senderId: Long) {
         viewModelScope.launch {
-            messageManager.insertAndGetNewMessage(
-                chatId = chatListItem.id,
-                senderId = 1,
-                message = null,
-                fileUri = uri,
-                messageTime = System.currentTimeMillis(),
-                readStatus = ReadStatusType.READ,
-                messageType = MessageType.NORMAL,
-                replyMessageId = null,
-                messageContentType = MessageContentType.IMAGE
-            )
+            insertNewMessageEntity(null, uri,  MessageContentType.IMAGE, senderId)
         }
     }
 }

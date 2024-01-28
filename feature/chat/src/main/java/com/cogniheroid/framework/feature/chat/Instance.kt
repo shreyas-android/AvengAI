@@ -22,11 +22,11 @@ object Instance {
     }
 
     val conversationViewModelFactory: ConversationViewModelFactory by lazy {
-        ConversationViewModelFactory(chatListManager)
+        ConversationViewModelFactory(chatListManager, senderManager)
     }
 
     val messageViewModelFactory: MessageViewModelFactory by lazy {
-        MessageViewModelFactory(messageManager = messageManager, avengerAIManager = ChatCore.avengerAIManager,
+        MessageViewModelFactory(chatListManager = chatListManager, messageManager = messageManager, avengerAIManager = ChatCore.avengerAIManager,
            senderManager =  senderManager)
     }
 

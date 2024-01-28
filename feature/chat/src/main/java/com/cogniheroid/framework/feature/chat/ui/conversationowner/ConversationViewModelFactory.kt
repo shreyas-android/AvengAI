@@ -6,9 +6,10 @@ import com.cogniheroid.framework.shared.core.chat.manager.chatlist.ChatListManag
 import com.cogniheroid.framework.shared.core.chat.manager.message.MessageManager
 import com.cogniheroid.framework.shared.core.chat.manager.sender.SenderManager
 
-class ConversationViewModelFactory(private val chatListManager: ChatListManager) : ViewModelProvider.Factory{
+class ConversationViewModelFactory(private val chatListManager: ChatListManager,
+                                   private val senderManager: SenderManager) : ViewModelProvider.Factory{
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return ChatViewModel(chatListManager) as T
+        return ChatViewModel(chatListManager, senderManager) as T
     }
 }
