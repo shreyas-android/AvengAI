@@ -1,15 +1,21 @@
 package com.cogniheroid.android
 
 import android.content.Intent
+import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
 import com.cogniheroid.framework.feature.avengai.AvengerAICore
-import com.cogniheroid.framework.feature.avengai.ui.AvengerAIDemoScreen
+import com.cogniheroid.framework.feature.avengai.ui.generation.AvengerAIDemoScreen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.io.File
 
 
 class AvengAIActivity : BaseActivity() {
@@ -42,6 +48,8 @@ class AvengAIActivity : BaseActivity() {
                 }
             }
         }
+
+        Log.d("CHECKPREFERENCE","CHEKCIG THE PREFERENCE = ${Build.MANUFACTURER} AND ${Build.BRAND}")
     }
 
    private fun getCameraGalleryCombinedIntent(): Intent {
@@ -64,6 +72,22 @@ class AvengAIActivity : BaseActivity() {
         }
 
         return chooser
+    }
+
+
+    private fun getSharedPreference() : SharedPreferences {
+        val f = File(
+            "/data/data/com.cogniheroid.android.ai.debug/shared_prefs/com.zoho.mail_preferences.xml")
+        val masterKey = MasterKey.Builder(application)
+            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+            .build()
+        return EncryptedSharedPreferences.create(
+            application,
+            "my_preferences",
+            masterKey,
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        )
     }
 
 

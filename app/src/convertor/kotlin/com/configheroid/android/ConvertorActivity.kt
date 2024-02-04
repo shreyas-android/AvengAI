@@ -10,7 +10,7 @@ class ConvertorActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ConvertorScreen()
+            ConvertorScreen(this@ConvertorActivity)
         }
 
     }
