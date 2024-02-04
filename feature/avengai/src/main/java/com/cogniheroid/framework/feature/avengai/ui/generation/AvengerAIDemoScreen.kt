@@ -1,4 +1,4 @@
-package com.cogniheroid.framework.feature.avengai.ui
+package com.cogniheroid.framework.feature.avengai.ui.generation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,7 +27,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.cogniheroid.android.ad.ui.theme.ComposeUITheme
 import com.cogniheroid.framework.feature.avengai.R
-import com.cogniheroid.framework.feature.avengai.ui.advancetextgeneration.AdvanceTextGeneration
+import com.cogniheroid.framework.feature.avengai.ui.generation.advancetextgeneration.AdvanceTextGeneration
 import com.cogniheroid.framework.feature.avengai.ui.textgeneration.TextGenerationScreen
 import com.cogniheroid.framework.ui.component.CustomButton
 

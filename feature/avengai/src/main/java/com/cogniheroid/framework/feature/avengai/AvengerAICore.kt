@@ -2,7 +2,8 @@ package com.cogniheroid.framework.feature.avengai
 
 import android.content.Intent
 import com.cogniheroid.framework.core.ai.AvengerAIManager
-import com.cogniheroid.framework.feature.avengai.ui.advancetextgeneration.AdvanceTextGenerationViewModelFactory
+import com.cogniheroid.framework.feature.avengai.ui.generation.advancetextgeneration.AdvanceTextGenerationViewModelFactory
+import com.cogniheroid.framework.feature.avengai.ui.nutrient.NutrientAIViewModelFactory
 import com.cogniheroid.framework.feature.avengai.ui.textgeneration.TextGenerationViewModelFactory
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -12,6 +13,8 @@ object AvengerAICore {
 
     lateinit var textGenerationViewModelFactory: TextGenerationViewModelFactory
 
+    lateinit var nutrientAIViewModelFactory : NutrientAIViewModelFactory
+
     internal val imageIntentFlow = MutableStateFlow<Intent?>(null)
 
     fun init(apiKey:String){
@@ -20,6 +23,8 @@ object AvengerAICore {
             AdvanceTextGenerationViewModelFactory(avengerAIManagerImpl)
         textGenerationViewModelFactory =
             TextGenerationViewModelFactory(avengerAIManagerImpl)
+
+        nutrientAIViewModelFactory = NutrientAIViewModelFactory(avengerAIManagerImpl)
     }
 
     fun onImageAdded(intent: Intent){

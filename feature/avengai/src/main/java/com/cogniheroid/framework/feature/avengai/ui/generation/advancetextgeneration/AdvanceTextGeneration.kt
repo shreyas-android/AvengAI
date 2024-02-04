@@ -1,4 +1,4 @@
-package com.cogniheroid.framework.feature.avengai.ui.advancetextgeneration
+package com.cogniheroid.framework.feature.avengai.ui.generation.advancetextgeneration
 
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
@@ -57,9 +57,9 @@ import coil.request.SuccessResult
 import coil.size.Precision
 import com.cogniheroid.framework.feature.avengai.AvengerAICore
 import com.cogniheroid.framework.feature.avengai.R
-import com.cogniheroid.framework.feature.avengai.ui.advancetextgeneration.uistate.AdvanceTextGenerationUIEffect
-import com.cogniheroid.framework.feature.avengai.ui.advancetextgeneration.uistate.AdvanceTextGenerationUIEvent
-import com.cogniheroid.framework.feature.avengai.ui.advancetextgeneration.uistate.AdvanceTextGenerationUIState
+import com.cogniheroid.framework.feature.avengai.ui.generation.advancetextgeneration.uistate.AdvanceTextGenerationUIEffect
+import com.cogniheroid.framework.feature.avengai.ui.generation.advancetextgeneration.uistate.AdvanceTextGenerationUIEvent
+import com.cogniheroid.framework.feature.avengai.ui.generation.advancetextgeneration.uistate.AdvanceTextGenerationUIState
 import com.cogniheroid.framework.ui.component.CustomButton
 import com.cogniheroid.framework.util.ContentUtils
 import kotlinx.coroutines.flow.collectLatest
@@ -190,7 +190,7 @@ fun AdvanceTextGeneration(
             })
         }
         AdvanceTextGenerationView(modifier = Modifier,
-            textGenerationUIState = advanceTextGenerationViewModel.advanceTextGenerationUIStateFlow.collectAsState().value,
+            textGenerationUIState = advanceTextGenerationViewModel.advanceTextGenerationUIStateStateFlow.collectAsState().value,
             performIntent = { textGenerationUIEvent ->
                 advanceTextGenerationViewModel.performIntent(textGenerationUIEvent)
             })
@@ -200,9 +200,9 @@ fun AdvanceTextGeneration(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun AdvanceTextGenerationView(
-    modifier: Modifier,
-    textGenerationUIState: AdvanceTextGenerationUIState,
-    performIntent: (AdvanceTextGenerationUIEvent) -> Unit
+        modifier: Modifier,
+        textGenerationUIState: AdvanceTextGenerationUIState,
+        performIntent: (AdvanceTextGenerationUIEvent) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
@@ -327,7 +327,8 @@ private fun AdvanceTextGenerationView(
             label = stringResource(R.string.label_generate_text),
             onClick = {
                 focusManager.clearFocus()
-                performIntent(AdvanceTextGenerationUIEvent.GenerateText(
+                performIntent(
+                    AdvanceTextGenerationUIEvent.GenerateText(
                     textGenerationUIState.inputText, defaultMessage))
             })
 

@@ -1,14 +1,13 @@
-package com.cogniheroid.framework.feature.avengai.ui.advancetextgeneration
+package com.cogniheroid.framework.feature.avengai.ui.generation.advancetextgeneration
 
 import android.graphics.Bitmap
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cogniheroid.framework.core.ai.AvengerAIManager
 import com.cogniheroid.framework.core.ai.data.model.ModelInput
-import com.cogniheroid.framework.feature.avengai.ui.advancetextgeneration.uistate.AdvanceTextGenerationUIEffect
-import com.cogniheroid.framework.feature.avengai.ui.advancetextgeneration.uistate.AdvanceTextGenerationUIEvent
-import com.cogniheroid.framework.feature.avengai.ui.advancetextgeneration.uistate.AdvanceTextGenerationUIState
+import com.cogniheroid.framework.feature.avengai.ui.generation.advancetextgeneration.uistate.AdvanceTextGenerationUIEffect
+import com.cogniheroid.framework.feature.avengai.ui.generation.advancetextgeneration.uistate.AdvanceTextGenerationUIEvent
+import com.cogniheroid.framework.feature.avengai.ui.generation.advancetextgeneration.uistate.AdvanceTextGenerationUIState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -28,14 +27,14 @@ class AdvanceTextGenerationViewModel(private val avengerAIManager:AvengerAIManag
 
     private var imageListFlow:MutableStateFlow<List<Bitmap>> = MutableStateFlow(listOf())
 
-    val advanceTextGenerationUIStateFlow = combine(inputField, result, isModelStartedGeneratingText, imageListFlow) { inputText, outputText, isGenerating, bitmapList ->
+    val advanceTextGenerationUIStateStateFlow = combine(inputField, result, isModelStartedGeneratingText, imageListFlow) { inputText, outputText, isGenerating, bitmapList ->
         AdvanceTextGenerationUIState(inputText, outputText, isGenerating, bitmapList)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),
         AdvanceTextGenerationUIState("", "", false, listOf())
     )
 
-    private val _advanceTextGenerationUIEffectFlow = Channel<AdvanceTextGenerationUIEffect>()
-    val advanceTextGenerationUIEffectFlow = _advanceTextGenerationUIEffectFlow.receiveAsFlow()
+    private val advanceTextGenerationUIEffectChannel = Channel<AdvanceTextGenerationUIEffect>()
+    val advanceTextGenerationUIEffectFlow = advanceTextGenerationUIEffectChannel.receiveAsFlow()
 
     fun performIntent(textGenerationUIEvent: AdvanceTextGenerationUIEvent){
         when(textGenerationUIEvent){
@@ -101,7 +100,7 @@ class AdvanceTextGenerationViewModel(private val avengerAIManager:AvengerAIManag
 
     private fun setSideEffect(advanceTextGenerationUIEffect: AdvanceTextGenerationUIEffect){
         viewModelScope.launch {
-            _advanceTextGenerationUIEffectFlow.send(advanceTextGenerationUIEffect)
+            advanceTextGenerationUIEffectChannel.send(advanceTextGenerationUIEffect)
         }
     }
 }
