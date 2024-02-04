@@ -1,7 +1,6 @@
 package com.cogniheroid.framework.feature.avengai.ui.nutrient
 
 import android.graphics.Bitmap
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cogniheroid.framework.core.ai.AvengerAIManager
@@ -11,8 +10,6 @@ import com.cogniheroid.framework.feature.avengai.ui.nutrient.uistate.NutrientUIE
 import com.cogniheroid.framework.feature.avengai.ui.nutrient.uistate.NutrientUIState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -92,9 +89,9 @@ class NutrientAIViewModel(private val avengerAIManager : AvengerAIManager) : Vie
 
     private fun getDefaultPrompt() : String {
        return """
-          You are an expert in nutritionist where you need to see the food items from the image 
-          and calculate the total calories, proteins, vitamins, minerals, carbohydrates, fats etc 
-          and what are nutrient data available please provide it. Also provide the details of every 
+          You are an expert in nutritionist where you need to accurately see the food items from the image , identify the food in the image accurately 
+          and calculate the quantity of the food in grams or user friendly,  total calories, proteins, vitamins, minerals, carbohydrates, fats etc 
+          and what are nutrient data available please provide it. Your data should be more accurate. It should match the value in internet. Also provide the details of every 
           food items with calories intake as below format.  Please follow the below format for generated text
           
           List of food Items present in image
@@ -106,23 +103,23 @@ class NutrientAIViewModel(private val avengerAIManager : AvengerAIManager) : Vie
           
           
        
-          ITEM 1(Bold) with no of grams
+          ITEM 1(Bold) quantity
           
-          1. no of calories 
-          2. no of protein 
-          3. no of Carbohydrate
-          4. no of fats 
-          5. no of vitamins 
-          6. no of minerals
+          1. no of calories -
+          2. no of protein -
+          3. no of Carbohydrate -
+          4. no of fats -
+          5. no of vitamins -
+          6. no of minerals -
           
-          ITEM 2 (Bold) with no of grams
+          ITEM 2 (Bold) quantity
           
-           1. no of calories 
-          2. no of protein 
-          3. no of Carbohydrate
-          4. no of fats 
-          5. no of vitamins 
-          6. no of minerals
+           1. no of calories -
+          2. no of protein -
+          3. no of Carbohydrate -
+          4. no of fats -
+          5. no of vitamins -
+          6. no of minerals -
             
           ---
           ---

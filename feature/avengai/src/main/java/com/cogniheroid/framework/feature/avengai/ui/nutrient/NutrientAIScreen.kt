@@ -3,7 +3,6 @@ package com.cogniheroid.framework.feature.avengai.ui.nutrient
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -36,8 +35,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,9 +50,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.graphics.drawable.toBitmap
-import androidx.core.text.HtmlCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.ImageLoader
 import coil.request.ImageRequest
@@ -63,8 +57,6 @@ import coil.request.SuccessResult
 import coil.size.Precision
 import com.cogniheroid.framework.feature.avengai.AvengerAICore
 import com.cogniheroid.framework.feature.avengai.R
-import com.cogniheroid.framework.feature.avengai.ui.generation.advancetextgeneration.uistate.AdvanceTextGenerationUIEffect
-import com.cogniheroid.framework.feature.avengai.ui.generation.advancetextgeneration.uistate.AdvanceTextGenerationUIEvent
 import com.cogniheroid.framework.feature.avengai.ui.nutrient.uistate.NutrientUIEffect
 import com.cogniheroid.framework.feature.avengai.ui.nutrient.uistate.NutrientUIEvent
 import com.cogniheroid.framework.feature.avengai.ui.nutrient.uistate.NutrientUIState
