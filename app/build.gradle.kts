@@ -107,15 +107,15 @@ android {
 
         create("stressbuster") {
             applicationId = "com.androidai.galaxy.stressbuster"
-            versionCode = 26
-            versionName = "5.0.0"
+            versionCode = 28
+            versionName = "5.0.2"
             signingConfig = signingConfigs.getByName("stressbuster")
         }
 
         create("adgalaxy"){
             applicationId = "com.androidai.galaxy.ad"
-            versionCode = 41
-            versionName = "7.2.11"
+            versionCode = 42
+            versionName = "8.0.0"
             signingConfig = signingConfigs.getByName("adgalaxy")
         }
     }

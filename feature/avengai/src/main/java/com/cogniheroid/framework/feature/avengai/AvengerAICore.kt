@@ -2,6 +2,7 @@ package com.cogniheroid.framework.feature.avengai
 
 import android.content.Intent
 import com.cogniheroid.framework.core.ai.AvengerAIManager
+import com.cogniheroid.framework.feature.avengai.ui.equationrecognizer.EquationRecognizerViewModelFactory
 import com.cogniheroid.framework.feature.avengai.ui.generation.advancetextgeneration.AdvanceTextGenerationViewModelFactory
 import com.cogniheroid.framework.feature.avengai.ui.nutrient.NutrientAIViewModelFactory
 import com.cogniheroid.framework.feature.avengai.ui.textgeneration.TextGenerationViewModelFactory
@@ -15,6 +16,8 @@ object AvengerAICore {
 
     lateinit var nutrientAIViewModelFactory : NutrientAIViewModelFactory
 
+    lateinit var equationRecognizerViewModelFactory : EquationRecognizerViewModelFactory
+
     internal val imageIntentFlow = MutableStateFlow<Intent?>(null)
 
     fun init(apiKey:String){
@@ -25,6 +28,8 @@ object AvengerAICore {
             TextGenerationViewModelFactory(avengerAIManagerImpl)
 
         nutrientAIViewModelFactory = NutrientAIViewModelFactory(avengerAIManagerImpl)
+
+        equationRecognizerViewModelFactory = EquationRecognizerViewModelFactory(avengerAIManagerImpl)
     }
 
     fun onImageAdded(intent: Intent){
