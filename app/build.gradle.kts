@@ -10,6 +10,10 @@ android {
     namespace = "com.cogniheroid.android"
     compileSdk = 34
 
+    val keystoreFile = project.rootProject.file("gradle.properties")
+    val properties = org.jetbrains.kotlin.konan.properties.Properties()
+    properties.load(keystoreFile.inputStream())
+
     defaultConfig {
         applicationId = "com.cogniheroid.android"
         minSdk = 24
@@ -17,14 +21,35 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        val keystoreFile = project.rootProject.file("local.properties")
-        val properties = org.jetbrains.kotlin.konan.properties.Properties()
-        properties.load(keystoreFile.inputStream())
+
 
         // Set API keys in BuildConfig
-        buildConfigField("String", "cogni_heroid_ai_api_key", "${properties.getProperty("COGNI_HEROID_AI_API_KEY")}")
+        buildConfigField(
+            "String", "cogni_heroid_ai_api_key",
+            properties.getProperty("COGNI_HEROID_AI_API_KEY"))
+    }
 
-      //  buildConfigField("String", "cogni_heroid_ai_api_key", properties.getProperty("COGNI_HEROID_AI_API_KEY"))
+    signingConfigs {
+        create("stressbuster") {
+            storeFile = file(properties.getProperty("STRESS_BUSTER_RELEASE_STORE_FILE"))
+            storePassword = properties.getProperty("STRESS_BUSTER_RELEASE_STORE_PASSWORD")
+            keyAlias = properties.getProperty("STRESS_BUSTER_RELEASE_KEY_ALIAS")
+            keyPassword = properties.getProperty("STRESS_BUSTER_RELEASE_KEY_PASSWORD")
+        }
+
+        create("adgalaxy") {
+            storeFile = file(properties.getProperty("ADGALAXY_RELEASE_STORE_FILE"))
+            storePassword = properties.getProperty("ADGALAXY_RELEASE_STORE_PASSWORD")
+            keyAlias = properties.getProperty("ADGALAXY_RELEASE_KEY_ALIAS")
+            keyPassword = properties.getProperty("ADGALAXY_RELEASE_KEY_PASSWORD")
+        }
+
+        create("cogniheroid") {
+            storeFile = file(properties.getProperty("COGNI_HEROID_AI_RELEASE_STORE_FILE"))
+            storePassword = properties.getProperty("COGNI_HEROID_AI_RELEASE_STORE_PASSWORD")
+            keyAlias = properties.getProperty("COGNI_HEROID_AI_RELEASE_KEY_ALIAS")
+            keyPassword = properties.getProperty("COGNI_HEROID_AI_RELEASE_KEY_PASSWORD")
+        }
     }
 
     buildTypes {
@@ -34,10 +59,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-            signingConfig = signingConfigs.getByName("debug")
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
     compileOptions {
@@ -56,26 +78,45 @@ android {
         kotlinCompilerExtensionVersion = "1.4.3"
     }
 
+
+
     flavorDimensions += "version"
 
-    productFlavors{
+    productFlavors {
 
-        create("convertor"){
+        create("convertor") {
             applicationIdSuffix = ".convertor"
             versionCode = 1
             versionName = "1.0.0"
+            signingConfig = signingConfigs.getByName("cogniheroid")
         }
 
-        create("avengai"){
+        create("avengai") {
             applicationIdSuffix = ".ai"
-            versionCode = 3
-            versionName = "1.0.2"
+            versionCode = 5
+            versionName = "1.0.3"
+            signingConfig = signingConfigs.getByName("cogniheroid")
         }
 
-        create("chat"){
-            applicationIdSuffix = ".chat"
+        create("chat") {
+            applicationIdSuffix = ".ai.chat"
             versionCode = 1
             versionName = "1.0.0"
+            signingConfig = signingConfigs.getByName("cogniheroid")
+        }
+
+        create("stressbuster") {
+            applicationId = "com.androidai.galaxy.stressbuster"
+            versionCode = 26
+            versionName = "5.0.0"
+            signingConfig = signingConfigs.getByName("stressbuster")
+        }
+
+        create("adgalaxy"){
+            applicationId = "com.androidai.galaxy.ad"
+            versionCode = 41
+            versionName = "7.2.11"
+            signingConfig = signingConfigs.getByName("adgalaxy")
         }
     }
 }
@@ -97,12 +138,13 @@ dependencies {
 
     implementation(libs.kotlinCoroutines)
 
-    implementation(libs.lifecycle.extensions)
-   // implementation(libs.lifeCycleExtension)
+    implementation(libs.lifecycle.extensions) // implementation(libs.lifeCycleExtension)
     implementation(libs.lifeCycleRuntime)
     implementation(libs.lifeCycleProcess)
 
     implementation(project(":feature:convertor"))
     implementation(project(":feature:avengai"))
     implementation(project(":feature:chat"))
+
+    implementation(libs.androidx.security.crypto)
 }

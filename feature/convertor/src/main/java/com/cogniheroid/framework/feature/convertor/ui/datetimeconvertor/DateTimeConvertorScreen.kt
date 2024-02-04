@@ -1,5 +1,6 @@
 package com.cogniheroid.framework.feature.convertor.ui.datetimeconvertor
 
+import android.app.Activity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -44,11 +45,14 @@ import com.cogniheroid.framework.feature.convertor.R
 import com.cogniheroid.framework.util.ContentUtils
 import com.cogniheroid.framework.feature.convertor.ui.datetimeconvertor.data.model.TimeZoneInfo
 import com.cogniheroid.framework.feature.convertor.utils.ConvertorUtils
+import com.cogniheroid.framework.feature.convertor.widget.AdBannerView
+import com.cogniheroid.framework.ui.theme.Dimensions
+import com.configheroid.framework.core.avengerad.AvengerAd
 import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun DateTimeConvertorScreen(navigateBack:()->Unit) {
+fun DateTimeConvertorScreen(activity: Activity, avengerAd: AvengerAd, navigateBack:()->Unit) {
 
     val context = LocalContext.current
     Scaffold(
@@ -83,6 +87,10 @@ fun DateTimeConvertorScreen(navigateBack:()->Unit) {
                 .fillMaxSize()
                 .padding(paddingValues), horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
+            AdBannerView(modifier = Modifier.padding(top = 16.dp, bottom = 100.dp),
+                activity = activity, avengerAd = avengerAd, bannerId = ConvertorUtils
+                    .BANNER_AD_UNIT_ID_5, mRECId = ConvertorUtils.MREC_AD_UNIT_ID_5)
 
             val showTimeZone = remember {
                 mutableStateOf(false)
@@ -218,7 +226,7 @@ fun DateTimeConvertorScreen(navigateBack:()->Unit) {
                 }
             }
 
-            com.cogniheroid.framework.ui.component.CustomButton(modifier = Modifier.padding(top = 24.dp),
+            com.cogniheroid.framework.ui.component.CustomButton(modifier = Modifier.padding(top = Dimensions.padding24),
                 label = stringResource(R.string.title_show_current_timezone), onClick = {
                     showTimeZone.value = true
                 })
@@ -227,6 +235,10 @@ fun DateTimeConvertorScreen(navigateBack:()->Unit) {
                 TimeZoneDataItem(timeZoneInfo = ConvertorUtils.getCurrentTimeZoneInfo(),
                     onItemClick = {})
             }
+
+            AdBannerView(modifier = Modifier.padding(top = 100.dp),
+                activity = activity, avengerAd = avengerAd, bannerId = ConvertorUtils
+                    .BANNER_AD_UNIT_ID_6, mRECId = ConvertorUtils.MREC_AD_UNIT_ID_6)
         }
     }
 }
@@ -269,7 +281,7 @@ private fun TimeZoneDataItem(timeZoneInfo: TimeZoneInfo, onItemClick: (TimeZoneI
             }
             timeZoneInfo.tzDisplayName?.let {
                 Text(fontSize = 16.sp,
-                    modifier = Modifier.padding(top = 4.dp), text = it,
+                    modifier = Modifier.padding(top = Dimensions.padding4), text = it,
 
                 )
             }
@@ -277,7 +289,7 @@ private fun TimeZoneDataItem(timeZoneInfo: TimeZoneInfo, onItemClick: (TimeZoneI
             if (timeZoneCode.isNotEmpty()) {
                 Text(fontSize = 14.sp,
                     text = timeZoneCode,
-                    modifier = Modifier.padding(top = 4.dp),
+                    modifier = Modifier.padding(top = Dimensions.padding4),
                 )
             }
         }

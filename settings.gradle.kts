@@ -17,8 +17,8 @@ dependencyResolutionManagement {
 rootProject.name = "AdGalaxy"
 
 include(":app")
-/*include(":avengerad")
-include(":feature:applovinscreen")*/
+include(":avengerad")
+//include(":feature:applovinscreen")*/
 include(":feature:convertor")
 include(":aicore")
 include(":feature:avengai")

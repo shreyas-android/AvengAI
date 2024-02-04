@@ -1,5 +1,6 @@
 package com.cogniheroid.framework.feature.convertor.ui.urlendecoder
 
+import android.app.Activity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -36,13 +37,16 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.cogniheroid.framework.feature.convertor.R
+import com.cogniheroid.framework.feature.convertor.utils.ConvertorUtils
+import com.cogniheroid.framework.feature.convertor.widget.AdBannerView
 import com.cogniheroid.framework.util.ContentUtils
+import com.configheroid.framework.core.avengerad.AvengerAd
 import java.net.URLDecoder
 import java.net.URLEncoder
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun URLEncoderDecoderScreen(navigateBack:()->Unit) {
+fun URLEncoderDecoderScreen(activity: Activity, avengerAd: AvengerAd, navigateBack:()->Unit) {
     val context = LocalContext.current
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -76,6 +80,11 @@ fun URLEncoderDecoderScreen(navigateBack:()->Unit) {
                 .fillMaxSize()
                 .padding(it), horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
         ) {
+
+            AdBannerView(modifier = Modifier.padding(top = 16.dp, bottom = 100.dp),
+                activity = activity, avengerAd = avengerAd, bannerId = ConvertorUtils
+                    .BANNER_AD_UNIT_ID_3, mRECId = ConvertorUtils.MREC_AD_UNIT_ID_3)
+
             val input = remember {
                 mutableStateOf("")
             }
@@ -179,6 +188,10 @@ fun URLEncoderDecoderScreen(navigateBack:()->Unit) {
                     }
                 }
             }
+
+            AdBannerView(modifier = Modifier.padding(top = 100.dp),
+                activity = activity, avengerAd = avengerAd, bannerId = ConvertorUtils
+                    .BANNER_AD_UNIT_ID_4, mRECId = ConvertorUtils.MREC_AD_UNIT_ID_4)
         }
     }
 }

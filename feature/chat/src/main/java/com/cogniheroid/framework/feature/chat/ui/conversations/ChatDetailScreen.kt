@@ -235,11 +235,10 @@ fun TopAppBarTitle(title: String, onSaveTitle: (String) -> Unit) {
         mutableStateOf(title)
     }
 
-    val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
 
     BasicTextField(
-        modifier = Modifier.fillMaxWidth().focusRequester(focusRequester),
+        modifier = Modifier.fillMaxWidth(),
         value = fieldValue.value, onValueChange = {
             fieldValue.value = it
         },
@@ -270,9 +269,8 @@ fun TopAppBarTitle(title: String, onSaveTitle: (String) -> Unit) {
                             text = fieldValue.value,
                             fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontWeight = FontWeight.Medium)
-                    } else {
-                        innerTextField()
                     }
+                    innerTextField()
                 }
 
                 Divider(modifier = Modifier

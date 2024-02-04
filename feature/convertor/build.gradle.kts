@@ -60,4 +60,5 @@ dependencies {
 
     implementation(project(":ui"))
     implementation(project(":utils"))
+    api(project(":avengerad"))
 }
