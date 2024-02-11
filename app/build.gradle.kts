@@ -86,15 +86,15 @@ android {
 
         create("convertor") {
             applicationIdSuffix = ".convertor"
-            versionCode = 1
-            versionName = "1.0.0"
+            versionCode = 2
+            versionName = "1.0.1"
             signingConfig = signingConfigs.getByName("cogniheroid")
         }
 
         create("avengai") {
             applicationIdSuffix = ".ai"
-            versionCode = 5
-            versionName = "1.0.3"
+            versionCode = 6
+            versionName = "1.0.4"
             signingConfig = signingConfigs.getByName("cogniheroid")
         }
 
@@ -107,15 +107,15 @@ android {
 
         create("stressbuster") {
             applicationId = "com.androidai.galaxy.stressbuster"
-            versionCode = 28
-            versionName = "5.0.2"
+            versionCode = 29
+            versionName = "5.0.3"
             signingConfig = signingConfigs.getByName("stressbuster")
         }
 
         create("adgalaxy"){
             applicationId = "com.androidai.galaxy.ad"
-            versionCode = 42
-            versionName = "8.0.0"
+            versionCode = 43
+            versionName = "8.0.1"
             signingConfig = signingConfigs.getByName("adgalaxy")
         }
     }
