@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AdGalaxy</string>
+    <string name="app_name">Aveng EquationInsight</string>
     <string name="show_reward"> Increase the count </string>
     <string name="show_interstitial"> Double the count </string>
     <string name="show_reward_interstitial">Double and increase the count</string>
