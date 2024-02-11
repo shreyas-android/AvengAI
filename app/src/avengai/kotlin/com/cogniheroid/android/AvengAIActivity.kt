@@ -74,21 +74,4 @@ class AvengAIActivity : BaseActivity() {
         return chooser
     }
 
-
-    private fun getSharedPreference() : SharedPreferences {
-        val f = File(
-            "/data/data/com.cogniheroid.android.ai.debug/shared_prefs/com.zoho.mail_preferences.xml")
-        val masterKey = MasterKey.Builder(application)
-            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-            .build()
-        return EncryptedSharedPreferences.create(
-            application,
-            "my_preferences",
-            masterKey,
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        )
-    }
-
-
 }
