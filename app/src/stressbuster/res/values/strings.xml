@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">StressBuster</string>
+    <string name="app_name">Aveng NutriChef</string>
     <string name="show_reward"> Increase the count </string>
     <string name="show_interstitial"> Double the count </string>
     <string name="show_reward_interstitial">Double and increase the count</string>
