@@ -1,4 +1,4 @@
-package com.cogniheroid.framework.feature.avengai.ui.textgeneration.uistate
+package com.cogniheroid.framework.feature.nlpai.ui.textgeneration.uistate
 
 data class TextGenerationUIState(
     val inputText:String,

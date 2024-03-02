@@ -1,4 +1,4 @@
-package com.cogniheroid.framework.feature.avengai.ui.textgeneration.uistate
+package com.cogniheroid.framework.feature.nlpai.ui.textgeneration.uistate
 
 sealed class TextGenerationUIEvent {
     data class InputText(val text:String): TextGenerationUIEvent()

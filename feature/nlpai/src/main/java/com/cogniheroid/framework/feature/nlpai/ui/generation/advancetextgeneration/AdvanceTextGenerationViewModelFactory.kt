@@ -1,4 +1,4 @@
-package com.cogniheroid.framework.feature.avengai.ui.generation.advancetextgeneration
+package com.cogniheroid.framework.feature.nlpai.ui.generation.advancetextgeneration
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

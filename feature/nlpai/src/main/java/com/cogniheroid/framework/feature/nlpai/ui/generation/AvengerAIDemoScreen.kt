@@ -1,4 +1,4 @@
-package com.cogniheroid.framework.feature.avengai.ui.generation
+package com.cogniheroid.framework.feature.nlpai.ui.generation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,6 +16,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -26,10 +28,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.cogniheroid.android.ad.ui.theme.ComposeUITheme
-import com.cogniheroid.framework.feature.avengai.R
-import com.cogniheroid.framework.feature.avengai.ui.generation.advancetextgeneration.AdvanceTextGeneration
-import com.cogniheroid.framework.feature.avengai.ui.textgeneration.TextGenerationScreen
+import com.cogniheroid.framework.feature.nlpai.R
+import com.cogniheroid.framework.feature.nlpai.ui.generation.advancetextgeneration.AdvanceTextGeneration
+import com.cogniheroid.framework.feature.nlpai.ui.textgeneration.TextGenerationScreen
+import com.cogniheroid.framework.feature.nlpai.utils.NLPAIUtils
+import com.cogniheroid.framework.ui.component.AdUIContainer
 import com.cogniheroid.framework.ui.component.CustomButton
+import com.configheroid.framework.core.avengerad.AvengerAd
+import com.configheroid.framework.core.avengerad.AvengerAdCore
 
 enum class AvengerAIRoute(val route: String) {
     GENERATE_TEXT("generateText"),
@@ -39,22 +45,28 @@ enum class AvengerAIRoute(val route: String) {
 
 @Composable
 fun AvengerAIDemoScreen(onAddImage: () -> Unit) {
+
+    val coroutineScope = rememberCoroutineScope()
+    val avengerAd = remember {
+        AvengerAdCore.getAvengerAd(coroutineScope)
+    }
+
     ComposeUITheme {
         val navController = rememberNavController()
         NavHost(navController = navController, startDestination = AvengerAIRoute.HOME.route) {
 
             composable(AvengerAIRoute.HOME.route) {
-                AvengAIDemoContainer(navController = navController)
+                AvengAIDemoContainer(navController = navController, avengerAd)
             }
 
             composable(AvengerAIRoute.GENERATE_TEXT.route) {
-                TextGenerationScreen {
+                TextGenerationScreen(avengerAd) {
                     navController.navigateUp()
                 }
             }
 
             composable(AvengerAIRoute.GENERATE_ADVANCE_TEXT.route) {
-                AdvanceTextGeneration(onAddImage){
+                AdvanceTextGeneration(avengerAd, onAddImage){
                     navController.navigateUp()
                 }
             }
@@ -65,7 +77,7 @@ fun AvengerAIDemoScreen(onAddImage: () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun  AvengAIDemoContainer(navController: NavController){
+private fun  AvengAIDemoContainer(navController: NavController, avengerAd : AvengerAd){
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
@@ -81,21 +93,26 @@ private fun  AvengAIDemoContainer(navController: NavController){
                 })
             }
         }) {
-        Column(
-            modifier = Modifier
-                .imePadding()
-                .verticalScroll(rememberScrollState())
-                .fillMaxSize()
-                .padding(it), horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            CustomButton(modifier = Modifier.padding(top = 32.dp), label = stringResource(id = R.string.title_text_generation)) {
-                navController.navigate(AvengerAIRoute.GENERATE_TEXT.route)
-            }
 
-            CustomButton(label = stringResource(id = R.string.title_advance_text_generation)) {
-                navController.navigate(AvengerAIRoute.GENERATE_ADVANCE_TEXT.route)
+
+        AdUIContainer(modifier = Modifier.fillMaxSize().padding(it), content = { childModifier->
+            Column(
+                modifier = childModifier
+                    .verticalScroll(rememberScrollState())
+                    .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                CustomButton(modifier = Modifier.padding(top = 32.dp), label = stringResource(id = R.string.title_text_generation)) {
+                    navController.navigate(AvengerAIRoute.GENERATE_TEXT.route)
+                }
+
+                CustomButton(label = stringResource(id = R.string.title_advance_text_generation)) {
+                    navController.navigate(AvengerAIRoute.GENERATE_ADVANCE_TEXT.route)
+                }
             }
-        }
+        }, bannerAd2 = {
+            avengerAd.getAdMobBannerView(it, NLPAIUtils.getAvengAIBannerAd1())
+        })
+
     }
 }

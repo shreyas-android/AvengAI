@@ -1,11 +1,11 @@
-package com.cogniheroid.framework.feature.avengai.ui.textgeneration
+package com.cogniheroid.framework.feature.nlpai.ui.textgeneration
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cogniheroid.framework.core.ai.AvengerAIManager
 import com.cogniheroid.framework.core.ai.data.model.ModelInput
-import com.cogniheroid.framework.feature.avengai.ui.textgeneration.uistate.TextGenerationUIEvent
-import com.cogniheroid.framework.feature.avengai.ui.textgeneration.uistate.TextGenerationUIState
+import com.cogniheroid.framework.feature.nlpai.ui.textgeneration.uistate.TextGenerationUIEvent
+import com.cogniheroid.framework.feature.nlpai.ui.textgeneration.uistate.TextGenerationUIState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collectLatest

@@ -1,13 +1,13 @@
-package com.cogniheroid.framework.feature.avengai.ui.generation.advancetextgeneration
+package com.cogniheroid.framework.feature.nlpai.ui.generation.advancetextgeneration
 
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cogniheroid.framework.core.ai.AvengerAIManager
 import com.cogniheroid.framework.core.ai.data.model.ModelInput
-import com.cogniheroid.framework.feature.avengai.ui.generation.advancetextgeneration.uistate.AdvanceTextGenerationUIEffect
-import com.cogniheroid.framework.feature.avengai.ui.generation.advancetextgeneration.uistate.AdvanceTextGenerationUIEvent
-import com.cogniheroid.framework.feature.avengai.ui.generation.advancetextgeneration.uistate.AdvanceTextGenerationUIState
+import com.cogniheroid.framework.feature.nlpai.ui.generation.advancetextgeneration.uistate.AdvanceTextGenerationUIEffect
+import com.cogniheroid.framework.feature.nlpai.ui.generation.advancetextgeneration.uistate.AdvanceTextGenerationUIEvent
+import com.cogniheroid.framework.feature.nlpai.ui.generation.advancetextgeneration.uistate.AdvanceTextGenerationUIState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted

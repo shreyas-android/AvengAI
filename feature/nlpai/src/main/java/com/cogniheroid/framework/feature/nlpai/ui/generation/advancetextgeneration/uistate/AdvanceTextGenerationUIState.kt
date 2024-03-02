@@ -1,4 +1,4 @@
-package com.cogniheroid.framework.feature.avengai.ui.generation.advancetextgeneration.uistate
+package com.cogniheroid.framework.feature.nlpai.ui.generation.advancetextgeneration.uistate
 
 import android.graphics.Bitmap
 
