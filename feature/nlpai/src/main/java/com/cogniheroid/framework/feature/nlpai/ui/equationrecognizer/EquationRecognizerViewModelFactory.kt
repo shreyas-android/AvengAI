@@ -1,4 +1,4 @@
-package com.cogniheroid.framework.feature.avengai.ui.equationrecognizer
+package com.cogniheroid.framework.feature.nlpai.ui.equationrecognizer
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

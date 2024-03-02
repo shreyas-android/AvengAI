@@ -1,15 +1,13 @@
-package com.cogniheroid.framework.feature.avengai.ui.equationrecognizer
+package com.cogniheroid.framework.feature.nlpai.ui.equationrecognizer
 
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cogniheroid.framework.core.ai.AvengerAIManager
 import com.cogniheroid.framework.core.ai.data.model.ModelInput
-import com.cogniheroid.framework.feature.avengai.ui.equationrecognizer.uistate.EquationRecognizerUIEffect
-import com.cogniheroid.framework.feature.avengai.ui.equationrecognizer.uistate.EquationRecognizerUIEvent
-import com.cogniheroid.framework.feature.avengai.ui.equationrecognizer.uistate.EquationRecognizerUIState
-import com.cogniheroid.framework.feature.avengai.ui.nutrient.uistate.NutrientUIEffect
-import com.cogniheroid.framework.feature.avengai.ui.nutrient.uistate.NutrientUIEvent
+import com.cogniheroid.framework.feature.nlpai.ui.equationrecognizer.uistate.EquationRecognizerUIEffect
+import com.cogniheroid.framework.feature.nlpai.ui.equationrecognizer.uistate.EquationRecognizerUIEvent
+import com.cogniheroid.framework.feature.nlpai.ui.equationrecognizer.uistate.EquationRecognizerUIState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
