@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.cogniheroid.framework.feature.avengai"
+    namespace = "com.cogniheroid.framework.feature.nlpai"
     compileSdk = 33
 
     defaultConfig {
@@ -65,4 +65,5 @@ dependencies {
     implementation(project(":utils"))
 
     api(project(":aicore"))
+    implementation(project(":avengerad"))
 }

@@ -16,14 +16,24 @@
     
     <string name="message_default_error_ai">Hello! How may help you? Please elaborate your query.</string>
 
-    <string name="title_nutrient_ai">Aveng Health</string>
+    <string name="title_nutrient_ai">Nutrient Insights</string>
 
     <string name="placeholder_choose_an_image">Choose an food image to get the nutrient insights from it</string>
     <string name="placeholder_button_nutrient">Give me the nutrient insights</string>
     <string name="placeholder_upload_file">Upload image</string>
 
-    <string name="title_equation_recognizer">Equation Recognizer</string>
+    <string name="title_equation_recognizer">Aveng EquationInsight</string>
 
     <string name="placeholder_choose_an_equation_image">Choose an equation image to get the name and explanation of equation from it</string>
     <string name="placeholder_button_equation">Get me the equation detail</string>
+
+    <string name="title_food_recipe">Food recipe</string>
+
+    <string name="placeholder_choose_image_text">Choose an food image or write a food to get the recipe </string>
+    <string name="placeholder_button_recipe">Get me the food recipe</string>
+    <string name="placeholder_generating_food_recipe">Generating recipe…</string>
+
+    <string name="hint_food_recipe">Enter the food…</string>
+
+    <string name="title_nutri_chef">Aveng NutriChef</string>
 </resources>

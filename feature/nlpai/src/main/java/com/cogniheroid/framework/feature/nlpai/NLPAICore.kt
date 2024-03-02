@@ -1,14 +1,18 @@
-package com.cogniheroid.framework.feature.avengai
+package com.cogniheroid.framework.feature.nlpai
 
+import android.content.Context
 import android.content.Intent
 import com.cogniheroid.framework.core.ai.AvengerAIManager
-import com.cogniheroid.framework.feature.avengai.ui.equationrecognizer.EquationRecognizerViewModelFactory
-import com.cogniheroid.framework.feature.avengai.ui.generation.advancetextgeneration.AdvanceTextGenerationViewModelFactory
-import com.cogniheroid.framework.feature.avengai.ui.nutrient.NutrientAIViewModelFactory
-import com.cogniheroid.framework.feature.avengai.ui.textgeneration.TextGenerationViewModelFactory
+import com.cogniheroid.framework.feature.nlpai.ui.equationrecognizer.EquationRecognizerViewModelFactory
+import com.cogniheroid.framework.feature.nlpai.ui.generation.advancetextgeneration.AdvanceTextGenerationViewModelFactory
+import com.cogniheroid.framework.feature.nlpai.ui.nutrichef.nutrient.NutrientAIViewModelFactory
+import com.cogniheroid.framework.feature.nlpai.ui.nutrichef.recipe.FoodRecipeViewModelFactory
+import com.cogniheroid.framework.feature.nlpai.ui.textgeneration.TextGenerationViewModelFactory
+import com.configheroid.framework.core.avengerad.AvengerAdCore
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 
-object AvengerAICore {
+object NLPAICore {
 
     lateinit var advanceTextGenerationViewModelFactory: AdvanceTextGenerationViewModelFactory
 
@@ -18,9 +22,11 @@ object AvengerAICore {
 
     lateinit var equationRecognizerViewModelFactory : EquationRecognizerViewModelFactory
 
+    lateinit var foodRecipeeViewModelFactory : FoodRecipeViewModelFactory
+
     internal val imageIntentFlow = MutableStateFlow<Intent?>(null)
 
-    fun init(apiKey:String){
+    fun init(context : Context, apiKey:String, isDebug:Boolean, scope: CoroutineScope){
         val avengerAIManagerImpl = AvengerAIManager.getInstance(apiKey)
         advanceTextGenerationViewModelFactory =
             AdvanceTextGenerationViewModelFactory(avengerAIManagerImpl)
@@ -30,6 +36,10 @@ object AvengerAICore {
         nutrientAIViewModelFactory = NutrientAIViewModelFactory(avengerAIManagerImpl)
 
         equationRecognizerViewModelFactory = EquationRecognizerViewModelFactory(avengerAIManagerImpl)
+
+        foodRecipeeViewModelFactory = FoodRecipeViewModelFactory(avengerAIManagerImpl)
+
+        AvengerAdCore.initAvengerAdmobCore(context, isDebug, null, scope)
     }
 
     fun onImageAdded(intent: Intent){

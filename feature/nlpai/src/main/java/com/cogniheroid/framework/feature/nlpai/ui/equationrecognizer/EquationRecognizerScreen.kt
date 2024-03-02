@@ -61,6 +61,7 @@ import com.cogniheroid.framework.feature.nlpai.ui.equationrecognizer.uistate.Equ
 import com.cogniheroid.framework.feature.nlpai.ui.equationrecognizer.uistate.EquationRecognizerUIState
 import com.cogniheroid.framework.feature.nlpai.utils.NLPAIUtils
 import com.cogniheroid.framework.feature.nlpai.utils.getAnnotatedString
+import com.cogniheroid.framework.ui.component.AdUIContainer
 import com.cogniheroid.framework.ui.component.CustomButton
 import com.cogniheroid.framework.ui.theme.Dimensions
 import com.cogniheroid.framework.util.ContentUtils
@@ -157,10 +158,12 @@ fun EquationRecognizerAIScreen(onAddImage : () -> Unit) {
         }
     }
 
-    val context = LocalContext.current
 
     val equationRecognizerState = viewModel.equationRecognizerUIStateFlow.collectAsState(
         EquationRecognizerUIState.getDefault()).value
+
+    val context = LocalContext.current
+
     Scaffold(containerColor = MaterialTheme.colorScheme.background, topBar = {
         val colors = TopAppBarDefaults.smallTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.surface,
@@ -173,31 +176,9 @@ fun EquationRecognizerAIScreen(onAddImage : () -> Unit) {
             })
         }
     }) {
-        ConstraintLayout(modifier = Modifier.fillMaxSize().padding(it)) {
-            val (banner1, container, banner2) = createRefs()
 
-            /*AvengBannerLayout(modifier = Modifier
-                .constrainAs(banner1) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    width = Dimension.fillToConstraints
-                }
-                .fillMaxWidth()) {
-                avengerAd.getAdMobBannerView(context = context, NLPAIUtils.getEquationBannerAd1())
-            }*/
-
-
-
-            Column(modifier = Modifier
-                .constrainAs(container) {
-                    top.linkTo(parent.top)
-                    bottom.linkTo(banner2.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    height = Dimension.fillToConstraints
-                    width = Dimension.fillToConstraints
-                }.padding(top = 24.dp)
+        AdUIContainer(Modifier.fillMaxSize().padding(it), content = {
+            Column(modifier = it.padding(top = 24.dp)
                 .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center) {
@@ -230,7 +211,6 @@ fun EquationRecognizerAIScreen(onAddImage : () -> Unit) {
                             .padding(
                                 end = 12.dp, top = Dimensions.padding24)) {
                         val (bitmap, close) = createRefs()
-                        val context = LocalContext.current
 
                         Image(
                             modifier = Modifier
@@ -273,7 +253,6 @@ fun EquationRecognizerAIScreen(onAddImage : () -> Unit) {
                     }
                 }
 
-                val context = LocalContext.current
                 if(equationRecognizerState.outputText.isNotEmpty() || equationRecognizerState.isGenerating) {
 
                     if(!equationRecognizerState.isGenerating) {
@@ -357,16 +336,8 @@ fun EquationRecognizerAIScreen(onAddImage : () -> Unit) {
                 }
             }
 
-            AvengBannerLayout(modifier = Modifier
-                .constrainAs(banner2) {
-                    bottom.linkTo(parent.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    width = Dimension.fillToConstraints
-                }
-                .fillMaxWidth()) {
-                avengerAd.getAdMobBannerView(context = context, NLPAIUtils.getEquationBannerAd2())
-            }
-        }
+        }, bannerAd2 = {
+            avengerAd.getAdMobBannerView(context = it, NLPAIUtils.getEquationBannerAd2())
+        })
     }
 }
