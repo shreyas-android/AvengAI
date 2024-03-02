@@ -1,13 +1,13 @@
-package com.cogniheroid.framework.feature.avengai.ui.nutrient
+package com.cogniheroid.framework.feature.nlpai.ui.nutrichef.nutrient
 
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cogniheroid.framework.core.ai.AvengerAIManager
 import com.cogniheroid.framework.core.ai.data.model.ModelInput
-import com.cogniheroid.framework.feature.avengai.ui.nutrient.uistate.NutrientUIEffect
-import com.cogniheroid.framework.feature.avengai.ui.nutrient.uistate.NutrientUIEvent
-import com.cogniheroid.framework.feature.avengai.ui.nutrient.uistate.NutrientUIState
+import com.cogniheroid.framework.feature.nlpai.ui.nutrichef.nutrient.uistate.NutrientUIEffect
+import com.cogniheroid.framework.feature.nlpai.ui.nutrichef.nutrient.uistate.NutrientUIEvent
+import com.cogniheroid.framework.feature.nlpai.ui.nutrichef.nutrient.uistate.NutrientUIState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
