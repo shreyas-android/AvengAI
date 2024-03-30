@@ -1,18 +1,12 @@
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinAndroid)
 }
-/*applyDefaults(
-    "feature.applovinscreen",
-    enableViewBinding = true,
-    enableDataBinding = true,
-    enableCompose = true
-)*/
 
 android {
-    namespace = "com.cogniheroid.framework.feature.applovinscreen"
-    compileSdk = 33
+    namespace = "com.cogniheroid.framework.feature.inspireai"
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 24
@@ -25,9 +19,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
     compileOptions {
@@ -41,7 +33,6 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
     }
-
 
     buildFeatures{
         compose = true
@@ -62,5 +53,15 @@ dependencies {
     implementation(libs.compose.material3)
     implementation(libs.compose.foundation)
 
-    api(project(":avengerad"))
+    implementation(libs.compose.navigation)
+
+    implementation(libs.activity)
+
+    implementation(libs.coil.compose)
+
+    implementation("sdk_V1:ui")
+    implementation(project(":utils"))
+
+    api(project(":aicore"))
+    implementation("sdk_V1:avenger-ad")
 }
