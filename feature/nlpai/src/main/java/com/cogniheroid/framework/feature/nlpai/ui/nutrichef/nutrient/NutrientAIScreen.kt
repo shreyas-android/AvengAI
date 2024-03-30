@@ -59,11 +59,11 @@ import com.cogniheroid.framework.feature.nlpai.ui.nutrichef.nutrient.uistate.Nut
 import com.cogniheroid.framework.feature.nlpai.ui.nutrichef.nutrient.uistate.NutrientUIState
 import com.cogniheroid.framework.feature.nlpai.utils.NLPAIUtils
 import com.cogniheroid.framework.feature.nlpai.utils.getAnnotatedString
-import com.cogniheroid.framework.ui.component.AdUIContainer
-import com.cogniheroid.framework.ui.component.CustomButton
-import com.cogniheroid.framework.ui.theme.Dimensions
+import com.sparrow.framework.ui.component.AdUIContainer
+import com.sparrow.framework.ui.component.CustomButton
+import com.sparrow.framework.ui.theme.Dimensions
 import com.cogniheroid.framework.util.ContentUtils
-import com.configheroid.framework.core.avengerad.AvengerAd
+import com.sparrow.framework.core.avengerad.AvengerAd
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 

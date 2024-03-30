@@ -61,10 +61,10 @@ import com.cogniheroid.framework.feature.nlpai.ui.generation.advancetextgenerati
 import com.cogniheroid.framework.feature.nlpai.ui.generation.advancetextgeneration.uistate.AdvanceTextGenerationUIEvent
 import com.cogniheroid.framework.feature.nlpai.ui.generation.advancetextgeneration.uistate.AdvanceTextGenerationUIState
 import com.cogniheroid.framework.feature.nlpai.utils.NLPAIUtils
-import com.cogniheroid.framework.ui.component.AdUIContainer
-import com.cogniheroid.framework.ui.component.CustomButton
 import com.cogniheroid.framework.util.ContentUtils
-import com.configheroid.framework.core.avengerad.AvengerAd
+import com.sparrow.framework.core.avengerad.AvengerAd
+import com.sparrow.framework.ui.component.AdUIContainer
+import com.sparrow.framework.ui.component.CustomButton
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -73,7 +73,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun AdvanceTextGeneration(
         avengerAd : AvengerAd,
-    onAddImage: () -> Unit, navigateBack: () -> Unit) {
+        onAddImage: () -> Unit, navigateBack: () -> Unit) {
 
     val imageRequestBuilder = ImageRequest.Builder(LocalContext.current)
     val imageLoader = ImageLoader.Builder(LocalContext.current).build()

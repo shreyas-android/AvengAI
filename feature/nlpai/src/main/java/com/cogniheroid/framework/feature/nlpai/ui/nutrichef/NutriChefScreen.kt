@@ -32,16 +32,15 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.cogniheroid.android.ad.ui.theme.ComposeUITheme
 import com.cogniheroid.framework.feature.nlpai.R
-import com.cogniheroid.framework.ui.component.AvengBannerLayout
 import com.cogniheroid.framework.feature.nlpai.ui.nutrichef.nutrient.NutrientAIScreen
 import com.cogniheroid.framework.feature.nlpai.ui.nutrichef.recipe.FoodRecipeScreen
 import com.cogniheroid.framework.feature.nlpai.utils.NLPAIUtils
-import com.cogniheroid.framework.ui.component.AdUIContainer
-import com.cogniheroid.framework.ui.component.CustomButton
-import com.configheroid.framework.core.avengerad.AvengerAd
-import com.configheroid.framework.core.avengerad.AvengerAdCore
+import com.sparrow.framework.ui.component.AdUIContainer
+import com.sparrow.framework.ui.component.CustomButton
+import com.sparrow.framework.core.avengerad.AvengerAd
+import com.sparrow.framework.core.avengerad.AvengerAdCore
+import com.sparrow.framework.ui.theme.ComposeUITheme
 
 enum class NutriChefRoute(val route : String) { NUTRIENT("nutrients"),
     RECIPE("recipe"),
@@ -97,7 +96,9 @@ private fun NutriChefContainer(navController : NavController, avengerAd : Avenge
 
         val context = LocalContext.current
 
-        AdUIContainer(modifier = Modifier.fillMaxSize().padding(it),
+        AdUIContainer(modifier = Modifier
+            .fillMaxSize()
+            .padding(it),
             content = { modifier ->
                 Column(
                     modifier = modifier

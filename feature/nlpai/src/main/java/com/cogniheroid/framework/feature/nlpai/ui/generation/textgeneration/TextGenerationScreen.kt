@@ -44,10 +44,10 @@ import com.cogniheroid.framework.feature.nlpai.R
 import com.cogniheroid.framework.feature.nlpai.ui.textgeneration.uistate.TextGenerationUIEvent
 import com.cogniheroid.framework.feature.nlpai.ui.textgeneration.uistate.TextGenerationUIState
 import com.cogniheroid.framework.feature.nlpai.utils.NLPAIUtils
-import com.cogniheroid.framework.ui.component.AdUIContainer
-import com.cogniheroid.framework.ui.component.CustomButton
+import com.sparrow.framework.ui.component.AdUIContainer
+import com.sparrow.framework.ui.component.CustomButton
 import com.cogniheroid.framework.util.ContentUtils
-import com.configheroid.framework.core.avengerad.AvengerAd
+import com.sparrow.framework.core.avengerad.AvengerAd
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

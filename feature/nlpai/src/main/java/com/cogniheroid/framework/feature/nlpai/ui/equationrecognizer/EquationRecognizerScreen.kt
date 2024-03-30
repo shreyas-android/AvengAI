@@ -55,17 +55,16 @@ import coil.request.SuccessResult
 import coil.size.Precision
 import com.cogniheroid.framework.feature.nlpai.NLPAICore
 import com.cogniheroid.framework.feature.nlpai.R
-import com.cogniheroid.framework.ui.component.AvengBannerLayout
 import com.cogniheroid.framework.feature.nlpai.ui.equationrecognizer.uistate.EquationRecognizerUIEffect
 import com.cogniheroid.framework.feature.nlpai.ui.equationrecognizer.uistate.EquationRecognizerUIEvent
 import com.cogniheroid.framework.feature.nlpai.ui.equationrecognizer.uistate.EquationRecognizerUIState
 import com.cogniheroid.framework.feature.nlpai.utils.NLPAIUtils
 import com.cogniheroid.framework.feature.nlpai.utils.getAnnotatedString
-import com.cogniheroid.framework.ui.component.AdUIContainer
-import com.cogniheroid.framework.ui.component.CustomButton
-import com.cogniheroid.framework.ui.theme.Dimensions
 import com.cogniheroid.framework.util.ContentUtils
-import com.configheroid.framework.core.avengerad.AvengerAdCore
+import com.sparrow.framework.core.avengerad.AvengerAdCore
+import com.sparrow.framework.ui.component.AdUIContainer
+import com.sparrow.framework.ui.component.CustomButton
+import com.sparrow.framework.ui.theme.Dimensions
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 

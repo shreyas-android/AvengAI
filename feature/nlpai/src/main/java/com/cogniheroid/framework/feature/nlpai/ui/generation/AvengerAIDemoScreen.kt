@@ -27,15 +27,15 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.cogniheroid.android.ad.ui.theme.ComposeUITheme
 import com.cogniheroid.framework.feature.nlpai.R
 import com.cogniheroid.framework.feature.nlpai.ui.generation.advancetextgeneration.AdvanceTextGeneration
 import com.cogniheroid.framework.feature.nlpai.ui.textgeneration.TextGenerationScreen
 import com.cogniheroid.framework.feature.nlpai.utils.NLPAIUtils
-import com.cogniheroid.framework.ui.component.AdUIContainer
-import com.cogniheroid.framework.ui.component.CustomButton
-import com.configheroid.framework.core.avengerad.AvengerAd
-import com.configheroid.framework.core.avengerad.AvengerAdCore
+import com.sparrow.framework.core.avengerad.AvengerAd
+import com.sparrow.framework.core.avengerad.AvengerAdCore
+import com.sparrow.framework.ui.component.AdUIContainer
+import com.sparrow.framework.ui.component.CustomButton
+import com.sparrow.framework.ui.theme.ComposeUITheme
 
 enum class AvengerAIRoute(val route: String) {
     GENERATE_TEXT("generateText"),
@@ -95,7 +95,9 @@ private fun  AvengAIDemoContainer(navController: NavController, avengerAd : Aven
         }) {
 
 
-        AdUIContainer(modifier = Modifier.fillMaxSize().padding(it), content = { childModifier->
+        AdUIContainer(modifier = Modifier
+            .fillMaxSize()
+            .padding(it), content = { childModifier->
             Column(
                 modifier = childModifier
                     .verticalScroll(rememberScrollState())
