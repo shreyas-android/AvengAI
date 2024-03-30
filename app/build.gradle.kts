@@ -30,14 +30,14 @@ android {
     }
 
     signingConfigs {
-        create("stressbuster") {
+        create("nutrichef") {
             storeFile = file(properties.getProperty("STRESS_BUSTER_RELEASE_STORE_FILE"))
             storePassword = properties.getProperty("STRESS_BUSTER_RELEASE_STORE_PASSWORD")
             keyAlias = properties.getProperty("STRESS_BUSTER_RELEASE_KEY_ALIAS")
             keyPassword = properties.getProperty("STRESS_BUSTER_RELEASE_KEY_PASSWORD")
         }
 
-        create("adgalaxy") {
+        create("equationinsight") {
             storeFile = file(properties.getProperty("ADGALAXY_RELEASE_STORE_FILE"))
             storePassword = properties.getProperty("ADGALAXY_RELEASE_STORE_PASSWORD")
             keyAlias = properties.getProperty("ADGALAXY_RELEASE_KEY_ALIAS")
@@ -84,17 +84,17 @@ android {
 
     productFlavors {
 
-        create("convertor") {
-            applicationIdSuffix = ".convertor"
-            versionCode = 2
-            versionName = "1.0.1"
+        create("avengai") {
+            applicationIdSuffix = ".ai"
+            versionCode = 7
+            versionName = "1.0.5"
             signingConfig = signingConfigs.getByName("cogniheroid")
         }
 
-        create("avengai") {
-            applicationIdSuffix = ".ai"
-            versionCode = 6
-            versionName = "1.0.4"
+        create("imageai") {
+            applicationIdSuffix = ".image.ai"
+            versionCode = 1
+            versionName = "1.0.0"
             signingConfig = signingConfigs.getByName("cogniheroid")
         }
 
@@ -105,18 +105,24 @@ android {
             signingConfig = signingConfigs.getByName("cogniheroid")
         }
 
-        create("stressbuster") {
+        create("nutrichef") {
             applicationId = "com.androidai.galaxy.stressbuster"
-            versionCode = 29
-            versionName = "5.0.3"
-            signingConfig = signingConfigs.getByName("stressbuster")
+            versionCode = 34
+            versionName = "5.2.3"
+            signingConfig = signingConfigs.getByName("nutrichef")
         }
 
-        create("adgalaxy"){
+        create("equationinsight"){
             applicationId = "com.androidai.galaxy.ad"
-            versionCode = 43
-            versionName = "8.0.1"
-            signingConfig = signingConfigs.getByName("adgalaxy")
+            versionCode = 47
+            versionName = "8.1.3"
+            signingConfig = signingConfigs.getByName("equationinsight")
+        }
+        create("inspire"){
+            applicationIdSuffix = ".ai.inspire"
+            versionCode = 1
+            versionName = "1.0.0"
+            signingConfig = signingConfigs.getByName("cogniheroid")
         }
     }
 }
@@ -142,9 +148,13 @@ dependencies {
     implementation(libs.lifeCycleRuntime)
     implementation(libs.lifeCycleProcess)
 
-    implementation(project(":feature:convertor"))
-    implementation(project(":feature:avengai"))
+    implementation(project(":feature:nlpai"))
     implementation(project(":feature:chat"))
+    implementation(project(":feature:imageai"))
+    implementation(project(":feature:inspireai"))
+    implementation(project(":utils"))
 
     implementation(libs.androidx.security.crypto)
+
+    implementation(libs.compose.constraintlayout)
 }

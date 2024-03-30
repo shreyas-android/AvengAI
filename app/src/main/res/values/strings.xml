@@ -1,9 +1,4 @@
 <resources>
     <string name="app_name">AdGalaxy</string>
-
-
-    <string name="google_publish_key">ca-app-pub-1164908821267698~780616545</string>
-    <string name="applovin_sdk_key">oMiUKaigFiazdAM746B4tiJ8GLHw2rmqzCeyan_wHRoTr6HeulFr7d95c4NrdoquH7TSkGDDOEspRmBycHZIKQ</string>
-
     <string name="placeholder_camera_permission_settings">Please provide a camera permission</string>
 </resources>

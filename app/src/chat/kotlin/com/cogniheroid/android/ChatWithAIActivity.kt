@@ -11,8 +11,6 @@ import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
-import com.cogniheroid.framework.feature.avengai.AvengerAICore
-import com.cogniheroid.framework.feature.avengai.ui.advancetextgeneration.uistate.AdvanceTextGenerationUIEvent
 import com.cogniheroid.framework.feature.chat.ChatScreen
 import com.cogniheroid.framework.feature.chat.callback.ChatExternalCallback
 import com.cogniheroid.framework.feature.chat.callback.ExternalTextCallback

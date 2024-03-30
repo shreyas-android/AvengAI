@@ -48,9 +48,9 @@ import coil.transform.CircleCropTransformation
 import com.cogniheroid.framework.feature.chat.ChatRoute
 import com.cogniheroid.framework.feature.chat.R
 import com.cogniheroid.framework.shared.core.chat.data.model.ConversationItem
-import com.cogniheroid.framework.ui.theme.Dimensions
 import com.cogniheroid.framework.util.CalendarUtils
 import com.cogniheroid.framework.util.ImageUtils
+import com.sparrow.framework.ui.theme.Dimensions
 import kotlinx.coroutines.launch
 import java.util.Calendar
 

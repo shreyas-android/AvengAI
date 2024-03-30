@@ -8,10 +8,8 @@ import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKey
-import com.cogniheroid.framework.feature.avengai.AvengerAICore
-import com.cogniheroid.framework.feature.avengai.ui.generation.AvengerAIDemoScreen
+import com.cogniheroid.framework.feature.nlpai.NLPAICore
+import com.cogniheroid.framework.feature.nlpai.ui.generation.AvengerAIDemoScreen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -44,7 +42,7 @@ class AvengAIActivity : BaseActivity() {
         lifecycleScope.launch {
             itemIntent.collectLatest {
                 it?.let {
-                    AvengerAICore.onImageAdded(it)
+                    NLPAICore.onImageAdded(it)
                 }
             }
         }

@@ -1,16 +1,11 @@
 package com.cogniheroid.framework.util
 
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
-import android.os.ParcelFileDescriptor
+
 import android.text.TextUtils
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.saveable.rememberSaveable
-import com.cogniheroid.framework.ui.component.ColorGenerator
-import com.cogniheroid.framework.ui.component.TextDrawable
-import java.io.IOException
+import com.sparrow.framework.ui.component.ColorGenerator
+import com.sparrow.framework.ui.component.TextDrawable
 import java.util.regex.Pattern
 
 object ImageUtils {

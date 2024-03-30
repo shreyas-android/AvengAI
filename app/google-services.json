@@ -67,7 +67,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:1015533699645:android:5cc281b896df5e9434e054",
         "android_client_info": {
-          "package_name": "com.cogniheroid.android.convertor"
+          "package_name": "com.cogniheroid.android.ai.inspire.debug"
         }
       },
       "oauth_client": [
@@ -96,7 +96,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:1015533699645:android:5cc281b896df5e9434e054",
         "android_client_info": {
-          "package_name": "com.cogniheroid.android.convertor.debug"
+          "package_name": "com.cogniheroid.android.ai.inspire"
         }
       },
       "oauth_client": [

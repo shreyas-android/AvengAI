@@ -7,10 +7,10 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ProcessLifecycleOwner
-import com.cogniheroid.framework.feature.avengai.AvengerAICore
+import com.cogniheroid.framework.feature.nlpai.NLPAICore
 import com.cogniheroid.framework.feature.chat.ChatCore
-import com.cogniheroid.framework.feature.convertor.ConvertorCore
-import com.configheroid.framework.core.avengerad.data.model.AvengerAdData
+import com.cogniheroid.framework.feature.imageai.ImageAICore
+import com.cogniheroid.framework.feature.inspireai.InspireAICore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
@@ -31,9 +31,11 @@ class AdGalaxyApplication : Application(), Application.ActivityLifecycleCallback
     }
 
 
+    private val globalDefaultScope = CoroutineScope(Dispatchers.IO)
 
     override fun onCreate() {
         super.onCreate()
+
         INSTANCE = this
 
         pref = getSharedPreferences(prefName, Context.MODE_PRIVATE)
@@ -42,12 +44,13 @@ class AdGalaxyApplication : Application(), Application.ActivityLifecycleCallback
         registerActivityLifecycleCallbacks(this)
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
 
-        AvengerAICore.init(BuildConfig.cogni_heroid_ai_api_key)
+        ImageAICore.init(BuildConfig.cogni_heroid_ai_api_key)
+        NLPAICore.init(this, BuildConfig.cogni_heroid_ai_api_key,  BuildConfig.DEBUG,
+            globalDefaultScope)
 
         ChatCore.init(BuildConfig.cogni_heroid_ai_api_key, this)
 
-        ConvertorCore.init(this, BuildConfig.DEBUG, AvengerAdData(listOf()),
-            CoroutineScope(Dispatchers.IO))
+        InspireAICore.init(BuildConfig.cogni_heroid_ai_api_key)
     }
 
 
@@ -63,7 +66,7 @@ class AdGalaxyApplication : Application(), Application.ActivityLifecycleCallback
     }
 
     override fun onActivityResumed(activity: Activity) {
-      //  avengerAd.onApplovinActivityHandling(activity)
+
     }
 
     override fun onActivityPaused(activity: Activity) {

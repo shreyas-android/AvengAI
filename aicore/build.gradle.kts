@@ -44,5 +44,7 @@ dependencies {
 
     implementation(libs.generative.ai)
 
+    implementation(libs.objectDetection.ml.kit)
+
 
 }

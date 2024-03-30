@@ -87,9 +87,9 @@ import com.cogniheroid.framework.shared.core.chat.data.enum.MessageContentType
 import com.cogniheroid.framework.shared.core.chat.data.model.ConversationItem
 import com.cogniheroid.framework.shared.core.chat.data.model.MessageWithSender
 import com.cogniheroid.framework.shared.core.chat.utils.DateTimeUtils
-import com.cogniheroid.framework.ui.theme.Dimensions
 import com.cogniheroid.framework.util.ContentUtils
 import com.cogniheroid.framework.util.ImageUtils
+import com.sparrow.framework.ui.theme.Dimensions
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 

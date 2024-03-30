@@ -5,11 +5,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.cogniheroid.android.ad.ui.theme.ComposeUITheme
 import com.cogniheroid.framework.feature.chat.callback.ChatExternalCallback
 import com.cogniheroid.framework.feature.chat.ui.conversationowner.ChatListScreen
 import com.cogniheroid.framework.feature.chat.ui.conversationowner.ChatViewModel
 import com.cogniheroid.framework.feature.chat.ui.conversations.ChatDetailScreen
+import com.sparrow.framework.ui.theme.ComposeUITheme
 
 enum class ChatRoute(val route: String) {
     CHAT_DETAIL("chat_detail"),
