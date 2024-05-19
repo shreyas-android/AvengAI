@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="title_url_encoder_decoder">URL encoder decoder</string>
+    <string name="field_input_url_encoder_decoder">Please enter the url…</string>
+
+    <string name="button_encode">Encode</string>
+    <string name="button_decode">Decode</string>
+
+    <string name="label_result">Result</string>
+
+    <string name="label_copied_to_clipboard">Copied to clipboard</string>
+
+    <string name="label_share_content">Share the content</string>
+
+    <string name="title_date_time_converter">Date time converter</string>
+    <string name="field_input_millisecond">Please enter the milli second…</string>
+    <string name="label_now">Now</string>
+
+    <string name="label_convert_to_date">Convert to date</string>
+    <string name="label_convert_to_time">Convert to time</string>
+    <string name="label_convert_to_date_time">Convert to date time</string>
+
+    <string name="title_show_current_timezone">Show device time zone</string>
+
+    <string name="title_convertor">VersaConvertor</string>
+</resources>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">VersaConvertor</string>
+
+    <string name="google_ad_publish_key">ca-app-pub-7235511025002252~3757292855</string>
+    <string name="firebase_app_id">1:291633066181:android:26bc1f523baf7e3000c0ac</string>
+    <string name="firebase_database_url">https://jackson-d2136-default-rtdb.firebaseio.com/</string>
+</resources>

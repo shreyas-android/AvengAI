@@ -1,16 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/../AvengAdModule/avengerad/chartboostmeditaion" />
+        <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
+        <option name="resolveExternalAnnotations" value="false" />
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <compositeConfiguration>
+          <compositeBuild compositeDefinitionSource="SCRIPT">
+            <builds>
+              <build path="$PROJECT_DIR$/../AvengAdModule" name="AvengAdModule">
+                <projects>
+                  <project path="$PROJECT_DIR$/../AvengAdModule" />
+                  <project path="$PROJECT_DIR$/../AvengAdModule/app" />
+                  <project path="$PROJECT_DIR$/../AvengAdModule/avengerad" />
+                  <project path="$PROJECT_DIR$/../AvengAdModule/feature" />
+                  <project path="$PROJECT_DIR$/../AvengAdModule/feature/applovinscreen" />
+                  <project path="$PROJECT_DIR$/../AvengAdModule/ui" />
+                  <project path="$PROJECT_DIR$/../AvengAdModule/utils" />
+                </projects>
+              </build>
+            </builds>
+          </compositeBuild>
+        </compositeConfiguration>
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleJvm" value="jbr-17" />
+        <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
         <option name="modules">
           <set>
+            <option value="$PROJECT_DIR$/../AvengAdModule" />
+            <option value="$PROJECT_DIR$/../AvengAdModule/app" />
+            <option value="$PROJECT_DIR$/../AvengAdModule/avengerad" />
+            <option value="$PROJECT_DIR$/../AvengAdModule/feature" />
+            <option value="$PROJECT_DIR$/../AvengAdModule/feature/applovinscreen" />
+            <option value="$PROJECT_DIR$/../AvengAdModule/ui" />
+            <option value="$PROJECT_DIR$/../AvengAdModule/utils" />
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/feature" />
+            <option value="$PROJECT_DIR$/feature/convertor" />
           </set>
         </option>
+        <option name="resolveExternalAnnotations" value="false" />
       </GradleProjectSettings>
     </option>
   </component>

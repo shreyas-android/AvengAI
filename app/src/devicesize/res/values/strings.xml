@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Mobile Dimensions Analyzer</string>
+
+    <string name="google_ad_publish_key">ca-app-pub-3940256099942544~3347511713</string>
+
+    <string name="firebase_project_id">jackson-d2136</string>
+</resources>

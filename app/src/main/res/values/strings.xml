@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">CalendarMobileSDK</string>
+    <string name="app_name">Aveng Advertiser</string>
+
+    <string name="google_ad_publish_key">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="versa_convertor_applovin_sdk_key">baLZGV14D4yktEGbOPEAZeIWnrL11MmVGneeGwLI1DNe1J_CZsM8Tbs3cTT5FT6NDfk1Rs_glevvwPJbrKx0sb</string>
+
+    <string name="firebase_project_id">jackson-d2136</string>
 </resources>

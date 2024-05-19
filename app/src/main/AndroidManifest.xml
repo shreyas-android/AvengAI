@@ -10,7 +10,13 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.CalendarMobileSDK"
-        tools:targetApi="31" />
+        android:theme="@style/Theme.AvengAdProjects"
+        tools:targetApi="31" >
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/google_ad_publish_key" />
+
+    </application>
 
 </manifest>
