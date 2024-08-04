@@ -66,8 +66,6 @@ import com.cogniheroid.framework.feature.imageai.R
 import com.cogniheroid.framework.feature.imageai.ui.objectdetection.uistate.ObjectDetectionUIEffect
 import com.cogniheroid.framework.feature.imageai.ui.objectdetection.uistate.ObjectDetectionUIEvent
 import com.cogniheroid.framework.feature.imageai.ui.objectdetection.uistate.ObjectDetectionUIState
-import com.sparrow.framework.ui.component.CustomButton
-import com.sparrow.framework.ui.theme.Dimensions
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 

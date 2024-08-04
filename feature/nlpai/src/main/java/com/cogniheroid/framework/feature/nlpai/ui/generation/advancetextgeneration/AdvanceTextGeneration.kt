@@ -60,11 +60,9 @@ import com.cogniheroid.framework.feature.nlpai.R
 import com.cogniheroid.framework.feature.nlpai.ui.generation.advancetextgeneration.uistate.AdvanceTextGenerationUIEffect
 import com.cogniheroid.framework.feature.nlpai.ui.generation.advancetextgeneration.uistate.AdvanceTextGenerationUIEvent
 import com.cogniheroid.framework.feature.nlpai.ui.generation.advancetextgeneration.uistate.AdvanceTextGenerationUIState
-import com.cogniheroid.framework.feature.nlpai.utils.NLPAIUtils
+import com.cogniheroid.framework.ui.component.AdUIContainer
+import com.cogniheroid.framework.ui.component.CustomButton
 import com.cogniheroid.framework.util.ContentUtils
-import com.sparrow.framework.core.avengerad.AvengerAd
-import com.sparrow.framework.ui.component.AdUIContainer
-import com.sparrow.framework.ui.component.CustomButton
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -72,7 +70,6 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AdvanceTextGeneration(
-        avengerAd : AvengerAd,
         onAddImage: () -> Unit, navigateBack: () -> Unit) {
 
     val imageRequestBuilder = ImageRequest.Builder(LocalContext.current)
@@ -194,7 +191,6 @@ fun AdvanceTextGeneration(
             })
         }
         AdvanceTextGenerationView(modifier = Modifier.fillMaxSize(),
-            avengerAd,
             textGenerationUIState = advanceTextGenerationViewModel.advanceTextGenerationUIStateStateFlow.collectAsState().value,
             performIntent = { textGenerationUIEvent ->
                 advanceTextGenerationViewModel.performIntent(textGenerationUIEvent)
@@ -206,7 +202,6 @@ fun AdvanceTextGeneration(
 @Composable
 private fun AdvanceTextGenerationView(
         modifier: Modifier,
-        avengerAd:AvengerAd,
         textGenerationUIState: AdvanceTextGenerationUIState,
         performIntent: (AdvanceTextGenerationUIEvent) -> Unit
 ) {
@@ -435,8 +430,6 @@ private fun AdvanceTextGenerationView(
                 }
             }
         }
-    }, bannerAd2 = {
-        avengerAd.getAdMobBannerView(context, NLPAIUtils.getAvengAIBannerAd3())
     })
 
 }

@@ -3,7 +3,6 @@ package com.cogniheroid.framework.feature.nlpai.ui.generation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
@@ -16,7 +15,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,15 +25,12 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.cogniheroid.android.ad.ui.theme.ComposeUITheme
 import com.cogniheroid.framework.feature.nlpai.R
 import com.cogniheroid.framework.feature.nlpai.ui.generation.advancetextgeneration.AdvanceTextGeneration
-import com.cogniheroid.framework.feature.nlpai.ui.textgeneration.TextGenerationScreen
-import com.cogniheroid.framework.feature.nlpai.utils.NLPAIUtils
-import com.sparrow.framework.core.avengerad.AvengerAd
-import com.sparrow.framework.core.avengerad.AvengerAdCore
-import com.sparrow.framework.ui.component.AdUIContainer
-import com.sparrow.framework.ui.component.CustomButton
-import com.sparrow.framework.ui.theme.ComposeUITheme
+import com.cogniheroid.framework.feature.nlpai.ui.generation.textgeneration.TextGenerationScreen
+import com.cogniheroid.framework.ui.component.AdUIContainer
+import com.cogniheroid.framework.ui.component.CustomButton
 
 enum class AvengerAIRoute(val route: String) {
     GENERATE_TEXT("generateText"),
@@ -47,26 +42,23 @@ enum class AvengerAIRoute(val route: String) {
 fun AvengerAIDemoScreen(onAddImage: () -> Unit) {
 
     val coroutineScope = rememberCoroutineScope()
-    val avengerAd = remember {
-        AvengerAdCore.getAvengerAd(coroutineScope)
-    }
 
     ComposeUITheme {
         val navController = rememberNavController()
         NavHost(navController = navController, startDestination = AvengerAIRoute.HOME.route) {
 
             composable(AvengerAIRoute.HOME.route) {
-                AvengAIDemoContainer(navController = navController, avengerAd)
+                AvengAIDemoContainer(navController = navController)
             }
 
             composable(AvengerAIRoute.GENERATE_TEXT.route) {
-                TextGenerationScreen(avengerAd) {
+                TextGenerationScreen {
                     navController.navigateUp()
                 }
             }
 
             composable(AvengerAIRoute.GENERATE_ADVANCE_TEXT.route) {
-                AdvanceTextGeneration(avengerAd, onAddImage){
+                AdvanceTextGeneration(onAddImage){
                     navController.navigateUp()
                 }
             }
@@ -77,7 +69,7 @@ fun AvengerAIDemoScreen(onAddImage: () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun  AvengAIDemoContainer(navController: NavController, avengerAd : AvengerAd){
+private fun  AvengAIDemoContainer(navController: NavController){
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
@@ -112,8 +104,6 @@ private fun  AvengAIDemoContainer(navController: NavController, avengerAd : Aven
                     navController.navigate(AvengerAIRoute.GENERATE_ADVANCE_TEXT.route)
                 }
             }
-        }, bannerAd2 = {
-            avengerAd.getAdMobBannerView(it, NLPAIUtils.getAvengAIBannerAd1())
         })
 
     }

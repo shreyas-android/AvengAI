@@ -63,4 +63,8 @@ class InspireAIViewModel(private val avengerAIManager : AvengerAIManager) : View
        """.trimIndent()
 
     }
+
+    // Can you please generate me one food related quotes to live a healthy life which is created by Artificial
+    //            general intelligence. Do not repeat the quotes.
+    //             The quotes should be in simple english.
 }

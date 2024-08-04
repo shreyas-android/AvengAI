@@ -8,7 +8,6 @@ import com.cogniheroid.framework.feature.nlpai.ui.generation.advancetextgenerati
 import com.cogniheroid.framework.feature.nlpai.ui.nutrichef.nutrient.NutrientAIViewModelFactory
 import com.cogniheroid.framework.feature.nlpai.ui.nutrichef.recipe.FoodRecipeViewModelFactory
 import com.cogniheroid.framework.feature.nlpai.ui.textgeneration.TextGenerationViewModelFactory
-import com.sparrow.framework.core.avengerad.AvengerAdCore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -38,8 +37,6 @@ object NLPAICore {
         equationRecognizerViewModelFactory = EquationRecognizerViewModelFactory(avengerAIManagerImpl)
 
         foodRecipeeViewModelFactory = FoodRecipeViewModelFactory(avengerAIManagerImpl)
-
-        AvengerAdCore.initAvengerAdmobCore(context, isDebug, null, scope)
     }
 
     fun onImageAdded(intent: Intent){

@@ -1,4 +1,4 @@
-package com.cogniheroid.framework.feature.nlpai.ui.textgeneration
+package com.cogniheroid.framework.feature.nlpai.ui.generation.textgeneration
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -41,17 +41,16 @@ import androidx.core.text.HtmlCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.cogniheroid.framework.feature.nlpai.NLPAICore
 import com.cogniheroid.framework.feature.nlpai.R
+import com.cogniheroid.framework.feature.nlpai.ui.textgeneration.TextGenerationViewModel
 import com.cogniheroid.framework.feature.nlpai.ui.textgeneration.uistate.TextGenerationUIEvent
 import com.cogniheroid.framework.feature.nlpai.ui.textgeneration.uistate.TextGenerationUIState
-import com.cogniheroid.framework.feature.nlpai.utils.NLPAIUtils
-import com.sparrow.framework.ui.component.AdUIContainer
-import com.sparrow.framework.ui.component.CustomButton
+import com.cogniheroid.framework.ui.component.AdUIContainer
+import com.cogniheroid.framework.ui.component.CustomButton
 import com.cogniheroid.framework.util.ContentUtils
-import com.sparrow.framework.core.avengerad.AvengerAd
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TextGenerationScreen(avengerAd:AvengerAd, navigateBack: () -> Unit) {
+fun TextGenerationScreen(navigateBack: () -> Unit) {
 
     val textGenerationViewModel = viewModel<TextGenerationViewModel>(
         factory = NLPAICore.textGenerationViewModelFactory)
@@ -84,7 +83,6 @@ fun TextGenerationScreen(avengerAd:AvengerAd, navigateBack: () -> Unit) {
         }
 
         TextGenerationView(modifier = Modifier.fillMaxSize(),
-            avengerAd = avengerAd,
             textGenerationUIState = textGenerationViewModel.textGenerationUIStateFlow.collectAsState().value,
             performIntent = { textGenerationUIEvent ->
                 textGenerationViewModel.performIntent(textGenerationUIEvent)
@@ -97,7 +95,6 @@ fun TextGenerationScreen(avengerAd:AvengerAd, navigateBack: () -> Unit) {
 @Composable
 fun TextGenerationView(
     modifier: Modifier,
-    avengerAd:AvengerAd,
     textGenerationUIState: TextGenerationUIState,
     performIntent: (TextGenerationUIEvent) -> Unit
 ) {
@@ -224,8 +221,6 @@ fun TextGenerationView(
                 }
             }
         }
-    }, bannerAd2 = {
-        avengerAd.getAdMobBannerView(it, NLPAIUtils.getAvengAIBannerAd2())
     })
 
 }

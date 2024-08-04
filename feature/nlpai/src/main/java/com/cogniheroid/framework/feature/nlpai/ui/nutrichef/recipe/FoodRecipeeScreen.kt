@@ -60,13 +60,11 @@ import com.cogniheroid.framework.feature.nlpai.R
 import com.cogniheroid.framework.feature.nlpai.ui.nutrichef.recipe.uistate.FoodRecipeUIEffect
 import com.cogniheroid.framework.feature.nlpai.ui.nutrichef.recipe.uistate.FoodRecipeUIEvent
 import com.cogniheroid.framework.feature.nlpai.ui.nutrichef.recipe.uistate.FoodRecipeUIState
-import com.cogniheroid.framework.feature.nlpai.utils.NLPAIUtils
 import com.cogniheroid.framework.feature.nlpai.utils.getAnnotatedString
-import com.sparrow.framework.ui.component.AdUIContainer
-import com.sparrow.framework.ui.component.CustomButton
-import com.sparrow.framework.ui.theme.Dimensions
+import com.cogniheroid.framework.ui.component.AdUIContainer
+import com.cogniheroid.framework.ui.component.CustomButton
+import com.cogniheroid.framework.ui.theme.Dimensions
 import com.cogniheroid.framework.util.ContentUtils
-import com.sparrow.framework.core.avengerad.AvengerAd
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -74,7 +72,6 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FoodRecipeScreen(
-        avengerAd : AvengerAd,
     onAddImage: () -> Unit, navigateBack: () -> Unit) {
 
     val imageRequestBuilder = ImageRequest.Builder(LocalContext.current)
@@ -195,7 +192,6 @@ fun FoodRecipeScreen(
             })
         }
         FoodRecipeView(modifier = Modifier.navigationBarsPadding().fillMaxSize(),
-            avengerAd = avengerAd,
             foodRecipeUIState = advanceTextGenerationViewModel.foodRecipeUIState.collectAsState().value,
             performIntent = { textGenerationUIEvent ->
                 advanceTextGenerationViewModel.performIntent(textGenerationUIEvent)
@@ -207,7 +203,6 @@ fun FoodRecipeScreen(
 @Composable
 private fun FoodRecipeView(
         modifier: Modifier,
-        avengerAd : AvengerAd,
         foodRecipeUIState: FoodRecipeUIState,
         performIntent: (FoodRecipeUIEvent) -> Unit
 ) {
@@ -450,8 +445,6 @@ private fun FoodRecipeView(
                     }
                 }
             }
-        }, bannerAd2 = {
-            avengerAd.getAdMobBannerView(context = context, NLPAIUtils.getNutriChefBannerAd3())
         })
 
 }

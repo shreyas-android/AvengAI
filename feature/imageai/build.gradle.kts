@@ -59,8 +59,7 @@ dependencies {
 
     implementation(libs.coil.compose)
 
-    implementation("sdk_V1:ui")
     implementation(project(":utils"))
-
+    implementation(project(":ui"))
     api(project(":aicore"))
 }

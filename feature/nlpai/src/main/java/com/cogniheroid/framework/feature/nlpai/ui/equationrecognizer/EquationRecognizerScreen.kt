@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -36,7 +34,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,13 +55,11 @@ import com.cogniheroid.framework.feature.nlpai.R
 import com.cogniheroid.framework.feature.nlpai.ui.equationrecognizer.uistate.EquationRecognizerUIEffect
 import com.cogniheroid.framework.feature.nlpai.ui.equationrecognizer.uistate.EquationRecognizerUIEvent
 import com.cogniheroid.framework.feature.nlpai.ui.equationrecognizer.uistate.EquationRecognizerUIState
-import com.cogniheroid.framework.feature.nlpai.utils.NLPAIUtils
 import com.cogniheroid.framework.feature.nlpai.utils.getAnnotatedString
+import com.cogniheroid.framework.ui.component.AdUIContainer
+import com.cogniheroid.framework.ui.component.CustomButton
+import com.cogniheroid.framework.ui.theme.Dimensions
 import com.cogniheroid.framework.util.ContentUtils
-import com.sparrow.framework.core.avengerad.AvengerAdCore
-import com.sparrow.framework.ui.component.AdUIContainer
-import com.sparrow.framework.ui.component.CustomButton
-import com.sparrow.framework.ui.theme.Dimensions
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -73,9 +68,6 @@ import kotlinx.coroutines.launch
 fun EquationRecognizerAIScreen(onAddImage : () -> Unit) {
 
     val coroutineScope = rememberCoroutineScope()
-    val avengerAd = remember {
-        AvengerAdCore.getAvengerAd(coroutineScope)
-    }
 
     val viewModel = viewModel<EquationRecognizerViewModel>(
         factory = NLPAICore.equationRecognizerViewModelFactory)
@@ -335,8 +327,6 @@ fun EquationRecognizerAIScreen(onAddImage : () -> Unit) {
                 }
             }
 
-        }, bannerAd2 = {
-            avengerAd.getAdMobBannerView(context = it, NLPAIUtils.getEquationBannerAd2())
         })
     }
 }

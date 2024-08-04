@@ -59,9 +59,7 @@ dependencies {
 
     implementation(libs.coil.compose)
 
-    implementation("sdk_V1:ui")
+    implementation(project(":ui"))
     implementation(project(":utils"))
-
     api(project(":aicore"))
-    implementation("sdk_V1:avenger-ad")
 }

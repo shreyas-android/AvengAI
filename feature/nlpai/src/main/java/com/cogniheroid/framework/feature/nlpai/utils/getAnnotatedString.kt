@@ -4,7 +4,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import com.sparrow.framework.ui.theme.Dimensions
+import com.cogniheroid.framework.ui.theme.Dimensions
 
 fun getAnnotatedString(text: String): AnnotatedString {
     val boldRegex = Regex("(?<!\\*)\\*\\*(?!\\*).*?(?<!\\*)\\*\\*(?!\\*)")

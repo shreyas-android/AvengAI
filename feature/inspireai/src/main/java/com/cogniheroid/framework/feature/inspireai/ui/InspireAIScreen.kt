@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import androidx.core.text.HtmlCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.cogniheroid.framework.feature.inspireai.InspireAICore
 import com.cogniheroid.framework.feature.inspireai.R
@@ -42,7 +41,6 @@ import com.cogniheroid.framework.feature.inspireai.ui.uistate.QuoteUIEvent
 import com.cogniheroid.framework.feature.inspireai.ui.viewmodel.InspireAIViewModel
 import com.cogniheroid.framework.feature.inspireai.utils.getAnnotatedString
 import com.cogniheroid.framework.util.ContentUtils
-import com.sparrow.framework.ui.theme.Dimensions
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable

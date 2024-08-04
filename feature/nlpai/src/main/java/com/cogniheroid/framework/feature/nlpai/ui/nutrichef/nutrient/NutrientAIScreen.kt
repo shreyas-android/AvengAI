@@ -57,19 +57,17 @@ import com.cogniheroid.framework.feature.nlpai.R
 import com.cogniheroid.framework.feature.nlpai.ui.nutrichef.nutrient.uistate.NutrientUIEffect
 import com.cogniheroid.framework.feature.nlpai.ui.nutrichef.nutrient.uistate.NutrientUIEvent
 import com.cogniheroid.framework.feature.nlpai.ui.nutrichef.nutrient.uistate.NutrientUIState
-import com.cogniheroid.framework.feature.nlpai.utils.NLPAIUtils
 import com.cogniheroid.framework.feature.nlpai.utils.getAnnotatedString
-import com.sparrow.framework.ui.component.AdUIContainer
-import com.sparrow.framework.ui.component.CustomButton
-import com.sparrow.framework.ui.theme.Dimensions
+import com.cogniheroid.framework.ui.component.AdUIContainer
+import com.cogniheroid.framework.ui.component.CustomButton
+import com.cogniheroid.framework.ui.theme.Dimensions
 import com.cogniheroid.framework.util.ContentUtils
-import com.sparrow.framework.core.avengerad.AvengerAd
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun NutrientAIScreen(avengerAd : AvengerAd, onAddImage : () -> Unit, navigateBack : () -> Unit) {
+fun NutrientAIScreen(onAddImage : () -> Unit, navigateBack : () -> Unit) {
 
     val viewModel = viewModel<NutrientAIViewModel>(factory = NLPAICore.nutrientAIViewModelFactory)
 
@@ -334,8 +332,6 @@ fun NutrientAIScreen(avengerAd : AvengerAd, onAddImage : () -> Unit, navigateBac
                     }
                 }
             }
-        }, bannerAd2 = { context ->
-            avengerAd.getAdMobBannerView(context = context, NLPAIUtils.getNutriChefBannerAd2())
         })
     }
 }
